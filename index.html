@@ -1,1176 +1,1413 @@
-<title>Day Planner</title>
-<meta name="claude:viewport-fit-sides" content="cover">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Instagram Carousel Creator</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Grotesk:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Syne:wght@600;700;800&family=DM+Sans:wght@300;400;500;700&display=swap">
 <style>
 /* ── Design tokens ── */
 :root {
-  --bg: #F5F4F0;
-  --surface: #FFFFFF;
-  --surface-raised: #FAFAF8;
-  --border: #E2E0DA;
-  --border-subtle: #EDECE8;
-  --text: #18181B;
-  --text-muted: #71717A;
-  --text-faint: #A1A1AA;
-  --accent: #4059E5;
-  --accent-soft: #EEF0FD;
-  --accent-hover: #3147C8;
-  --high: #E5380A;
-  --high-soft: #FEF0EC;
-  --med: #D97706;
-  --med-soft: #FFFBEB;
-  --low: #059669;
-  --low-soft: #ECFDF5;
-  --done-alpha: 0.45;
-  --radius: 10px;
-  --radius-sm: 6px;
-  --shadow: 0 1px 3px rgba(0,0,0,.07), 0 1px 2px rgba(0,0,0,.04);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
-  color-scheme: light;
-}
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0D0E14;
-    --surface: #16181F;
-    --surface-raised: #1C1F29;
-    --border: #2A2D3A;
-    --border-subtle: #22252F;
-    --text: #E8E9EE;
-    --text-muted: #8B8FA8;
-    --text-faint: #5A5E74;
-    --accent: #6B7FF5;
-    --accent-soft: #1A1E40;
-    --accent-hover: #8596F8;
-    --high: #F8755A;
-    --high-soft: #2A1210;
-    --med: #F5A623;
-    --med-soft: #2A1F0A;
-    --low: #34D399;
-    --low-soft: #072318;
-    --shadow: 0 1px 3px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.18);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.22);
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0D0E14;
-  --surface: #16181F;
-  --surface-raised: #1C1F29;
-  --border: #2A2D3A;
-  --border-subtle: #22252F;
-  --text: #E8E9EE;
-  --text-muted: #8B8FA8;
-  --text-faint: #5A5E74;
-  --accent: #6B7FF5;
-  --accent-soft: #1A1E40;
-  --accent-hover: #8596F8;
-  --high: #F8755A;
-  --high-soft: #2A1210;
-  --med: #F5A623;
-  --med-soft: #2A1F0A;
-  --low: #34D399;
-  --low-soft: #072318;
-  --shadow: 0 1px 3px rgba(0,0,0,.25), 0 1px 2px rgba(0,0,0,.18);
-  --shadow-lg: 0 4px 16px rgba(0,0,0,.35), 0 2px 6px rgba(0,0,0,.22);
+  --bg: #0B0D15;
+  --surf: #13161F;
+  --surf2: #1B1E2C;
+  --surf3: #222638;
+  --bdr: #282C3E;
+  --bdr2: #1E2230;
+  --txt: #E2E4EF;
+  --muted: #7B7F9E;
+  --faint: #454870;
+  --acc: #7C6CF0;
+  --acc2: #1C1940;
+  --acc-h: #9585FF;
+  --ok: #3DCC85;
+  --err: #F06060;
+  --warn: #F5A623;
+  --r: 8px;
+  --rs: 5px;
+  --rl: 14px;
   color-scheme: dark;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--txt);font-size:14px;-webkit-font-smoothing:antialiased;overflow:hidden}
+button{font-family:inherit;cursor:pointer}
+input,textarea,select{font-family:inherit}
 
-*, *::before, *::after { box-sizing: border-box; }
+/* ── Layout ── */
+.app{display:grid;grid-template-rows:50px 1fr;height:100dvh}
 
-html, body {
-  height: 100%;
-  margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  font-size: 14px;
-  -webkit-font-smoothing: antialiased;
+/* ── Header ── */
+.header{
+  display:flex;align-items:center;padding:0 14px;
+  background:var(--surf);border-bottom:1px solid var(--bdr);
+  gap:10px;flex-shrink:0;z-index:20
 }
-
-body {
-  padding-left: max(16px, env(safe-area-inset-left, 0px));
-  padding-right: max(16px, env(safe-area-inset-right, 0px));
-  padding-block: 0;
+.logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:14px;letter-spacing:-.3px;user-select:none;white-space:nowrap}
+.logo-icon{
+  width:28px;height:28px;border-radius:7px;
+  background:linear-gradient(135deg,#7C6CF0 0%,#C850C0 100%);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0
 }
-
-/* ── App layout ── */
-.app {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  max-width: 1100px;
-  margin: 0 auto;
+.logo-icon svg{display:block}
+.hdiv{width:1px;height:18px;background:var(--bdr);flex-shrink:0}
+.hgrow{flex:1}
+.hbrand{display:flex;align-items:center;gap:6px}
+.hbrand input{
+  background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--rs);
+  padding:5px 9px;font-size:12px;font-weight:500;color:var(--txt);outline:none;
+  width:160px;transition:border-color .15s
 }
+.hbrand input:focus{border-color:var(--acc)}
+.hbrand input::placeholder{color:var(--faint)}
+.hend{display:flex;align-items:center;gap:6px}
 
-.app-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 0 12px;
-  flex-shrink: 0;
-  gap: 12px;
+.btn{
+  display:inline-flex;align-items:center;gap:5px;
+  height:30px;padding:0 12px;border-radius:var(--rs);
+  font-size:12px;font-weight:600;border:none;
+  transition:all .15s;white-space:nowrap
 }
+.btn-ghost{background:none;color:var(--muted);border:1px solid var(--bdr)}
+.btn-ghost:hover{color:var(--txt);border-color:var(--acc)}
+.btn-acc{background:var(--acc);color:#fff}
+.btn-acc:hover{background:var(--acc-h)}
+.btn-sm{height:26px;padding:0 10px;font-size:11px}
+.btn-ico{width:30px;padding:0;justify-content:center;background:none;color:var(--muted);border:1px solid var(--bdr)}
+.btn-ico:hover{color:var(--txt);border-color:var(--acc)}
 
-.app-title {
-  font-size: 18px;
-  font-weight: 700;
-  letter-spacing: -0.3px;
-  color: var(--text);
-  margin: 0;
+/* ── Workspace ── */
+.workspace{display:grid;grid-template-columns:186px 1fr 310px;min-height:0;overflow:hidden}
+
+/* ── Slides panel ── */
+.slides-panel{
+  background:var(--surf);border-right:1px solid var(--bdr);
+  display:flex;flex-direction:column;overflow:hidden
 }
-
-.header-actions {
-  display: flex;
-  gap: 8px;
-  align-items: center;
+.sp-head{
+  padding:10px 12px 8px;display:flex;align-items:center;
+  justify-content:space-between;border-bottom:1px solid var(--bdr2);flex-shrink:0
 }
-
-.btn-icon {
-  width: 34px;
-  height: 34px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: background .15s, color .15s, border-color .15s;
-  box-shadow: var(--shadow);
-  padding: 0;
+.sp-label{font-size:10px;font-weight:700;letter-spacing:.7px;text-transform:uppercase;color:var(--faint)}
+.sp-list{
+  flex:1;overflow-y:auto;padding:8px;
+  display:flex;flex-direction:column;gap:5px
 }
-.btn-icon:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
-.btn-icon svg { display: block; flex-shrink: 0; }
-
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 0 14px;
-  height: 34px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  white-space: nowrap;
-  transition: background .15s, box-shadow .15s;
-  box-shadow: var(--shadow);
+.sp-list::-webkit-scrollbar{width:3px}
+.sp-list::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:3px}
+.sp-add{
+  margin:6px 8px 8px;padding:9px;background:none;
+  border:1px dashed var(--bdr);border-radius:var(--rs);
+  color:var(--muted);font-size:11.5px;font-weight:500;
+  display:flex;align-items:center;justify-content:center;gap:5px;
+  transition:all .15s;flex-shrink:0
 }
-.btn-primary:hover { background: var(--accent-hover); }
+.sp-add:hover{border-color:var(--acc);color:var(--acc);background:var(--acc2)}
 
-.app-body {
-  flex: 1;
-  display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: 16px;
-  min-height: 0;
-  padding-bottom: 16px;
+/* Slide thumbnail */
+.stb{
+  position:relative;aspect-ratio:4/5;border-radius:var(--rs);
+  overflow:hidden;border:2px solid transparent;
+  transition:border-color .15s;cursor:pointer;flex-shrink:0;
+  background:var(--surf2)
 }
-
-/* ── Tasks panel ── */
-.tasks-panel {
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
-  gap: 10px;
+.stb:hover{border-color:rgba(124,108,240,.6)}
+.stb.active{border-color:var(--acc)}
+.stb-canvas{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.stb-n{
+  position:absolute;bottom:3px;right:5px;
+  font-size:9px;font-weight:700;color:rgba(255,255,255,.55);
+  letter-spacing:.4px;text-shadow:0 1px 2px rgba(0,0,0,.8)
 }
-
-.filter-bar {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
+.stb-del{
+  position:absolute;top:3px;right:3px;width:18px;height:18px;
+  background:rgba(0,0,0,.75);border:none;border-radius:50%;
+  color:rgba(255,255,255,.6);display:none;align-items:center;
+  justify-content:center;font-size:10px;font-weight:700;
+  transition:background .12s;line-height:1
+}
+.stb:hover .stb-del{display:flex}
+.stb-del:hover{background:var(--err);color:#fff}
+.stb-type{
+  position:absolute;top:3px;left:5px;
+  font-size:8px;font-weight:700;letter-spacing:.5px;
+  text-transform:uppercase;color:rgba(255,255,255,.5);
+  text-shadow:0 1px 2px rgba(0,0,0,.8)
 }
 
-.filter-chip {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 5px 12px;
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all .15s;
-  box-shadow: var(--shadow);
-}
-.filter-chip:hover { color: var(--accent); border-color: var(--accent); }
-.filter-chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
-
-.tasks-scroll {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  padding-right: 2px;
-}
-.tasks-scroll::-webkit-scrollbar { width: 4px; }
-.tasks-scroll::-webkit-scrollbar-track { background: transparent; }
-.tasks-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-
-.task-group-label {
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  padding: 6px 0 2px;
+/* ── Canvas area ── */
+.canvas-area{
+  background:var(--bg);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  position:relative;overflow:hidden;gap:14px;
+  background-image:radial-gradient(var(--bdr2) 1px,transparent 1px);
+  background-size:24px 24px
 }
 
-.task-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 11px 12px;
-  display: flex;
-  gap: 10px;
-  align-items: flex-start;
-  box-shadow: var(--shadow);
-  cursor: pointer;
-  transition: border-color .15s, box-shadow .15s;
-  position: relative;
-}
-.task-card:hover { border-color: var(--accent); box-shadow: var(--shadow-lg); }
-.task-card.done { opacity: var(--done-alpha); }
-.task-card.done .task-title { text-decoration: line-through; }
-
-.task-check {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  border: 2px solid var(--border);
-  border-radius: 50%;
-  cursor: pointer;
-  margin-top: 1px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all .15s;
-  background: transparent;
-}
-.task-check:hover { border-color: var(--accent); }
-.task-check.checked { background: var(--accent); border-color: var(--accent); }
-.task-check.checked::after {
-  content: '';
-  display: block;
-  width: 5px;
-  height: 8px;
-  border: 1.5px solid #fff;
-  border-top: none;
-  border-left: none;
-  transform: rotate(45deg) translate(-1px, -1px);
+.slide-nav-wrap{
+  display:flex;align-items:center;gap:14px;position:relative
 }
 
-.task-body { flex: 1; min-width: 0; }
-.task-title {
-  font-size: 13.5px;
-  font-weight: 500;
-  color: var(--text);
-  line-height: 1.4;
-  word-break: break-word;
+.snav{
+  width:34px;height:34px;border-radius:50%;background:var(--surf);
+  border:1px solid var(--bdr);color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0
 }
-.task-meta {
-  display: flex;
-  gap: 8px;
-  margin-top: 5px;
-  flex-wrap: wrap;
-  align-items: center;
-}
-.task-date {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-}
-.task-date.overdue { color: var(--high); }
-.task-date.today { color: var(--accent); font-weight: 500; }
+.snav:hover:not(:disabled){background:var(--surf2);color:var(--txt);border-color:var(--acc)}
+.snav:disabled{opacity:.3;cursor:not-allowed}
 
-.task-category {
-  font-size: 11px;
-  font-weight: 500;
-  padding: 2px 7px;
-  border-radius: 20px;
-  background: var(--border-subtle);
-  color: var(--text-muted);
+.slide-frame{
+  box-shadow:0 24px 64px rgba(0,0,0,.7),0 0 0 1px rgba(255,255,255,.06);
+  border-radius:3px;overflow:hidden;flex-shrink:0;position:relative
 }
 
-.priority-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  flex-shrink: 0;
-  margin-top: 5px;
-}
-.priority-dot.high { background: var(--high); }
-.priority-dot.medium { background: var(--med); }
-.priority-dot.low { background: var(--low); }
-
-.task-delete {
-  opacity: 0;
-  background: none;
-  border: none;
-  color: var(--text-faint);
-  cursor: pointer;
-  padding: 2px;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  transition: opacity .15s, color .15s;
-  flex-shrink: 0;
-}
-.task-card:hover .task-delete { opacity: 1; }
-.task-delete:hover { color: var(--high); }
-
-.empty-state {
-  text-align: center;
-  padding: 48px 16px;
-  color: var(--text-faint);
-}
-.empty-state svg { opacity: .35; margin-bottom: 12px; }
-.empty-state p { margin: 0; font-size: 13px; }
-
-/* ── Calendar panel ── */
-.calendar-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+/* 360×450 = 1080×1350 at 1/3 scale */
+.slide-canvas{
+  width:360px;height:450px;
+  position:relative;overflow:hidden;display:block;
+  background:#fff
 }
 
-.calendar-widget {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  flex-shrink: 0;
+.canvas-info{
+  display:flex;align-items:center;gap:12px;
+  background:var(--surf);border:1px solid var(--bdr);
+  border-radius:var(--r);padding:5px 14px;
+  font-size:11px;color:var(--muted);gap:8px
 }
+.canvas-info span{display:flex;align-items:center;gap:4px}
+.ci-dot{width:6px;height:6px;border-radius:50%;background:var(--acc)}
 
-.cal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 14px 16px 10px;
+/* ── Right panel ── */
+.rpanel{
+  background:var(--surf);border-left:1px solid var(--bdr);
+  display:flex;flex-direction:column;overflow:hidden
 }
+.rtabs{display:flex;border-bottom:1px solid var(--bdr);flex-shrink:0}
+.rtab{
+  flex:1;padding:11px 6px;font-size:11.5px;font-weight:600;
+  color:var(--muted);border:none;background:none;
+  border-bottom:2px solid transparent;transition:all .15s;
+  text-align:center;letter-spacing:.1px
+}
+.rtab:hover{color:var(--txt)}
+.rtab.on{color:var(--acc);border-bottom-color:var(--acc)}
+.rpbody{
+  flex:1;overflow-y:auto;padding:14px 12px
+}
+.rpbody::-webkit-scrollbar{width:4px}
+.rpbody::-webkit-scrollbar-thumb{background:var(--bdr);border-radius:4px}
+.rpane{display:none}
+.rpane.on{display:block}
 
-.cal-month {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: -0.2px;
+/* Fields */
+.fsec{margin-bottom:18px}
+.fsec-title{
+  font-size:10px;font-weight:700;letter-spacing:.7px;
+  text-transform:uppercase;color:var(--faint);margin-bottom:9px
 }
+.field{display:flex;flex-direction:column;gap:4px;margin-bottom:10px}
+.flabel{font-size:11px;font-weight:500;color:var(--muted)}
+.field input,.field textarea,.field select{
+  background:var(--surf2);border:1px solid var(--bdr);
+  border-radius:var(--rs);padding:7px 9px;
+  font-size:12.5px;color:var(--txt);outline:none;
+  transition:border-color .15s;width:100%
+}
+.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--acc)}
+.field textarea{resize:vertical;min-height:72px;line-height:1.5}
+.field select option{background:var(--surf2)}
+.field input::placeholder,.field textarea::placeholder{color:var(--faint)}
 
-.cal-nav {
-  display: flex;
-  gap: 4px;
-}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 
-.cal-nav-btn {
-  width: 28px;
-  height: 28px;
-  border: 1px solid var(--border);
-  background: var(--surface-raised);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  transition: all .15s;
-  padding: 0;
+/* Layout picker */
+.layout-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:10px}
+.lo{
+  aspect-ratio:4/5;border-radius:var(--rs);cursor:pointer;
+  border:2px solid var(--bdr);background:var(--surf2);
+  transition:all .15s;position:relative;overflow:hidden;
+  display:flex;align-items:flex-end;justify-content:center;
+  padding-bottom:5px
 }
-.cal-nav-btn:hover { background: var(--accent-soft); color: var(--accent); border-color: var(--accent); }
+.lo:hover{border-color:rgba(124,108,240,.6)}
+.lo.on{border-color:var(--acc);background:var(--acc2)}
+.lo-label{font-size:8px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--muted);z-index:1}
+.lo.on .lo-label{color:var(--acc)}
+.lo-icon{position:absolute;inset:6px 6px 16px;display:flex;flex-direction:column;gap:2px;justify-content:flex-end}
+.lo-bar{border-radius:2px;background:rgba(255,255,255,.15)}
 
-.cal-grid {
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding: 0 10px 12px;
-  gap: 2px;
+/* Color palette */
+.palette-row{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:4px}
+.swatch{
+  width:36px;height:36px;border-radius:var(--rs);
+  cursor:pointer;border:2px solid transparent;
+  transition:all .15s;position:relative;overflow:hidden;flex-shrink:0
 }
+.swatch:hover{border-color:rgba(255,255,255,.3);transform:scale(1.08)}
+.swatch.on{border-color:#fff;box-shadow:0 0 0 2px rgba(255,255,255,.2)}
+.swatch input[type=color]{
+  position:absolute;inset:0;opacity:0;cursor:pointer;
+  width:100%;height:100%;border:none;padding:0
+}
+.palette-role{
+  display:flex;gap:6px;align-items:center;margin-bottom:8px;flex-wrap:wrap
+}
+.prole{
+  display:flex;align-items:center;gap:4px;
+  font-size:10.5px;color:var(--muted)
+}
+.prole-dot{width:10px;height:10px;border-radius:3px;flex-shrink:0}
 
-.cal-dow {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  text-align: center;
-  padding: 4px 0;
+/* Font picker */
+.font-opt{
+  display:flex;align-items:center;gap:10px;
+  padding:8px 10px;border-radius:var(--rs);cursor:pointer;
+  border:1px solid var(--bdr);background:var(--surf2);
+  transition:all .15s;margin-bottom:6px
 }
+.font-opt:hover{border-color:rgba(124,108,240,.6)}
+.font-opt.on{border-color:var(--acc);background:var(--acc2)}
+.fo-sample{font-size:22px;font-weight:700;line-height:1;color:var(--txt);min-width:36px}
+.fo-info{flex:1;min-width:0}
+.fo-name{font-size:11.5px;font-weight:600;color:var(--txt)}
+.fo-sub{font-size:10px;color:var(--muted)}
 
-.cal-day {
-  position: relative;
-  aspect-ratio: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: background .12s;
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--text-muted);
-  font-variant-numeric: tabular-nums;
-  gap: 2px;
-  padding: 2px 0;
+/* Ref panel */
+.dropzone{
+  border:2px dashed var(--bdr);border-radius:var(--r);
+  padding:28px 16px;text-align:center;cursor:pointer;
+  transition:all .15s;margin-bottom:12px;position:relative;
+  overflow:hidden
 }
-.cal-day:empty { cursor: default; }
-.cal-day:not(:empty):hover { background: var(--accent-soft); color: var(--accent); }
-.cal-day.today { color: var(--accent); font-weight: 700; }
-.cal-day.today .cal-day-num { background: var(--accent); color: #fff; border-radius: 50%; width: 22px; height: 22px; display: flex; align-items: center; justify-content: center; }
-.cal-day.other-month { color: var(--text-faint); opacity: .5; }
-.cal-day.selected { background: var(--accent-soft); }
-.cal-day.selected .cal-day-num { color: var(--accent); }
+.dropzone:hover,.dropzone.drag{border-color:var(--acc);background:var(--acc2)}
+.dropzone.has-img{padding:0;border-style:solid;border-color:var(--bdr)}
+.dropzone.has-img img{width:100%;display:block;border-radius:5px}
+.dz-ico{margin-bottom:8px;opacity:.5}
+.dz-main{font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:4px}
+.dz-sub{font-size:11px;color:var(--faint)}
+.dz-clear{
+  position:absolute;top:6px;right:6px;width:22px;height:22px;
+  background:rgba(0,0,0,.75);border:none;border-radius:50%;
+  color:#fff;font-size:12px;display:none;align-items:center;justify-content:center
+}
+.dropzone.has-img:hover .dz-clear{display:flex}
+.dz-clear:hover{background:var(--err)}
+.dz-input{display:none}
+.ref-notes{
+  background:var(--surf2);border:1px solid var(--bdr2);
+  border-radius:var(--r);padding:10px 12px;
+  font-size:11.5px;color:var(--muted);line-height:1.55
+}
+.ref-notes p{margin-bottom:6px}
+.ref-notes p:last-child{margin-bottom:0}
 
-.cal-day-num { font-size: 12.5px; line-height: 1; }
+/* Style preset pills */
+.style-row{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px}
+.style-pill{
+  padding:5px 10px;border-radius:20px;font-size:11px;font-weight:600;
+  border:1px solid var(--bdr);background:var(--surf2);color:var(--muted);
+  cursor:pointer;transition:all .15s
+}
+.style-pill:hover{border-color:var(--acc);color:var(--acc)}
+.style-pill.on{background:var(--acc);color:#fff;border-color:var(--acc)}
 
-.cal-dots {
-  display: flex;
-  gap: 2px;
-  justify-content: center;
+/* ── Export overlay ── */
+.export-ov{
+  position:fixed;inset:0;background:rgba(0,0,0,.85);
+  z-index:100;display:flex;flex-direction:column;align-items:center;
+  overflow-y:auto;padding:28px 16px 48px;gap:20px;
+  backdrop-filter:blur(4px)
 }
-.cal-dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
+.export-ov[hidden]{display:none!important}
+.exhead{
+  display:flex;align-items:center;justify-content:space-between;
+  width:100%;max-width:440px
 }
-.cal-dot.high { background: var(--high); }
-.cal-dot.medium { background: var(--med); }
-.cal-dot.low { background: var(--low); }
-.cal-dot.done { background: var(--text-faint); }
+.extitle{font-size:17px;font-weight:700}
+.exslide{
+  width:360px;height:450px;border-radius:4px;
+  overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,.85);
+  flex-shrink:0
+}
+.exslide .slide-canvas{width:100%;height:100%}
+.exnav{display:flex;align-items:center;gap:10px}
+.exnote{
+  font-size:11.5px;color:var(--muted);text-align:center;
+  max-width:380px;line-height:1.55;padding:10px 14px;
+  background:var(--surf);border-radius:var(--r);
+  border:1px solid var(--bdr)
+}
+.ex-actions{display:flex;gap:8px}
 
-/* ── Mini upcoming ── */
-.upcoming-section {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow: hidden;
-  flex: 1;
-  min-height: 0;
-  display: flex;
-  flex-direction: column;
+/* ── Toast ── */
+.toast{
+  position:fixed;bottom:20px;left:50%;transform:translateX(-50%);
+  background:var(--surf2);border:1px solid var(--bdr);border-radius:var(--r);
+  padding:9px 16px;font-size:12.5px;color:var(--txt);
+  box-shadow:0 8px 24px rgba(0,0,0,.5);z-index:200;
+  pointer-events:none;opacity:0;transition:opacity .2s;white-space:nowrap
 }
-
-.upcoming-header {
-  padding: 12px 14px 8px;
-  font-size: 12px;
-  font-weight: 600;
-  letter-spacing: .3px;
-  color: var(--text-muted);
-  border-bottom: 1px solid var(--border-subtle);
-  flex-shrink: 0;
-}
-
-.upcoming-list {
-  overflow-y: auto;
-  flex: 1;
-  padding: 6px 0;
-}
-.upcoming-list::-webkit-scrollbar { width: 3px; }
-.upcoming-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-.upcoming-item {
-  display: flex;
-  gap: 10px;
-  padding: 7px 14px;
-  align-items: center;
-  transition: background .12s;
-  cursor: pointer;
-}
-.upcoming-item:hover { background: var(--surface-raised); }
-
-.upcoming-date-col {
-  flex-shrink: 0;
-  width: 32px;
-  text-align: center;
-}
-.upcoming-day-num {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 15px;
-  font-weight: 500;
-  line-height: 1;
-  color: var(--text);
-  font-variant-numeric: tabular-nums;
-}
-.upcoming-day-label {
-  font-size: 9px;
-  letter-spacing: .5px;
-  text-transform: uppercase;
-  color: var(--text-faint);
-  margin-top: 2px;
-}
-.upcoming-title {
-  font-size: 12.5px;
-  font-weight: 500;
-  color: var(--text);
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  flex: 1;
-  min-width: 0;
-}
-.upcoming-prio {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  flex-shrink: 0;
-}
-.upcoming-empty {
-  padding: 20px 14px;
-  color: var(--text-faint);
-  font-size: 12px;
-  text-align: center;
-}
-
-/* ── Modal ── */
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.45);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 100;
-  padding: 16px;
-  backdrop-filter: blur(2px);
-}
-.modal-overlay[hidden] { display: none !important; }
-
-.modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  max-width: 440px;
-  overflow: hidden;
-}
-
-.modal-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 18px 20px 14px;
-  border-bottom: 1px solid var(--border-subtle);
-}
-.modal-title {
-  font-size: 15px;
-  font-weight: 700;
-  margin: 0;
-  letter-spacing: -0.2px;
-}
-
-.modal-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
-.modal-footer {
-  padding: 12px 20px 18px;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-
-.field { display: flex; flex-direction: column; gap: 5px; }
-.field-label { font-size: 12px; font-weight: 600; color: var(--text-muted); letter-spacing: .2px; }
-
-.field input, .field select, .field textarea {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 9px 11px;
-  font-size: 13.5px;
-  color: var(--text);
-  font-family: inherit;
-  outline: none;
-  transition: border-color .15s, box-shadow .15s;
-  width: 100%;
-}
-.field input:focus, .field select:focus, .field textarea:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(var(--accent-rgb, 64, 89, 229), .12);
-}
-.field textarea { resize: vertical; min-height: 70px; }
-
-.field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.btn-cancel {
-  background: var(--surface-raised);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 0 16px;
-  height: 36px;
-  font-size: 13px;
-  font-weight: 500;
-  cursor: pointer;
-  color: var(--text-muted);
-  transition: all .15s;
-}
-.btn-cancel:hover { border-color: var(--accent); color: var(--accent); }
-
-.btn-save {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 0 20px;
-  height: 36px;
-  font-size: 13px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background .15s;
-}
-.btn-save:hover { background: var(--accent-hover); }
+.toast.on{opacity:1}
 
 /* ── Responsive ── */
-@media (max-width: 680px) {
-  .app-body { grid-template-columns: 1fr; }
-  .calendar-panel { order: -1; }
-  .upcoming-section { min-height: 160px; }
+@media(max-width:900px){
+  .workspace{grid-template-columns:160px 1fr}
+  .rpanel{display:none}
 }
-@media (max-width: 400px) {
-  .app-title { font-size: 16px; }
+@media(max-width:640px){
+  .workspace{grid-template-columns:1fr}
+  .slides-panel{display:none}
 }
 </style>
+</head>
+<body>
 
-<!-- Modal -->
-<div class="modal-overlay" id="modal" hidden aria-modal="true" role="dialog">
-  <div class="modal">
-    <div class="modal-header">
-      <h2 class="modal-title" id="modal-title">New Task</h2>
-      <button class="btn-icon" id="modal-close" aria-label="Close">
-        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M1 1l12 12M13 1L1 13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
-      </button>
+<!-- Export Overlay -->
+<div class="export-ov" id="exportOv" hidden>
+  <div class="exhead">
+    <span class="extitle">Export Carousel</span>
+    <div class="ex-actions">
+      <button class="btn btn-ghost" id="exPrev" disabled>← Prev</button>
+      <span id="exCounter" style="font-size:12px;color:var(--muted);min-width:60px;text-align:center"></span>
+      <button class="btn btn-ghost" id="exNext">Next →</button>
+      <button class="btn btn-ghost btn-ico" id="closeExport" title="Close">✕</button>
     </div>
-    <div class="modal-body">
-      <div class="field">
-        <label class="field-label" for="task-title">Title</label>
-        <input type="text" id="task-title" placeholder="What needs to be done?" autocomplete="off">
-      </div>
-      <div class="field">
-        <label class="field-label" for="task-notes">Notes</label>
-        <textarea id="task-notes" placeholder="Any details…" rows="2"></textarea>
-      </div>
-      <div class="field-row">
-        <div class="field">
-          <label class="field-label" for="task-date">Due date</label>
-          <input type="date" id="task-date">
-        </div>
-        <div class="field">
-          <label class="field-label" for="task-priority">Priority</label>
-          <select id="task-priority">
-            <option value="medium">Medium</option>
-            <option value="high">High</option>
-            <option value="low">Low</option>
-          </select>
-        </div>
-      </div>
-      <div class="field">
-        <label class="field-label" for="task-category">Category</label>
-        <select id="task-category">
-          <option value="">None</option>
-          <option value="Work">Work</option>
-          <option value="Personal">Personal</option>
-          <option value="Health">Health</option>
-          <option value="Finance">Finance</option>
-          <option value="Learning">Learning</option>
-          <option value="Home">Home</option>
-        </select>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn-cancel" id="modal-cancel">Cancel</button>
-      <button class="btn-save" id="modal-save">Add Task</button>
-    </div>
+  </div>
+  <div class="exslide">
+    <div class="slide-canvas" id="exportCanvas"></div>
+  </div>
+  <div class="exnote">
+    <p><strong>To export:</strong> Right-click the slide above and "Save image as…" — or take a screenshot of each slide.</p>
+    <p>Each slide represents 1080 × 1350 px (4:5) when rendered at full resolution. Navigate through all slides and save each one.</p>
   </div>
 </div>
 
 <!-- App -->
 <div class="app">
-  <header class="app-header">
-    <h1 class="app-title">Day Planner</h1>
-    <div class="header-actions">
-      <button class="btn-icon" id="theme-toggle" title="Toggle theme" aria-label="Toggle theme">
-        <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><path d="M7.5 1v1M7.5 13v1M1 7.5H0M15 7.5h-1M2.93 2.93l.7.7M11.37 11.37l.7.7M2.93 12.07l.7-.7M11.37 3.63l.7-.7M7.5 5a2.5 2.5 0 100 5 2.5 2.5 0 000-5z" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/></svg>
-      </button>
-      <button class="btn-primary" id="new-task-btn">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-        New Task
-      </button>
+  <header class="header">
+    <div class="logo">
+      <div class="logo-icon">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <rect x="1" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".9"/>
+          <rect x="9" y="1" width="6" height="6" rx="1.5" fill="white" opacity=".7"/>
+          <rect x="1" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".7"/>
+          <rect x="9" y="9" width="6" height="6" rx="1.5" fill="white" opacity=".5"/>
+        </svg>
+      </div>
+      Carousel Creator
+    </div>
+    <div class="hdiv"></div>
+    <div class="hbrand">
+      <input type="text" id="brandInput" placeholder="Brand name or @handle" maxlength="40">
+    </div>
+    <div class="hgrow"></div>
+    <div class="hend">
+      <button class="btn btn-ghost" id="addSlideBtnH">+ Add Slide</button>
+      <button class="btn btn-acc" id="exportBtn">↗ Export</button>
     </div>
   </header>
 
-  <div class="app-body">
-    <!-- Tasks panel -->
-    <section class="tasks-panel">
-      <div class="filter-bar" id="filter-bar">
-        <button class="filter-chip active" data-filter="all">All</button>
-        <button class="filter-chip" data-filter="today">Today</button>
-        <button class="filter-chip" data-filter="upcoming">Upcoming</button>
-        <button class="filter-chip" data-filter="done">Done</button>
+  <div class="workspace">
+    <!-- Slides list -->
+    <div class="slides-panel">
+      <div class="sp-head">
+        <span class="sp-label">Slides</span>
+        <span id="slideCount" style="font-size:10px;color:var(--faint)">0 / 10</span>
       </div>
-      <div class="tasks-scroll" id="task-list" role="list"></div>
-    </section>
+      <div class="sp-list" id="slidesList"></div>
+      <button class="sp-add" id="addSlideBtn">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M6 1v10M1 6h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Add Slide
+      </button>
+    </div>
 
-    <!-- Calendar panel -->
-    <aside class="calendar-panel">
-      <div class="calendar-widget">
-        <div class="cal-header">
-          <span class="cal-month" id="cal-month"></span>
-          <div class="cal-nav">
-            <button class="cal-nav-btn" id="cal-prev" aria-label="Previous month">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M6.5 1.5L3 5l3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
-            <button class="cal-nav-btn" id="cal-today-btn" title="Go to today" aria-label="Today">
-              <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="1" y="2" width="10" height="9" rx="1.5" stroke="currentColor" stroke-width="1.3"/><path d="M4 1v2M8 1v2M1 5h10" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
-            </button>
-            <button class="cal-nav-btn" id="cal-next" aria-label="Next month">
-              <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M3.5 1.5L7 5l-3.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+    <!-- Canvas -->
+    <div class="canvas-area">
+      <div class="slide-nav-wrap">
+        <button class="snav" id="prevSlide" title="Previous" disabled>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M6.5 1.5L3 5l3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <div class="slide-frame">
+          <div class="slide-canvas" id="mainCanvas"></div>
+        </div>
+        <button class="snav" id="nextSlide" title="Next" disabled>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none">
+            <path d="M3.5 1.5L7 5l-3.5 3.5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+      <div class="canvas-info">
+        <span><span class="ci-dot"></span>1080 × 1350 px</span>
+        <span style="color:var(--bdr)">|</span>
+        <span id="slideLabel" style="color:var(--acc)">Slide 1 of 1</span>
+        <span style="color:var(--bdr)">|</span>
+        <span>4:5 ratio</span>
+      </div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="rpanel">
+      <div class="rtabs">
+        <button class="rtab on" data-tab="content">Content</button>
+        <button class="rtab" data-tab="design">Design</button>
+        <button class="rtab" data-tab="reference">Reference</button>
+      </div>
+      <div class="rpbody">
+
+        <!-- Content tab -->
+        <div class="rpane on" id="pane-content">
+          <div class="fsec">
+            <div class="fsec-title">Layout</div>
+            <div class="layout-grid" id="layoutGrid">
+              <!-- filled by JS -->
+            </div>
+          </div>
+          <div class="fsec">
+            <div class="fsec-title">Slide Content</div>
+            <div id="contentFields"><!-- filled by JS --></div>
           </div>
         </div>
-        <div class="cal-grid" id="cal-grid"></div>
-      </div>
 
-      <div class="upcoming-section">
-        <div class="upcoming-header" id="upcoming-header">Upcoming Tasks</div>
-        <div class="upcoming-list" id="upcoming-list"></div>
+        <!-- Design tab -->
+        <div class="rpane" id="pane-design">
+          <div class="fsec">
+            <div class="fsec-title">Visual Style</div>
+            <div class="style-row" id="styleRow">
+              <!-- filled by JS -->
+            </div>
+          </div>
+          <div class="fsec">
+            <div class="fsec-title">Color Palette</div>
+            <div class="palette-row" id="paletteRow"></div>
+            <div class="palette-role" id="paletteRole"></div>
+          </div>
+          <div class="fsec">
+            <div class="fsec-title">Typography</div>
+            <div id="fontOpts"></div>
+          </div>
+        </div>
+
+        <!-- Reference tab -->
+        <div class="rpane" id="pane-reference">
+          <div class="fsec">
+            <div class="fsec-title">Design Reference</div>
+            <div class="dropzone" id="dropzone">
+              <div class="dz-ico">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+                  <rect x="3" y="5" width="26" height="22" rx="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+                  <circle cx="11" cy="12" r="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+                  <path d="M3 22l7-7 5 5 4-4 10 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".4"/>
+                </svg>
+              </div>
+              <div class="dz-main">Upload reference image</div>
+              <div class="dz-sub">Click or drag & drop · PNG, JPG, WEBP</div>
+              <button class="dz-clear" id="dzClear">✕</button>
+              <input type="file" class="dz-input" id="refInput" accept="image/*">
+            </div>
+          </div>
+          <div class="fsec">
+            <div class="ref-notes">
+              <p><strong>How to use:</strong> Upload a carousel you love as a visual reference.</p>
+              <p>Then pick colors from its palette and select a font style that matches it.</p>
+              <p>Your content (entered in the Content tab) will be laid out using those design choices.</p>
+            </div>
+          </div>
+        </div>
+
       </div>
-    </aside>
+    </div>
   </div>
 </div>
 
+<div class="toast" id="toast"></div>
+
 <script>
-(function() {
+(function(){
 'use strict';
 
-// ── State ──
-const TODAY = (() => {
-  const d = new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-})();
+/* ── IDs ── */
+let _id = 0;
+const uid = () => 'sl' + (++_id);
 
-let state = {
-  tasks: [],
-  filter: 'all',
-  calYear: new Date().getFullYear(),
-  calMonth: new Date().getMonth(),
-  selectedDay: null,
-  editId: null,
-  theme: null
+/* ── Fonts ── */
+const FONTS = [
+  {id:'inter',  name:'Inter',          sub:'Clean & modern',       css:'Inter',             weight:'800'},
+  {id:'jakarta',name:'Plus Jakarta',   sub:'Friendly geometric',   css:'Plus Jakarta Sans', weight:'800'},
+  {id:'playfair',name:'Playfair',      sub:'Elegant serif',        css:'Playfair Display',  weight:'900'},
+  {id:'syne',   name:'Syne',           sub:'Bold & striking',      css:'Syne',              weight:'800'},
+  {id:'grotesk',name:'Space Grotesk',  sub:'Technical & clear',    css:'Space Grotesk',     weight:'700'},
+];
+
+/* ── Design styles (preset palettes) ── */
+const STYLES = [
+  {id:'midnight', name:'Midnight',  pal:['#0D0F1A','#7C6CF0','#FFFFFF','#9DA3C2','#FFD166']},
+  {id:'ocean',    name:'Ocean',     pal:['#0A1628','#0EA5E9','#FFFFFF','#94C3E0','#F5A623']},
+  {id:'blush',    name:'Blush',     pal:['#1A0A14','#E0587A','#FFFFFF','#C9A0B0','#FFD166']},
+  {id:'forest',   name:'Forest',    pal:['#0A1610','#22C55E','#FFFFFF','#86C89E','#FFF176']},
+  {id:'cream',    name:'Cream',     pal:['#FAF7F2','#3D2B1F','#1A1208','#7D6A5E','#C05621']},
+  {id:'slate',    name:'Slate',     pal:['#1E2430','#64748B','#E8EAF0','#94A3B8','#F59E0B']},
+];
+
+/* ── Layouts ── */
+const LAYOUTS = [
+  {id:'cover',   label:'Cover'},
+  {id:'content', label:'Content'},
+  {id:'list',    label:'List'},
+  {id:'stat',    label:'Stat'},
+  {id:'quote',   label:'Quote'},
+  {id:'outro',   label:'Outro'},
+];
+
+const LAYOUT_ICONS = {
+  cover:   [{h:30,w:70,r:3},{h:15,w:55,r:2},{h:8,w:35,r:2}],
+  content: [{h:15,w:70,r:2},{h:8,w:50,r:2},{h:6,w:70,r:1},{h:6,w:65,r:1},{h:6,w:60,r:1}],
+  list:    [{h:14,w:65,r:2},{h:7,w:50,r:1},{h:7,w:55,r:1},{h:7,w:45,r:1},{h:7,w:52,r:1}],
+  stat:    [{h:36,w:55,r:4},{h:10,w:60,r:2},{h:7,w:40,r:1}],
+  quote:   [{h:8,w:15,r:1},{h:18,w:70,r:2},{h:10,w:50,r:2},{h:6,w:30,r:1}],
+  outro:   [{h:20,w:60,r:3},{h:10,w:50,r:2},{h:14,w:45,r:7}],
 };
 
-function loadState() {
-  try {
-    const raw = localStorage.getItem('dayplanner_v2');
-    if (raw) {
-      const saved = JSON.parse(raw);
-      state.tasks = saved.tasks || [];
-      state.theme = saved.theme || null;
-    }
-  } catch(e) {}
+/* ── State ── */
+const state = {
+  slides: [],
+  current: 0,
+  design: {
+    style: 'midnight',
+    palette: [...STYLES[0].pal],
+    font: 'inter',
+    brand: '',
+  },
+  refImage: null,
+  tab: 'content',
+};
 
-  if (!state.tasks.length) {
-    // Seed with examples
-    const d = new Date();
-    const fmt = (offset) => {
-      const x = new Date(d);
-      x.setDate(x.getDate() + offset);
-      return `${x.getFullYear()}-${String(x.getMonth()+1).padStart(2,'0')}-${String(x.getDate()).padStart(2,'0')}`;
-    };
-    state.tasks = [
-      { id: uid(), title: 'Finish project proposal', notes: 'Include budget breakdown', due: fmt(0), priority: 'high', category: 'Work', done: false, created: Date.now()-4000 },
-      { id: uid(), title: 'Team standup', notes: '', due: fmt(0), priority: 'medium', category: 'Work', done: true, created: Date.now()-3000 },
-      { id: uid(), title: 'Gym session', notes: '', due: fmt(1), priority: 'medium', category: 'Health', done: false, created: Date.now()-2000 },
-      { id: uid(), title: 'Review Q4 budget', notes: '', due: fmt(3), priority: 'high', category: 'Finance', done: false, created: Date.now()-1000 },
-      { id: uid(), title: 'Read "Deep Work"', notes: 'Chapter 3 onwards', due: fmt(5), priority: 'low', category: 'Learning', done: false, created: Date.now() },
-    ];
+/* ── Slide defaults per layout ── */
+function defaultSlide(layout) {
+  const defs = {
+    cover:   {eyebrow:'Welcome',headline:'Your Headline\nGoes Here',sub:'A compelling subtitle that draws your audience in',cta:''},
+    content: {eyebrow:'Key Point',headline:'The Main Idea',body:'Explain your concept here. Keep it concise and impactful — one clear message per slide.',cta:''},
+    list:    {eyebrow:'',headline:'Key Takeaways',items:['First important point to remember','Second insight your audience needs','Third actionable step to take'],cta:''},
+    stat:    {eyebrow:'Did you know?',stat:'83%',statLabel:'of people prefer visual content',body:'A short supporting insight or context.',cta:''},
+    quote:   {eyebrow:'',quote:'"The best way to predict the future is to create it."',author:'— Peter Drucker',body:'',cta:''},
+    outro:   {eyebrow:'',headline:'Follow for More',body:'More tips, insights & ideas every week.',cta:'Follow @yourbrand'},
+  };
+  return {id:uid(), layout, ...defs[layout]};
+}
+
+/* ── Seed initial slides ── */
+function init() {
+  state.slides = [
+    defaultSlide('cover'),
+    defaultSlide('content'),
+    defaultSlide('list'),
+    defaultSlide('outro'),
+  ];
+  state.slides[0].eyebrow = 'Your Topic';
+  state.slides[0].headline = 'The Ultimate Guide\nto Your Subject';
+  state.slides[0].sub = 'Everything you need to know in one carousel';
+  state.slides[1].headline = 'Why This Matters';
+  state.slides[1].body = 'Share your key insight here. One powerful idea per slide keeps your audience engaged and coming back for more.';
+  state.slides[2].headline = 'What You\'ll Learn';
+  state.slides[2].items = ['The core concept explained simply','How to apply it immediately','Common mistakes to avoid'];
+  render();
+}
+
+/* ── Rendering ── */
+function esc(s) {
+  if (!s) return '';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function nl2br(s) {
+  return esc(s).replace(/\n/g,'<br>');
+}
+
+function hexToRgb(hex) {
+  const r = parseInt(hex.slice(1,3),16);
+  const g = parseInt(hex.slice(3,5),16);
+  const b = parseInt(hex.slice(5,7),16);
+  return {r,g,b};
+}
+
+function isLight(hex) {
+  const {r,g,b} = hexToRgb(hex);
+  return (r*0.299 + g*0.587 + b*0.114) > 160;
+}
+
+function alpha(hex, a) {
+  const {r,g,b} = hexToRgb(hex);
+  return `rgba(${r},${g},${b},${a})`;
+}
+
+function mix(hex1, hex2, t) {
+  const c1 = hexToRgb(hex1), c2 = hexToRgb(hex2);
+  const r = Math.round(c1.r + (c2.r-c1.r)*t);
+  const g = Math.round(c1.g + (c2.g-c1.g)*t);
+  const b = Math.round(c1.b + (c2.b-c1.b)*t);
+  return '#' + [r,g,b].map(x=>x.toString(16).padStart(2,'0')).join('');
+}
+
+function buildSlide(slide, design, index, total) {
+  const [bg, accent, textMain, textMuted, highlight] = design.palette;
+  const font = FONTS.find(f=>f.id===design.font) || FONTS[0];
+  const hFont = `'${font.css}', system-ui, sans-serif`;
+  const light = isLight(bg);
+  const txt = light ? '#1A1208' : textMain;
+  const muted = light ? '#6B5B4E' : alpha(textMain, 0.55);
+  const isDark = !light;
+
+  // Accent decorative color
+  const dec = isDark ? alpha(accent, 0.12) : alpha(accent, 0.08);
+
+  const brand = design.brand || '';
+
+  switch(slide.layout) {
+    case 'cover': return buildCover(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    case 'content': return buildContent(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    case 'list': return buildList(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    case 'stat': return buildStat(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    case 'quote': return buildQuote(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    case 'outro': return buildOutro(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
+    default: return buildContent(slide, {bg,accent,txt,muted,hFont,highlight,dec,isDark,brand,light}, index, total);
   }
 }
 
-function saveState() {
-  try {
-    localStorage.setItem('dayplanner_v2', JSON.stringify({ tasks: state.tasks, theme: state.theme }));
-  } catch(e) {}
+function slideMeta(index, total, accent, muted, hFont, brand) {
+  const num = String(index+1).padStart(2,'0');
+  const tot = String(total).padStart(2,'0');
+  return `<div style="
+    position:absolute;top:18px;right:20px;
+    display:flex;align-items:center;gap:5px;
+    font-family:${hFont};font-size:8.5px;font-weight:700;
+    letter-spacing:1.2px;text-transform:uppercase;color:${muted}
+  ">${num}<span style="color:${alpha(accent,.4)}">/</span>${tot}</div>
+  ${brand ? `<div style="
+    position:absolute;top:18px;left:20px;
+    font-family:${hFont};font-size:8px;font-weight:700;
+    letter-spacing:1px;text-transform:uppercase;color:${muted}
+  ">${esc(brand)}</div>` : ''}`;
 }
 
-function uid() {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
+function accentLine(accent) {
+  return `<div style="width:28px;height:3px;background:${accent};border-radius:2px;margin-bottom:14px"></div>`;
 }
 
-// ── Theme ──
-function applyTheme() {
-  if (state.theme === 'dark') {
-    document.documentElement.setAttribute('data-theme', 'dark');
-  } else if (state.theme === 'light') {
-    document.documentElement.setAttribute('data-theme', 'light');
-  } else {
-    document.documentElement.removeAttribute('data-theme');
-  }
-}
-
-document.getElementById('theme-toggle').addEventListener('click', () => {
-  const current = state.theme;
-  const isDark = current === 'dark' || (!current && window.matchMedia('(prefers-color-scheme: dark)').matches);
-  state.theme = isDark ? 'light' : 'dark';
-  applyTheme();
-  saveState();
-});
-
-// ── Filters ──
-document.getElementById('filter-bar').addEventListener('click', e => {
-  const chip = e.target.closest('.filter-chip');
-  if (!chip) return;
-  state.filter = chip.dataset.filter;
-  state.selectedDay = null;
-  document.querySelectorAll('.filter-chip').forEach(c => c.classList.toggle('active', c === chip));
-  renderTasks();
-  renderCalendar();
-});
-
-// ── Task CRUD ──
-function getFilteredTasks() {
-  if (state.selectedDay) {
-    return state.tasks.filter(t => t.due === state.selectedDay).sort(taskSort);
-  }
-  const now = new Date();
-  const todayStr = TODAY;
-  switch(state.filter) {
-    case 'today':
-      return state.tasks.filter(t => t.due === todayStr && !t.done).sort(taskSort);
-    case 'upcoming':
-      return state.tasks.filter(t => t.due && t.due > todayStr && !t.done).sort(taskSort);
-    case 'done':
-      return state.tasks.filter(t => t.done).sort((a,b) => b.created - a.created);
-    default:
-      return [...state.tasks].sort(taskSort);
-  }
-}
-
-function taskSort(a, b) {
-  if (a.done !== b.done) return a.done ? 1 : -1;
-  if (a.due && b.due) return a.due.localeCompare(b.due);
-  if (a.due) return -1;
-  if (b.due) return 1;
-  return b.created - a.created;
-}
-
-function formatDate(due) {
-  if (!due) return '';
-  const [y, m, d] = due.split('-').map(Number);
-  const today = new Date(); today.setHours(0,0,0,0);
-  const dueDate = new Date(y, m-1, d);
-  const diff = Math.round((dueDate - today) / 86400000);
-  if (diff < 0) return { label: `${Math.abs(diff)}d overdue`, cls: 'overdue' };
-  if (diff === 0) return { label: 'Today', cls: 'today' };
-  if (diff === 1) return { label: 'Tomorrow', cls: '' };
-  if (diff < 7) return { label: ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'][dueDate.getDay()], cls: '' };
-  return { label: dueDate.toLocaleDateString('en', {month:'short', day:'numeric'}), cls: '' };
-}
-
-// ── Render tasks ──
-function renderTasks() {
-  const list = document.getElementById('task-list');
-  const tasks = getFilteredTasks();
-  if (!tasks.length) {
-    list.innerHTML = `<div class="empty-state">
-      <svg width="40" height="40" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="26" rx="4" stroke="currentColor" stroke-width="2"/><path d="M13 20h14M13 14h8M13 26h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
-      <p>${state.selectedDay ? 'No tasks on this day.' : 'No tasks here yet.'}</p>
-    </div>`;
-    return;
-  }
-
-  // Group by date for "all" filter
-  let html = '';
-  if (state.filter === 'all' && !state.selectedDay) {
-    const overdue = tasks.filter(t => !t.done && t.due && t.due < TODAY);
-    const todayT = tasks.filter(t => !t.done && t.due === TODAY);
-    const upcoming = tasks.filter(t => !t.done && t.due && t.due > TODAY);
-    const noDate = tasks.filter(t => !t.done && !t.due);
-    const done = tasks.filter(t => t.done);
-    if (overdue.length) { html += `<div class="task-group-label">Overdue</div>`; overdue.forEach(t => { html += taskHTML(t); }); }
-    if (todayT.length) { html += `<div class="task-group-label">Today</div>`; todayT.forEach(t => { html += taskHTML(t); }); }
-    if (upcoming.length) { html += `<div class="task-group-label">Upcoming</div>`; upcoming.forEach(t => { html += taskHTML(t); }); }
-    if (noDate.length) { html += `<div class="task-group-label">Anytime</div>`; noDate.forEach(t => { html += taskHTML(t); }); }
-    if (done.length) { html += `<div class="task-group-label">Completed</div>`; done.forEach(t => { html += taskHTML(t); }); }
-  } else {
-    tasks.forEach(t => { html += taskHTML(t); });
-  }
-
-  list.innerHTML = html;
-
-  list.querySelectorAll('.task-check').forEach(el => {
-    el.addEventListener('click', e => { e.stopPropagation(); toggleDone(el.dataset.id); });
-  });
-  list.querySelectorAll('.task-delete').forEach(el => {
-    el.addEventListener('click', e => { e.stopPropagation(); deleteTask(el.dataset.id); });
-  });
-  list.querySelectorAll('.task-card').forEach(el => {
-    el.addEventListener('click', () => openEdit(el.dataset.id));
-  });
-}
-
-function taskHTML(t) {
-  const dateInfo = t.due ? formatDate(t.due) : null;
-  const priorityLabel = t.priority || 'medium';
-  return `<div class="task-card${t.done ? ' done' : ''}" data-id="${t.id}" role="listitem">
-    <div class="priority-dot ${priorityLabel}"></div>
-    <button class="task-check${t.done ? ' checked' : ''}" data-id="${t.id}" aria-label="${t.done ? 'Mark incomplete' : 'Mark complete'}"></button>
-    <div class="task-body">
-      <div class="task-title">${escHtml(t.title)}</div>
-      <div class="task-meta">
-        ${dateInfo ? `<span class="task-date ${dateInfo.cls}">${dateInfo.label}</span>` : ''}
-        ${t.category ? `<span class="task-category">${escHtml(t.category)}</span>` : ''}
-      </div>
-    </div>
-    <button class="task-delete" data-id="${t.id}" aria-label="Delete task">
-      <svg width="13" height="13" viewBox="0 0 13 13" fill="none"><path d="M1.5 1.5l10 10M11.5 1.5l-10 10" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-    </button>
+function buildCover(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,dec,isDark} = d;
+  const headSize = (s.headline||'').replace(/\n/g,' ').length > 30 ? '26px' : '32px';
+  const grad = isDark
+    ? `radial-gradient(ellipse 80% 60% at 110% -10%, ${alpha(accent,.25)} 0%, transparent 60%)`
+    : `radial-gradient(ellipse 80% 60% at 110% -10%, ${alpha(accent,.15)} 0%, transparent 60%)`;
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:28px 26px 30px;overflow:hidden;
+  ">
+    <!-- Decorative -->
+    <div style="position:absolute;inset:0;background:${grad};pointer-events:none"></div>
+    <div style="
+      position:absolute;top:-40px;right:-40px;
+      width:180px;height:180px;border-radius:50%;
+      background:${accent};opacity:${isDark?.08:.05};
+      pointer-events:none
+    "></div>
+    <div style="
+      position:absolute;top:40px;right:30px;
+      width:80px;height:80px;border-radius:50%;
+      border:1.5px solid ${alpha(accent,.25)};
+      pointer-events:none
+    "></div>
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    <!-- Content -->
+    ${accentLine(accent)}
+    ${s.eyebrow ? `<div style="
+      font-size:9px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;color:${accent};margin-bottom:10px
+    ">${esc(s.eyebrow)}</div>` : ''}
+    <div style="
+      font-size:${headSize};font-weight:900;line-height:1.1;
+      color:${txt};letter-spacing:-0.5px;margin-bottom:12px
+    ">${nl2br(s.headline||'Your Headline')}</div>
+    ${s.sub ? `<div style="
+      font-size:12px;line-height:1.6;color:${muted};max-width:90%
+    ">${esc(s.sub)}</div>` : ''}
+    <!-- Bottom line -->
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,${accent},${highlight})
+    "></div>
   </div>`;
 }
 
-function toggleDone(id) {
-  const t = state.tasks.find(t => t.id === id);
-  if (t) { t.done = !t.done; saveState(); renderTasks(); renderCalendar(); renderUpcoming(); }
+function buildContent(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,dec,isDark} = d;
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    display:flex;flex-direction:column;
+    padding:24px 22px;overflow:hidden;gap:14px;
+  ">
+    <div style="
+      position:absolute;bottom:-30px;left:-30px;
+      width:160px;height:160px;border-radius:50%;
+      background:${accent};opacity:${isDark?.06:.04};pointer-events:none
+    "></div>
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    <div style="margin-top:12px">
+      ${accentLine(accent)}
+      ${s.eyebrow ? `<div style="
+        font-size:9px;font-weight:700;letter-spacing:2px;
+        text-transform:uppercase;color:${accent};margin-bottom:8px
+      ">${esc(s.eyebrow)}</div>` : ''}
+      <div style="
+        font-size:22px;font-weight:900;line-height:1.15;
+        color:${txt};letter-spacing:-.4px;margin-bottom:14px
+      ">${nl2br(s.headline||'Key Insight')}</div>
+      <div style="
+        font-size:12.5px;line-height:1.75;color:${muted};
+        border-left:2.5px solid ${alpha(accent,.4)};
+        padding-left:12px
+      ">${esc(s.body||'Your content goes here. One clear idea per slide.')}</div>
+    </div>
+    <!-- Decorative block bottom -->
+    <div style="
+      position:absolute;bottom:22px;right:22px;
+      width:48px;height:48px;border-radius:10px;
+      border:1.5px solid ${alpha(accent,.2)};
+      display:flex;align-items:center;justify-content:center;
+      font-size:20px;font-weight:900;color:${alpha(accent,.3)};
+      font-family:${hFont}
+    ">${String(idx+1)}</div>
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,${accent},transparent)
+    "></div>
+  </div>`;
 }
 
-function deleteTask(id) {
-  state.tasks = state.tasks.filter(t => t.id !== id);
-  saveState(); renderTasks(); renderCalendar(); renderUpcoming();
+function buildList(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,isDark} = d;
+  const items = s.items && s.items.length ? s.items : ['First item','Second item','Third item'];
+  const maxItems = 5;
+  const shownItems = items.slice(0, maxItems);
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    padding:22px 22px;overflow:hidden;
+    display:flex;flex-direction:column;gap:12px;
+  ">
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    <div style="margin-top:10px">
+      ${accentLine(accent)}
+      ${s.eyebrow ? `<div style="
+        font-size:9px;font-weight:700;letter-spacing:2px;
+        text-transform:uppercase;color:${accent};margin-bottom:8px
+      ">${esc(s.eyebrow)}</div>` : ''}
+      <div style="
+        font-size:20px;font-weight:900;line-height:1.2;
+        color:${txt};letter-spacing:-.3px;margin-bottom:16px
+      ">${esc(s.headline||'Key Points')}</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px;flex:1">
+      ${shownItems.map((item, i) => `
+        <div style="
+          display:flex;align-items:flex-start;gap:10px;
+          padding:8px 11px;
+          background:${alpha(accent, isDark ? .08 : .05)};
+          border-radius:7px;
+          border-left:3px solid ${accent};
+        ">
+          <div style="
+            min-width:18px;height:18px;border-radius:50%;
+            background:${accent};color:${isLight(accent)?'#000':'#fff'};
+            font-size:8px;font-weight:800;
+            display:flex;align-items:center;justify-content:center;
+            flex-shrink:0;margin-top:1px
+          ">${i+1}</div>
+          <div style="font-size:11.5px;line-height:1.5;color:${txt};font-weight:500">${esc(item)}</div>
+        </div>
+      `).join('')}
+    </div>
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,${accent},transparent)
+    "></div>
+  </div>`;
 }
 
-// ── Calendar ──
-const MONTHS = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-const DAYS = ['Su','Mo','Tu','We','Th','Fr','Sa'];
+function buildStat(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,isDark} = d;
+  const accentLight = isLight(accent);
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:28px;overflow:hidden;text-align:center;
+  ">
+    <!-- Rings -->
+    <div style="
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:240px;height:240px;border-radius:50%;
+      border:1px solid ${alpha(accent,.12)};pointer-events:none
+    "></div>
+    <div style="
+      position:absolute;top:50%;left:50%;
+      transform:translate(-50%,-50%);
+      width:160px;height:160px;border-radius:50%;
+      border:1px solid ${alpha(accent,.18)};pointer-events:none
+    "></div>
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    ${s.eyebrow ? `<div style="
+      font-size:9px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;color:${accent};margin-bottom:12px
+    ">${esc(s.eyebrow)}</div>` : ''}
+    <div style="
+      font-size:68px;font-weight:900;line-height:1;
+      color:${accent};letter-spacing:-3px;
+      text-shadow:0 2px 20px ${alpha(accent,.3)};
+      margin-bottom:8px
+    ">${esc(s.stat||'0')}</div>
+    <div style="
+      font-size:14px;font-weight:600;color:${txt};
+      margin-bottom:12px;max-width:80%
+    ">${esc(s.statLabel||'Key metric')}</div>
+    ${s.body ? `<div style="
+      font-size:11px;line-height:1.6;color:${muted};
+      max-width:80%;padding:8px 14px;
+      background:${alpha(accent,.08)};border-radius:8px
+    ">${esc(s.body)}</div>` : ''}
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,${accent},transparent)
+    "></div>
+  </div>`;
+}
 
-function renderCalendar() {
-  const { calYear, calMonth } = state;
-  document.getElementById('cal-month').textContent = `${MONTHS[calMonth]} ${calYear}`;
+function buildQuote(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,isDark} = d;
+  const q = s.quote || '"Your powerful quote goes here."';
+  const qLen = q.replace(/['"]/g,'').length;
+  const qSize = qLen > 100 ? '14px' : qLen > 60 ? '16px' : '18px';
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:32px 26px;overflow:hidden;text-align:center;
+  ">
+    <!-- Decorative BG -->
+    <div style="
+      position:absolute;top:-10%;left:50%;
+      transform:translateX(-50%);
+      width:200%;height:60%;
+      background:radial-gradient(ellipse, ${alpha(accent,.09)} 0%, transparent 65%);
+      pointer-events:none
+    "></div>
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    <!-- Opening mark -->
+    <div style="
+      font-size:64px;font-weight:900;line-height:.7;
+      color:${accent};opacity:.7;margin-bottom:10px;
+      font-family:Georgia,serif
+    ">"</div>
+    <div style="
+      font-size:${qSize};font-weight:600;line-height:1.6;
+      color:${txt};font-style:italic;
+      max-width:90%;margin-bottom:18px
+    ">${esc(q.replace(/^["'"']/,'').replace(/["'"']$/,''))}</div>
+    <!-- Divider -->
+    <div style="
+      width:30px;height:2px;background:${accent};
+      border-radius:2px;margin-bottom:14px;opacity:.7
+    "></div>
+    ${s.author ? `<div style="
+      font-size:10px;font-weight:700;letter-spacing:1.5px;
+      text-transform:uppercase;color:${muted}
+    ">${esc(s.author)}</div>` : ''}
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:2px;
+      background:linear-gradient(90deg,transparent,${accent},transparent)
+    "></div>
+  </div>`;
+}
 
-  const grid = document.getElementById('cal-grid');
-  const todayParts = TODAY.split('-').map(Number);
-  const firstDay = new Date(calYear, calMonth, 1).getDay();
-  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
-  const daysInPrev = new Date(calYear, calMonth, 0).getDate();
+function buildOutro(s, d, idx, tot) {
+  const {bg,accent,txt,muted,hFont,highlight,isDark} = d;
+  const accentLight = isLight(accent);
+  const ctaBg = accent;
+  const ctaTxt = accentLight ? '#1A1208' : '#fff';
+  return `<div style="
+    width:100%;height:100%;position:relative;
+    background:${bg};font-family:${hFont};
+    display:flex;flex-direction:column;
+    align-items:center;justify-content:center;
+    padding:28px;overflow:hidden;text-align:center;gap:14px;
+  ">
+    <!-- Radial glow -->
+    <div style="
+      position:absolute;bottom:-20%;left:50%;
+      transform:translateX(-50%);
+      width:180%;height:60%;
+      background:radial-gradient(ellipse, ${alpha(accent,.15)} 0%, transparent 60%);
+      pointer-events:none
+    "></div>
+    ${slideMeta(idx,tot,accent,muted,hFont,d.brand)}
+    ${accentLine(accent)}
+    ${s.eyebrow ? `<div style="
+      font-size:9px;font-weight:700;letter-spacing:2px;
+      text-transform:uppercase;color:${accent}
+    ">${esc(s.eyebrow)}</div>` : ''}
+    <div style="
+      font-size:26px;font-weight:900;line-height:1.15;
+      color:${txt};letter-spacing:-.4px
+    ">${nl2br(s.headline||'Follow for More')}</div>
+    ${s.body ? `<div style="font-size:12px;line-height:1.6;color:${muted};max-width:85%">${esc(s.body)}</div>` : ''}
+    ${s.cta ? `<div style="
+      margin-top:8px;padding:10px 22px;
+      background:${ctaBg};color:${ctaTxt};
+      font-size:12px;font-weight:800;border-radius:30px;
+      letter-spacing:.5px
+    ">${esc(s.cta)}</div>` : ''}
+    <div style="
+      position:absolute;bottom:0;left:0;right:0;height:3px;
+      background:linear-gradient(90deg,${accent},${highlight})
+    "></div>
+  </div>`;
+}
 
-  // Build dot map
-  const dotMap = {};
-  state.tasks.forEach(t => {
-    if (!t.due) return;
-    const [y,m,d] = t.due.split('-').map(Number);
-    if (y === calYear && m-1 === calMonth) {
-      if (!dotMap[d]) dotMap[d] = [];
-      dotMap[d].push(t);
-    }
+/* ── Render to DOM ── */
+function renderCanvas(container, slide, idx, total) {
+  if (!slide) { container.innerHTML = ''; return; }
+  container.innerHTML = buildSlide(slide, state.design, idx, total);
+}
+
+function renderAllThumbs() {
+  const list = document.getElementById('slidesList');
+  list.innerHTML = '';
+  state.slides.forEach((sl, i) => {
+    const thumb = document.createElement('div');
+    thumb.className = 'stb' + (i === state.current ? ' active' : '');
+    thumb.dataset.idx = i;
+    thumb.innerHTML = `
+      <div class="stb-canvas" id="stb-${sl.id}"></div>
+      <div class="stb-type">${sl.layout}</div>
+      <div class="stb-n">${String(i+1).padStart(2,'0')}</div>
+      <button class="stb-del" data-idx="${i}" title="Delete">✕</button>
+    `;
+    thumb.addEventListener('click', e => {
+      if (e.target.classList.contains('stb-del')) return;
+      selectSlide(i);
+    });
+    list.appendChild(thumb);
+    renderCanvas(thumb.querySelector('.stb-canvas'), sl, i, state.slides.length);
   });
+  // bind delete
+  list.querySelectorAll('.stb-del').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      deleteSlide(parseInt(btn.dataset.idx));
+    });
+  });
+  document.getElementById('slideCount').textContent = `${state.slides.length} / 10`;
+}
 
-  let html = DAYS.map(d => `<div class="cal-dow">${d}</div>`).join('');
+function updateMainCanvas() {
+  const sl = state.slides[state.current];
+  renderCanvas(document.getElementById('mainCanvas'), sl, state.current, state.slides.length);
+  document.getElementById('slideLabel').textContent = `Slide ${state.current+1} of ${state.slides.length}`;
+  document.getElementById('prevSlide').disabled = state.current === 0;
+  document.getElementById('nextSlide').disabled = state.current === state.slides.length-1;
+}
 
-  // Previous month cells
-  for (let i = 0; i < firstDay; i++) {
-    const day = daysInPrev - firstDay + i + 1;
-    html += `<div class="cal-day other-month"><span class="cal-day-num">${day}</span></div>`;
-  }
+function render() {
+  renderAllThumbs();
+  updateMainCanvas();
+  updateContentPanel();
+  updateLayoutGrid();
+}
 
-  for (let d = 1; d <= daysInMonth; d++) {
-    const iso = `${calYear}-${String(calMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-    const isToday = iso === TODAY;
-    const isSelected = iso === state.selectedDay;
-    const dots = dotMap[d] || [];
+/* ── Content panel ── */
+function updateContentPanel() {
+  updateLayoutGrid();
+  updateContentFields();
+}
 
-    const dotsHtml = dots.slice(0,3).map(t =>
-      `<span class="cal-dot ${t.done ? 'done' : (t.priority||'medium')}"></span>`
+function updateLayoutGrid() {
+  const grid = document.getElementById('layoutGrid');
+  grid.innerHTML = LAYOUTS.map(l => {
+    const sl = state.slides[state.current];
+    const active = sl && sl.layout === l.id;
+    const bars = (LAYOUT_ICONS[l.id]||[]).map(b =>
+      `<div style="height:${b.h}%;width:${b.w}%;background:rgba(255,255,255,.2);border-radius:${b.r}px;flex-shrink:0"></div>`
     ).join('');
-
-    html += `<div class="cal-day${isToday ? ' today' : ''}${isSelected ? ' selected' : ''}" data-iso="${iso}">
-      <span class="cal-day-num">${d}</span>
-      ${dots.length ? `<div class="cal-dots">${dotsHtml}</div>` : ''}
+    return `<div class="lo${active?' on':''}" data-layout="${l.id}">
+      <div class="lo-icon" style="align-items:flex-start;justify-content:center;flex-direction:column">${bars}</div>
+      <span class="lo-label">${l.label}</span>
     </div>`;
-  }
-
-  // Fill remaining
-  const total = firstDay + daysInMonth;
-  const remaining = (7 - (total % 7)) % 7;
-  for (let d = 1; d <= remaining; d++) {
-    html += `<div class="cal-day other-month"><span class="cal-day-num">${d}</span></div>`;
-  }
-
-  grid.innerHTML = html;
-  grid.querySelectorAll('.cal-day[data-iso]').forEach(el => {
+  }).join('');
+  grid.querySelectorAll('.lo').forEach(el => {
     el.addEventListener('click', () => {
-      const iso = el.dataset.iso;
-      if (state.selectedDay === iso) {
-        state.selectedDay = null;
-        // Reset filter chips
-        document.querySelectorAll('.filter-chip').forEach(c =>
-          c.classList.toggle('active', c.dataset.filter === state.filter));
-      } else {
-        state.selectedDay = iso;
-        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      }
-      renderTasks();
-      renderCalendar();
+      const sl = state.slides[state.current];
+      if (!sl) return;
+      const lyt = el.dataset.layout;
+      // Preserve common fields, merge with layout defaults
+      const def = defaultSlide(lyt);
+      const kept = {
+        headline: sl.headline || def.headline,
+        eyebrow: sl.eyebrow !== undefined ? sl.eyebrow : def.eyebrow,
+        sub: sl.sub || def.sub,
+        body: sl.body || def.body,
+        cta: sl.cta || def.cta,
+      };
+      Object.assign(sl, def, kept, {id: sl.id, layout: lyt});
+      render();
     });
   });
 }
 
-document.getElementById('cal-prev').addEventListener('click', () => {
-  if (state.calMonth === 0) { state.calMonth = 11; state.calYear--; }
-  else state.calMonth--;
-  renderCalendar();
-});
-document.getElementById('cal-next').addEventListener('click', () => {
-  if (state.calMonth === 11) { state.calMonth = 0; state.calYear++; }
-  else state.calMonth++;
-  renderCalendar();
-});
-document.getElementById('cal-today-btn').addEventListener('click', () => {
-  const now = new Date();
-  state.calYear = now.getFullYear(); state.calMonth = now.getMonth();
-  state.selectedDay = null;
-  document.querySelectorAll('.filter-chip').forEach(c =>
-    c.classList.toggle('active', c.dataset.filter === state.filter));
-  renderCalendar(); renderTasks();
-});
+const FIELD_DEFS = {
+  cover:   [{key:'eyebrow',label:'Eyebrow text',type:'text'},{key:'headline',label:'Headline',type:'textarea',rows:2},{key:'sub',label:'Subtitle',type:'textarea',rows:2}],
+  content: [{key:'eyebrow',label:'Eyebrow text',type:'text'},{key:'headline',label:'Headline',type:'text'},{key:'body',label:'Body copy',type:'textarea',rows:3}],
+  list:    [{key:'eyebrow',label:'Eyebrow text',type:'text'},{key:'headline',label:'Headline',type:'text'},{key:'_items',label:'List items (one per line)',type:'textarea',rows:4}],
+  stat:    [{key:'eyebrow',label:'Eyebrow text',type:'text'},{key:'stat',label:'Stat / Number',type:'text'},{key:'statLabel',label:'Stat label',type:'text'},{key:'body',label:'Supporting text',type:'textarea',rows:2}],
+  quote:   [{key:'quote',label:'Quote text',type:'textarea',rows:3},{key:'author',label:'Attribution',type:'text'}],
+  outro:   [{key:'headline',label:'Headline',type:'text'},{key:'body',label:'Body text',type:'textarea',rows:2},{key:'cta',label:'CTA button text',type:'text'}],
+};
 
-// ── Upcoming list ──
-function renderUpcoming() {
-  const container = document.getElementById('upcoming-list');
-  const header = document.getElementById('upcoming-header');
-
-  const upcoming = state.tasks
-    .filter(t => !t.done && t.due && t.due >= TODAY)
-    .sort((a,b) => a.due.localeCompare(b.due))
-    .slice(0, 12);
-
-  if (!upcoming.length) {
-    container.innerHTML = `<p class="upcoming-empty">No upcoming tasks.</p>`;
-    header.textContent = 'Upcoming Tasks';
-    return;
-  }
-
-  header.textContent = `Upcoming — ${upcoming.length} task${upcoming.length !== 1 ? 's' : ''}`;
-  container.innerHTML = upcoming.map(t => {
-    const [y,m,d] = t.due.split('-').map(Number);
-    const dateObj = new Date(y, m-1, d);
-    const dayNum = d;
-    const dayLabel = ['SUN','MON','TUE','WED','THU','FRI','SAT'][dateObj.getDay()];
-    return `<div class="upcoming-item" data-id="${t.id}">
-      <div class="upcoming-date-col">
-        <div class="upcoming-day-num">${String(dayNum).padStart(2,'0')}</div>
-        <div class="upcoming-day-label">${dayLabel}</div>
-      </div>
-      <span class="upcoming-title">${escHtml(t.title)}</span>
-      <span class="upcoming-prio" style="background:var(--${t.priority||'med'})"></span>
+function updateContentFields() {
+  const sl = state.slides[state.current];
+  const fields = document.getElementById('contentFields');
+  if (!sl) { fields.innerHTML = '<p style="color:var(--faint);font-size:12px">No slide selected.</p>'; return; }
+  const defs = FIELD_DEFS[sl.layout] || [];
+  fields.innerHTML = defs.map(f => {
+    let val = f.key === '_items'
+      ? (sl.items||[]).join('\n')
+      : (sl[f.key] !== undefined ? sl[f.key] : '');
+    if (f.type === 'textarea') {
+      return `<div class="field">
+        <label class="flabel">${f.label}</label>
+        <textarea data-key="${f.key}" rows="${f.rows||3}" placeholder="${f.label}…">${esc(val)}</textarea>
+      </div>`;
+    }
+    return `<div class="field">
+      <label class="flabel">${f.label}</label>
+      <input type="text" data-key="${f.key}" value="${esc(val)}" placeholder="${f.label}…">
     </div>`;
   }).join('');
 
-  container.querySelectorAll('.upcoming-item').forEach(el => {
-    el.addEventListener('click', () => openEdit(el.dataset.id));
+  fields.querySelectorAll('input,textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const sl = state.slides[state.current];
+      if (!sl) return;
+      const key = el.dataset.key;
+      if (key === '_items') {
+        sl.items = el.value.split('\n').filter(x=>x.trim());
+      } else {
+        sl[key] = el.value;
+      }
+      updateMainCanvas();
+      // Debounce thumb update
+      clearTimeout(el._t);
+      el._t = setTimeout(() => renderAllThumbs(), 300);
+    });
   });
 }
 
-// ── Modal ──
-const modal = document.getElementById('modal');
-const modalTitleEl = document.getElementById('modal-title');
-const titleInput = document.getElementById('task-title');
-const notesInput = document.getElementById('task-notes');
-const dateInput = document.getElementById('task-date');
-const priorityInput = document.getElementById('task-priority');
-const categoryInput = document.getElementById('task-category');
-const saveBtn = document.getElementById('modal-save');
-
-function openModal(prefillDate) {
-  state.editId = null;
-  modalTitleEl.textContent = 'New Task';
-  saveBtn.textContent = 'Add Task';
-  titleInput.value = '';
-  notesInput.value = '';
-  dateInput.value = prefillDate || (state.selectedDay || '');
-  priorityInput.value = 'medium';
-  categoryInput.value = '';
-  modal.hidden = false;
-  titleInput.focus();
-}
-
-function openEdit(id) {
-  const t = state.tasks.find(t => t.id === id);
-  if (!t) return;
-  state.editId = id;
-  modalTitleEl.textContent = 'Edit Task';
-  saveBtn.textContent = 'Save Changes';
-  titleInput.value = t.title;
-  notesInput.value = t.notes || '';
-  dateInput.value = t.due || '';
-  priorityInput.value = t.priority || 'medium';
-  categoryInput.value = t.category || '';
-  modal.hidden = false;
-  titleInput.focus();
-}
-
-function closeModal() {
-  modal.hidden = true;
-  state.editId = null;
-}
-
-document.getElementById('new-task-btn').addEventListener('click', () => openModal());
-document.getElementById('modal-close').addEventListener('click', closeModal);
-document.getElementById('modal-cancel').addEventListener('click', closeModal);
-modal.addEventListener('click', e => { if (e.target === modal) closeModal(); });
-
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape' && !modal.hidden) closeModal();
-  if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); openModal(); }
-});
-
-saveBtn.addEventListener('click', saveTask);
-document.getElementById('modal').addEventListener('keydown', e => {
-  if (e.key === 'Enter' && e.target !== notesInput) saveTask();
-});
-
-function saveTask() {
-  const title = titleInput.value.trim();
-  if (!title) { titleInput.focus(); titleInput.style.borderColor = 'var(--high)'; setTimeout(() => titleInput.style.borderColor = '', 1000); return; }
-
-  if (state.editId) {
-    const t = state.tasks.find(t => t.id === state.editId);
-    if (t) {
-      t.title = title;
-      t.notes = notesInput.value.trim();
-      t.due = dateInput.value || null;
-      t.priority = priorityInput.value;
-      t.category = categoryInput.value;
-    }
-  } else {
-    state.tasks.push({
-      id: uid(),
-      title,
-      notes: notesInput.value.trim(),
-      due: dateInput.value || null,
-      priority: priorityInput.value,
-      category: categoryInput.value,
-      done: false,
-      created: Date.now()
+/* ── Design panel ── */
+function initDesignPanel() {
+  // Style pills
+  const row = document.getElementById('styleRow');
+  row.innerHTML = STYLES.map(s =>
+    `<button class="style-pill${s.id===state.design.style?' on':''}" data-style="${s.id}">${s.name}</button>`
+  ).join('');
+  row.querySelectorAll('.style-pill').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const st = STYLES.find(s=>s.id===btn.dataset.style);
+      if (!st) return;
+      state.design.style = st.id;
+      state.design.palette = [...st.pal];
+      row.querySelectorAll('.style-pill').forEach(b=>b.classList.toggle('on', b===btn));
+      updatePaletteUI();
+      renderAll();
     });
-  }
+  });
 
-  saveState(); closeModal();
-  renderTasks(); renderCalendar(); renderUpcoming();
+  updatePaletteUI();
+
+  // Fonts
+  const fo = document.getElementById('fontOpts');
+  fo.innerHTML = FONTS.map(f =>
+    `<div class="font-opt${f.id===state.design.font?' on':''}" data-fid="${f.id}">
+      <div class="fo-sample" style="font-family:'${f.css}',system-ui;font-weight:${f.weight}">${f.name[0]}</div>
+      <div class="fo-info"><div class="fo-name">${f.name}</div><div class="fo-sub">${f.sub}</div></div>
+    </div>`
+  ).join('');
+  fo.querySelectorAll('.font-opt').forEach(el => {
+    el.addEventListener('click', () => {
+      state.design.font = el.dataset.fid;
+      fo.querySelectorAll('.font-opt').forEach(e=>e.classList.toggle('on', e===el));
+      renderAll();
+    });
+  });
 }
 
-// ── Util ──
-function escHtml(s) {
-  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+const PAL_ROLES = ['Background','Accent','Text','Muted','Highlight'];
+function updatePaletteUI() {
+  const pr = document.getElementById('paletteRow');
+  const prole = document.getElementById('paletteRole');
+  pr.innerHTML = state.design.palette.map((c,i) =>
+    `<div class="swatch${i===0?' on':''}" style="background:${c}" data-idx="${i}" title="${PAL_ROLES[i]}">
+      <input type="color" value="${c}" data-idx="${i}">
+    </div>`
+  ).join('');
+  prole.innerHTML = state.design.palette.map((c,i) =>
+    `<div class="prole"><div class="prole-dot" style="background:${c}"></div>${PAL_ROLES[i]}</div>`
+  ).join('');
+  pr.querySelectorAll('.swatch input[type=color]').forEach(inp => {
+    inp.addEventListener('input', () => {
+      state.design.palette[parseInt(inp.dataset.idx)] = inp.value;
+      inp.closest('.swatch').style.background = inp.value;
+      renderAll();
+    });
+  });
 }
 
-// ── Init ──
-loadState();
-applyTheme();
-renderTasks();
-renderCalendar();
-renderUpcoming();
+function renderAll() {
+  renderAllThumbs();
+  updateMainCanvas();
+}
+
+/* ── Select / navigate ── */
+function selectSlide(idx) {
+  state.current = Math.max(0, Math.min(idx, state.slides.length-1));
+  render();
+}
+
+function deleteSlide(idx) {
+  if (state.slides.length <= 1) { toast('Keep at least one slide'); return; }
+  state.slides.splice(idx, 1);
+  if (state.current >= state.slides.length) state.current = state.slides.length-1;
+  render();
+}
+
+function addSlide(layout) {
+  if (state.slides.length >= 10) { toast('Maximum 10 slides'); return; }
+  const sl = defaultSlide(layout||'content');
+  state.slides.splice(state.current+1, 0, sl);
+  state.current = state.current+1;
+  render();
+}
+
+/* ── Add slide modal (simple approach: cycle through layouts) ── */
+let addSlidePromptVisible = false;
+function showAddSlideMenu(anchorEl) {
+  // Remove existing
+  const existing = document.getElementById('addMenu');
+  if (existing) { existing.remove(); addSlidePromptVisible = false; return; }
+  if (addSlidePromptVisible) return;
+  addSlidePromptVisible = true;
+
+  const menu = document.createElement('div');
+  menu.id = 'addMenu';
+  menu.style.cssText = `
+    position:fixed;background:var(--surf2);border:1px solid var(--bdr);
+    border-radius:var(--r);padding:6px;z-index:50;
+    box-shadow:0 8px 24px rgba(0,0,0,.5);min-width:140px
+  `;
+  menu.innerHTML = LAYOUTS.map(l =>
+    `<button data-l="${l.id}" style="
+      display:block;width:100%;text-align:left;
+      padding:7px 12px;background:none;border:none;
+      font-size:12.5px;color:var(--txt);border-radius:5px;
+      cursor:pointer;font-family:inherit;
+    " onmouseover="this.style.background='var(--surf3)'" onmouseout="this.style.background='none'"
+    >${l.label}</button>`
+  ).join('');
+
+  // Position near anchor
+  const rect = anchorEl.getBoundingClientRect();
+  menu.style.top = (rect.bottom+4)+'px';
+  menu.style.left = rect.left+'px';
+
+  document.body.appendChild(menu);
+
+  menu.querySelectorAll('button').forEach(btn => {
+    btn.addEventListener('click', () => {
+      addSlide(btn.dataset.l);
+      menu.remove();
+      addSlidePromptVisible = false;
+    });
+  });
+
+  const dismiss = e => {
+    if (!menu.contains(e.target) && e.target !== anchorEl) {
+      menu.remove();
+      addSlidePromptVisible = false;
+      document.removeEventListener('click', dismiss, true);
+    }
+  };
+  setTimeout(() => document.addEventListener('click', dismiss, true), 0);
+}
+
+/* ── Export ── */
+let exportIdx = 0;
+function openExport() {
+  exportIdx = state.current;
+  updateExportSlide();
+  document.getElementById('exportOv').hidden = false;
+}
+function updateExportSlide() {
+  const sl = state.slides[exportIdx];
+  renderCanvas(document.getElementById('exportCanvas'), sl, exportIdx, state.slides.length);
+  document.getElementById('exCounter').textContent = `${exportIdx+1} / ${state.slides.length}`;
+  document.getElementById('exPrev').disabled = exportIdx===0;
+  document.getElementById('exNext').disabled = exportIdx===state.slides.length-1;
+}
+
+/* ── Reference image ── */
+function initRefPanel() {
+  const dz = document.getElementById('dropzone');
+  const inp = document.getElementById('refInput');
+  const clear = document.getElementById('dzClear');
+
+  dz.addEventListener('click', e => {
+    if (e.target === clear) return;
+    if (!dz.classList.contains('has-img')) inp.click();
+  });
+  inp.addEventListener('change', () => {
+    const f = inp.files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = e2 => {
+      state.refImage = e2.target.result;
+      dz.innerHTML = `<img src="${e2.target.result}" alt="Reference"><button class="dz-clear" id="dzClear">✕</button>`;
+      dz.classList.add('has-img');
+      document.getElementById('dzClear').addEventListener('click', clearRef);
+    };
+    reader.readAsDataURL(f);
+  });
+  dz.addEventListener('dragover', e => { e.preventDefault(); dz.classList.add('drag'); });
+  dz.addEventListener('dragleave', () => dz.classList.remove('drag'));
+  dz.addEventListener('drop', e => {
+    e.preventDefault(); dz.classList.remove('drag');
+    const f = e.dataTransfer.files[0];
+    if (f && f.type.startsWith('image/')) {
+      inp.files; // can't assign, use reader directly
+      const reader = new FileReader();
+      reader.onload = e2 => {
+        state.refImage = e2.target.result;
+        dz.innerHTML = `<img src="${e2.target.result}" alt="Reference"><button class="dz-clear" id="dzClear">✕</button>`;
+        dz.classList.add('has-img');
+        document.getElementById('dzClear').addEventListener('click', clearRef);
+      };
+      reader.readAsDataURL(f);
+    }
+  });
+  clear.addEventListener('click', clearRef);
+}
+
+function clearRef() {
+  state.refImage = null;
+  const dz = document.getElementById('dropzone');
+  dz.classList.remove('has-img');
+  dz.innerHTML = `
+    <div class="dz-ico">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+        <rect x="3" y="5" width="26" height="22" rx="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+        <circle cx="11" cy="12" r="3" stroke="currentColor" stroke-width="1.5" opacity=".4"/>
+        <path d="M3 22l7-7 5 5 4-4 10 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" opacity=".4"/>
+      </svg>
+    </div>
+    <div class="dz-main">Upload reference image</div>
+    <div class="dz-sub">Click or drag & drop · PNG, JPG, WEBP</div>
+    <button class="dz-clear" id="dzClear">✕</button>
+    <input type="file" class="dz-input" id="refInput" accept="image/*">
+  `;
+  document.getElementById('refInput').addEventListener('change', () => {
+    const f = document.getElementById('refInput').files[0];
+    if (!f) return;
+    const reader = new FileReader();
+    reader.onload = e2 => {
+      state.refImage = e2.target.result;
+      dz.innerHTML = `<img src="${e2.target.result}" alt="Reference"><button class="dz-clear" id="dzClear">✕</button>`;
+      dz.classList.add('has-img');
+      document.getElementById('dzClear').addEventListener('click', clearRef);
+    };
+    reader.readAsDataURL(f);
+  });
+  document.getElementById('dzClear').addEventListener('click', clearRef);
+}
+
+/* ── Toast ── */
+let toastT;
+function toast(msg) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('on');
+  clearTimeout(toastT);
+  toastT = setTimeout(() => el.classList.remove('on'), 2200);
+}
+
+/* ── Event wiring ── */
+function wireEvents() {
+  // Tab switching
+  document.querySelectorAll('.rtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const t = tab.dataset.tab;
+      document.querySelectorAll('.rtab').forEach(x=>x.classList.toggle('on',x===tab));
+      document.querySelectorAll('.rpane').forEach(x=>x.classList.toggle('on',x.id==='pane-'+t));
+    });
+  });
+
+  // Nav
+  document.getElementById('prevSlide').addEventListener('click', () => selectSlide(state.current-1));
+  document.getElementById('nextSlide').addEventListener('click', () => selectSlide(state.current+1));
+
+  // Add slide buttons
+  document.getElementById('addSlideBtn').addEventListener('click', e => showAddSlideMenu(e.currentTarget));
+  document.getElementById('addSlideBtnH').addEventListener('click', e => showAddSlideMenu(e.currentTarget));
+
+  // Export
+  document.getElementById('exportBtn').addEventListener('click', openExport);
+  document.getElementById('closeExport').addEventListener('click', () => { document.getElementById('exportOv').hidden=true; });
+  document.getElementById('exPrev').addEventListener('click', () => { exportIdx--; updateExportSlide(); });
+  document.getElementById('exNext').addEventListener('click', () => { exportIdx++; updateExportSlide(); });
+
+  // Brand name
+  document.getElementById('brandInput').addEventListener('input', e => {
+    state.design.brand = e.target.value.trim();
+    renderAll();
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (['INPUT','TEXTAREA','SELECT'].includes(document.activeElement.tagName)) return;
+    if (e.key==='ArrowLeft' || e.key==='ArrowUp') selectSlide(state.current-1);
+    if (e.key==='ArrowRight' || e.key==='ArrowDown') selectSlide(state.current+1);
+    if (e.key==='Escape' && !document.getElementById('exportOv').hidden) {
+      document.getElementById('exportOv').hidden=true;
+    }
+  });
+}
+
+/* ── Bootstrap ── */
+initRefPanel();
+initDesignPanel();
+wireEvents();
+init();
 
 })();
 </script>
+</body>
+</html>
