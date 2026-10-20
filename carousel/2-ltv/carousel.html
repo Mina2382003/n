@@ -1,0 +1,67 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+</style></head><body><section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 05</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Economics · Part 2</span>
+      <h1>Same customer.<br><span class="gold">75% more</span><br>value.</h1>
+      <p class="sub" style="margin-top:44px">How much is one customer really worth to your venue? Here's the math.</p></div><div class="bot"><span>Save this for later</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 05</div></div><div class="huge">02</div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The equation · LTV</span>
+      <h2 style="margin:40px 0 30px">What is one customer <span class="rose">worth over time?</span></h2>
+      <div class="formula" style="font-size:34px">LTV = AOV × Repeat orders/yr × Margin × (Lifespan months ÷ 12)</div>
+      <p class="sub" style="margin-top:40px">Lifetime Value. AOV is your average order value. The lever most owners ignore is <b>repeat orders</b>.</p></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 05</div></div>
+      <h2 style="margin-top:40px;margin-bottom:44px">LTV, with <span class="rose">network loyalty</span></h2>
+      <div class="cards">
+        <div class="card w"><div class="l">Standalone app</div><div class="m">AOV 300 × 4 repeats/yr × 30% margin</div><div class="big">EGP 360</div></div>
+        <div class="card d"><div class="l">On a shared network</div><div class="m">AOV 300 × 7 repeats/yr × 30% margin</div><div class="big">EGP 630</div></div>
+      </div>
+      <div class="pill" style="margin-top:36px">↑ +75% lifetime value. Loyalty carries across every partner venue.</div><div class="bot"><span>Hypothetical · 12-month lifespan</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 05</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">Worksheet · your turn</span>
+      <h2 style="margin:40px 0 40px">Now run <span class="gold">your own</span> LTV</h2>
+      <div class="row"><span>Average order value (EGP)</span><span class="blank"></span></div><div class="row"><span>Repeat orders per year</span><span class="blank"></span></div><div class="row"><span>Gross margin (%)</span><span class="blank"></span></div><div class="row"><span>Customer lifespan (months)</span><span class="blank"></span></div><div class="row total"><span>LTV</span><span class="blank"></span></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 05</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <h1 style="font-size:92px">Repeat visits <span class="gold">are the business.</span></h1>
+  <p class="sub" style="margin:40px 0 60px">Same order value, same margin. The only thing that changed is how often they come back.</p>
+  <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+    <div>🔖 &nbsp;Save it to run your numbers</div>
+    <div>💬 &nbsp;Comment your LTV</div>
+    <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
+  </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>
