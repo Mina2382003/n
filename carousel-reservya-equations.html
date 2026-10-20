@@ -1,0 +1,672 @@
+<title>Reservya Equations Carousel</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&display=swap" rel="stylesheet">
+
+<style>
+/* ── Token system — single-theme brand palette ── */
+:root {
+  --cream:   #F5F0E8;
+  --dark:    #1A0A0E;
+  --copper:  #C47A3E;
+  --cop-dim: rgba(196,122,62,.12);
+  --cop-mid: rgba(196,122,62,.35);
+  --cr-dim:  rgba(245,240,232,.08);
+  --cr-mid:  rgba(245,240,232,.18);
+  --cr-fade: rgba(245,240,232,.5);
+  --cr-ghost:rgba(245,240,232,.12);
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: #0F0A0C;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-block: 28px;
+  padding-left:  max(16px, env(safe-area-inset-left,  0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  gap: 18px;
+  font-family: 'Barlow', system-ui, sans-serif;
+}
+
+/* ── Stage ── */
+.stage {
+  position: relative;
+  width: 400px;
+  height: 500px;
+  max-width: min(400px, calc(100vw - 32px));
+  aspect-ratio: 4/5;
+}
+@media (max-width: 440px) {
+  .stage { width: calc(100vw - 32px); height: auto; }
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: 5px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+}
+.slide.on { opacity: 1; pointer-events: auto; }
+
+/* ── Shared elements ── */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 13px;
+  border-radius: 20px;
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.pill-copper  { background: var(--copper); color: var(--cream); }
+.pill-dark    { background: var(--dark);   color: var(--cream); border: 1px solid var(--cop-mid); }
+.pill-cream   { background: var(--cream);  color: var(--dark); }
+.pill-outline { border: 1px solid var(--copper); color: var(--copper); background: transparent; }
+
+.halo {
+  position: absolute;
+  border-radius: 50%;
+  background-image: radial-gradient(circle, currentColor var(--hd,1.4px), transparent var(--hd,1.4px));
+  background-size: var(--hs,9px) var(--hs,9px);
+  -webkit-mask-image: radial-gradient(ellipse var(--hmx,85%) var(--hmy,85%) at center,
+    black 0%, rgba(0,0,0,.75) 35%, rgba(0,0,0,.38) 60%, transparent 78%);
+  mask-image: radial-gradient(ellipse var(--hmx,85%) var(--hmy,85%) at center,
+    black 0%, rgba(0,0,0,.75) 35%, rgba(0,0,0,.38) 60%, transparent 78%);
+}
+
+/* ── Slide 1: Cream / Cover ── */
+.s1 {
+  background: var(--cream);
+  padding: 36px 34px 38px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.s1-ghost {
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  font-size: 160px;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--cop-dim);
+  user-select: none;
+  letter-spacing: -.04em;
+}
+
+.s1-eyebrow {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--copper);
+  margin-bottom: 10px;
+}
+
+.s1-light {
+  font-size: 30px;
+  font-weight: 300;
+  font-style: italic;
+  line-height: 1;
+  color: var(--dark);
+  margin-bottom: 3px;
+}
+
+.s1-bold {
+  font-size: 70px;
+  font-weight: 900;
+  line-height: .9;
+  text-transform: uppercase;
+  color: var(--dark);
+  letter-spacing: -.02em;
+  margin-bottom: 26px;
+}
+
+.s1-halo {
+  color: var(--copper);
+  width: 230px;
+  height: 230px;
+  right: -65px;
+  bottom: -65px;
+  --hs: 10px; --hd: 1.5px; --hmx: 80%; --hmy: 80%;
+}
+
+.s1-ring {
+  position: absolute;
+  top: 42px;
+  right: 36px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: 2px solid var(--copper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--copper);
+  font-size: 20px;
+  opacity: .7;
+}
+
+/* ── Slide 2: Dark / CAC Equation ── */
+.s2 {
+  background: var(--dark);
+  padding: 30px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.eq-title {
+  font-size: 27px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: 1.02;
+  letter-spacing: -.01em;
+  color: var(--cream);
+}
+
+.eq-formula {
+  font-size: 9px;
+  font-style: italic;
+  letter-spacing: .04em;
+  color: var(--cr-fade);
+  line-height: 1.4;
+}
+
+.compare-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9px;
+}
+
+.cbox {
+  border-radius: 4px;
+  padding: 13px 13px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.cbox-light  { background: var(--cr-dim);  border: 1px solid var(--cr-ghost); color: var(--cream); }
+.cbox-copper { background: var(--copper);  color: var(--cream); }
+
+.cbox-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.cbox-light .cbox-label { color: var(--cr-fade); }
+.cbox-copper .cbox-label { color: rgba(245,240,232,.8); }
+
+.cbox-meta {
+  font-size: 9px;
+  line-height: 1.6;
+  opacity: .7;
+}
+
+.cbox-result {
+  font-size: 18px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -.01em;
+  margin-top: 7px;
+  line-height: 1;
+}
+
+.footnote {
+  font-size: 9px;
+  font-style: italic;
+  padding: 9px 11px;
+  border-radius: 3px;
+  line-height: 1.55;
+  background: var(--cop-dim);
+  color: rgba(245,240,232,.65);
+  border-left: 2px solid var(--copper);
+}
+
+.s2-halo {
+  color: rgba(196,122,62,.22);
+  width: 160px;
+  height: 160px;
+  right: -30px;
+  top: -30px;
+  --hs: 8px; --hd: 1.2px;
+}
+
+/* ── Slide 3: Copper / CAC Worksheet ── */
+.s3 {
+  background: var(--copper);
+  padding: 38px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 20px;
+}
+
+.ws-title {
+  font-size: 32px;
+  font-weight: 900;
+  text-transform: uppercase;
+  line-height: .95;
+  letter-spacing: -.01em;
+  color: var(--cream);
+}
+
+.ws-fields { display: flex; flex-direction: column; gap: 18px; }
+
+.field-row { display: flex; flex-direction: column; gap: 7px; }
+
+.field-label {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(245,240,232,.75);
+}
+
+.field-line { height: 1px; background: rgba(245,240,232,.35); }
+
+.formula-box {
+  padding: 13px 15px;
+  border: 1.5px solid rgba(245,240,232,.3);
+  border-radius: 3px;
+  font-size: 10px;
+  font-style: italic;
+  letter-spacing: .03em;
+  color: rgba(245,240,232,.85);
+  line-height: 1.5;
+}
+
+.s3-halo {
+  color: rgba(26,10,14,.2);
+  width: 200px;
+  height: 200px;
+  right: -55px;
+  bottom: -55px;
+  --hs: 10px; --hd: 1.4px;
+}
+
+/* ── Slide 4: Dark / LTV Equation ── */
+.s4 {
+  background: var(--dark);
+  padding: 28px 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+}
+
+/* ── Slide 5: Cream / LTV Worksheet ── */
+.s5 {
+  background: var(--cream);
+  padding: 34px 34px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+.s5 .ws-title { color: var(--dark); }
+.s5 .ws-fields { gap: 14px; }
+.s5 .field-label { color: rgba(26,10,14,.55); }
+.s5 .field-line  { background: rgba(26,10,14,.18); }
+.s5 .formula-box { border-color: rgba(26,10,14,.18); color: rgba(26,10,14,.7); }
+
+.brand-footer {
+  font-size: 8px;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: rgba(26,10,14,.35);
+  margin-top: auto;
+}
+
+.s5-halo {
+  color: var(--copper);
+  width: 210px;
+  height: 210px;
+  left: -60px;
+  bottom: -60px;
+  --hs: 10px; --hd: 1.4px; --hmx: 80%; --hmy: 80%;
+}
+
+.s5-ring {
+  position: absolute;
+  bottom: 42px;
+  right: 36px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  border: 2px solid var(--copper);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--copper);
+  font-size: 18px;
+  opacity: .5;
+}
+
+/* ── Controls ── */
+.controls {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btn {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255,255,255,.2);
+  background: rgba(255,255,255,.07);
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  transition: background .2s, border-color .2s;
+}
+.btn:hover:not(:disabled) { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.45); }
+.btn:disabled { opacity: .22; cursor: default; }
+
+.dots { display: flex; gap: 6px; }
+.dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.22);
+  cursor: pointer;
+  transition: background .2s, transform .2s;
+}
+.dot.on { background: var(--copper); transform: scale(1.35); }
+
+.counter {
+  font-size: 11px;
+  color: rgba(255,255,255,.35);
+  letter-spacing: .08em;
+  min-width: 34px;
+  text-align: center;
+}
+
+.grid-btn {
+  background: none;
+  border: 1.5px solid rgba(255,255,255,.18);
+  color: rgba(255,255,255,.4);
+  padding: 5px 12px;
+  border-radius: 3px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 10px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all .2s;
+}
+.grid-btn:hover { color: #fff; border-color: rgba(255,255,255,.45); }
+
+/* ── Grid overlay ── */
+.grid-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.92);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 24px;
+}
+.grid-overlay[hidden] { display: none !important; }
+
+.grid-row { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+
+.grid-thumb {
+  width: 160px;
+  height: 200px;
+  overflow: hidden;
+  cursor: pointer;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,.1);
+  transition: border-color .2s;
+  position: relative;
+  flex-shrink: 0;
+}
+.grid-thumb:hover { border-color: var(--copper); }
+.grid-thumb .inner {
+  width: 400px;
+  height: 500px;
+  transform: scale(.4);
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.grid-close {
+  background: none;
+  border: 1.5px solid rgba(255,255,255,.2);
+  color: rgba(255,255,255,.5);
+  padding: 7px 20px;
+  border-radius: 3px;
+  font-family: 'Barlow', sans-serif;
+  font-size: 11px;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.grid-close:hover { color: #fff; border-color: rgba(255,255,255,.5); }
+</style>
+
+<div class="stage" id="stage">
+
+  <!-- Slide 1: Cream / Cover -->
+  <div class="slide s1 on">
+    <div class="s1-ghost">03</div>
+    <div class="halo s1-halo"></div>
+    <div class="s1-ring">↗</div>
+    <div class="s1-eyebrow">Session 3 · The Economics</div>
+    <div class="s1-light">The</div>
+    <div class="s1-bold">Equations.</div>
+    <div class="pill pill-copper">Output · 5 Formulas to Run</div>
+  </div>
+
+  <!-- Slide 2: Dark / CAC Equation -->
+  <div class="slide s2">
+    <div class="halo s2-halo"></div>
+    <div class="pill pill-copper">The Equation</div>
+    <div class="eq-title">Your CAC,<br>Before &amp; After</div>
+    <div class="eq-formula">CAC = Marketing Spend ÷ New Customers</div>
+    <div class="compare-grid">
+      <div class="cbox cbox-light">
+        <div class="cbox-label">Solo Marketing</div>
+        <div class="cbox-meta">Spend: EGP 80,000<br>New customers: 150</div>
+        <div class="cbox-result">CAC: EGP 400</div>
+      </div>
+      <div class="cbox cbox-copper">
+        <div class="cbox-label">On Reservya's Network</div>
+        <div class="cbox-meta">Spend: EGP 60,000<br>New customers: 220</div>
+        <div class="cbox-result">CAC: EGP 273</div>
+      </div>
+    </div>
+    <div class="footnote">32% lower CAC — hypothetical example, replace with your own numbers.</div>
+  </div>
+
+  <!-- Slide 3: Copper / CAC Worksheet -->
+  <div class="slide s3">
+    <div class="halo s3-halo"></div>
+    <div class="pill pill-dark">Worksheet · Fill In Your Numbers</div>
+    <div class="ws-title">Now Run<br>Your Own CAC</div>
+    <div class="ws-fields">
+      <div class="field-row">
+        <div class="field-label">Marketing spend last month (EGP)</div>
+        <div class="field-line"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">New customers won</div>
+        <div class="field-line"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Your CAC</div>
+        <div class="field-line"></div>
+      </div>
+    </div>
+    <div class="formula-box">CAC = Spend ÷ New Customers</div>
+  </div>
+
+  <!-- Slide 4: Dark / LTV Equation -->
+  <div class="slide s4">
+    <div class="pill pill-copper">The Equation</div>
+    <div class="eq-title">LTV, With<br>Network Loyalty</div>
+    <div class="eq-formula">LTV = AOV × repeat orders/yr × margin × (lifespan months ÷ 12)</div>
+    <div class="compare-grid">
+      <div class="cbox cbox-light">
+        <div class="cbox-label">Standalone App</div>
+        <div class="cbox-meta">AOV 300 × 4 repeats/yr<br>× 30% margin</div>
+        <div class="cbox-result">LTV: EGP 360</div>
+      </div>
+      <div class="cbox cbox-copper">
+        <div class="cbox-label">Reservya Network</div>
+        <div class="cbox-meta">AOV 300 × 7 repeats/yr<br>× 30% margin</div>
+        <div class="cbox-result">LTV: EGP 630</div>
+      </div>
+    </div>
+    <div class="footnote">+75% lifetime value — loyalty that carries across every partner venue.</div>
+  </div>
+
+  <!-- Slide 5: Cream / LTV Worksheet -->
+  <div class="slide s5">
+    <div class="halo s5-halo"></div>
+    <div class="s5-ring">↗</div>
+    <div class="pill pill-copper" style="align-self:flex-start">Worksheet · Fill In Your Numbers</div>
+    <div class="ws-title">Now Run<br>Your Own LTV</div>
+    <div class="ws-fields">
+      <div class="field-row">
+        <div class="field-label">Average order value (EGP)</div>
+        <div class="field-line"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Repeat orders per year</div>
+        <div class="field-line"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Gross margin (%)</div>
+        <div class="field-line"></div>
+      </div>
+      <div class="field-row">
+        <div class="field-label">Customer lifespan (months)</div>
+        <div class="field-line"></div>
+      </div>
+    </div>
+    <div class="formula-box">LTV = AOV × Repeat/yr × Margin × (Lifespan ÷ 12)</div>
+    <div class="brand-footer">Reservya — The Aggregator Advantage</div>
+  </div>
+
+</div>
+
+<!-- Controls -->
+<div class="controls">
+  <button class="btn" id="prev" aria-label="Previous" disabled>←</button>
+  <div class="dots" id="dots"></div>
+  <button class="btn" id="next" aria-label="Next">→</button>
+  <span class="counter" id="counter">1 / 5</span>
+  <button class="grid-btn" id="gridBtn">Grid</button>
+</div>
+
+<!-- Grid overlay -->
+<div class="grid-overlay" id="gridOverlay" hidden>
+  <div class="grid-row" id="gridRow"></div>
+  <button class="grid-close" id="gridClose">Close</button>
+</div>
+
+<script>
+const N = 5;
+let cur = 0;
+
+const slides  = document.querySelectorAll('.slide');
+const dotsWrap = document.getElementById('dots');
+const prevBtn = document.getElementById('prev');
+const nextBtn = document.getElementById('next');
+const counter = document.getElementById('counter');
+const gridBtn = document.getElementById('gridBtn');
+const gridOverlay = document.getElementById('gridOverlay');
+const gridRow = document.getElementById('gridRow');
+const gridClose = document.getElementById('gridClose');
+
+// Build dots
+for (let i = 0; i < N; i++) {
+  const d = document.createElement('div');
+  d.className = 'dot' + (i === 0 ? ' on' : '');
+  d.addEventListener('click', () => go(i));
+  dotsWrap.appendChild(d);
+}
+const dots = document.querySelectorAll('.dot');
+
+function go(i) {
+  slides[cur].classList.remove('on');
+  dots[cur].classList.remove('on');
+  cur = Math.max(0, Math.min(N - 1, i));
+  slides[cur].classList.add('on');
+  dots[cur].classList.add('on');
+  counter.textContent = (cur + 1) + ' / ' + N;
+  prevBtn.disabled = cur === 0;
+  nextBtn.disabled = cur === N - 1;
+}
+
+prevBtn.addEventListener('click', () => go(cur - 1));
+nextBtn.addEventListener('click', () => go(cur + 1));
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowLeft')  go(cur - 1);
+  if (e.key === 'ArrowRight') go(cur + 1);
+});
+
+// Swipe
+let touchX = null;
+const stage = document.getElementById('stage');
+stage.addEventListener('touchstart', e => { touchX = e.touches[0].clientX; }, { passive: true });
+stage.addEventListener('touchend', e => {
+  if (touchX === null) return;
+  const dx = e.changedTouches[0].clientX - touchX;
+  if (Math.abs(dx) > 40) go(cur + (dx < 0 ? 1 : -1));
+  touchX = null;
+}, { passive: true });
+
+// Grid view
+function buildGrid() {
+  gridRow.innerHTML = '';
+  for (let i = 0; i < N; i++) {
+    const thumb = document.createElement('div');
+    thumb.className = 'grid-thumb';
+    const inner = document.createElement('div');
+    inner.className = 'inner';
+    inner.innerHTML = slides[i].outerHTML;
+    inner.querySelector('.slide').classList.add('on');
+    thumb.appendChild(inner);
+    thumb.addEventListener('click', () => {
+      go(i);
+      gridOverlay.hidden = true;
+    });
+    gridRow.appendChild(thumb);
+  }
+}
+
+gridBtn.addEventListener('click', () => {
+  buildGrid();
+  gridOverlay.hidden = false;
+});
+gridClose.addEventListener('click', () => { gridOverlay.hidden = true; });
+gridOverlay.addEventListener('click', e => {
+  if (e.target === gridOverlay) gridOverlay.hidden = true;
+});
+</script>
