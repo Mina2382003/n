@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guest Data Carousel — 5 Slides · 1080×1350</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,500;0,700;0,800;0,900;1,300;1,400;1,500&display=swap">
+<style>
+/* ── Design tokens from reference ── */
+:root {
+  --cream:   #ECEAE0;
+  --black:   #0D0C0B;
+  --copper:  #C47840;
+  --copper2: #9E5F2A;
+  --white:   #FFFFFF;
+  --font:    'Barlow', system-ui, sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:var(--font);-webkit-font-smoothing:antialiased;background:#171410}
+button{font-family:var(--font);cursor:pointer}
+
+/* ── Viewer shell ── */
+.viewer{
+  min-height:100dvh;
+  display:flex;flex-direction:column;align-items:center;
+  justify-content:flex-start;padding:36px 20px 60px;gap:0;
+}
+.v-eyebrow{
+  font-size:10px;font-weight:700;letter-spacing:2.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.18);margin-bottom:30px;text-align:center
+}
+
+/* ── Stage ── */
+.stage{display:flex;align-items:center;gap:20px}
+
+.slides-wrap{
+  width:400px;height:500px;
+  position:relative;overflow:hidden;
+  border-radius:3px;
+  box-shadow:0 40px 100px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.04);
+}
+
+.slide{
+  position:absolute;inset:0;width:100%;height:100%;
+  opacity:0;transition:opacity .38s;pointer-events:none;overflow:hidden;
+}
+.slide.on{opacity:1;pointer-events:auto}
+
+/* ── Nav buttons ── */
+.nbtn{
+  width:42px;height:42px;border-radius:50%;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.04);
+  color:rgba(255,255,255,.55);font-size:18px;
+  display:flex;align-items:center;justify-content:center;
+  transition:all .15s;flex-shrink:0;
+}
+.nbtn:hover{background:rgba(255,255,255,.12);color:#fff}
+.nbtn:disabled{opacity:.18;cursor:not-allowed}
+
+/* ── Controls ── */
+.controls{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:24px}
+.dots{display:flex;gap:7px}
+.dot{
+  width:6px;height:6px;border-radius:50%;
+  background:rgba(255,255,255,.18);
+  cursor:pointer;transition:all .22s;
+}
+.dot.on{background:var(--copper);width:22px;border-radius:3px}
+.counter{
+  font-size:10px;font-weight:700;letter-spacing:2px;
+  text-transform:uppercase;color:rgba(255,255,255,.18)
+}
+.view-all-btn{
+  font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;
+  color:rgba(255,255,255,.22);background:none;border:none;
+  transition:color .15s;padding:4px 8px;
+}
+.view-all-btn:hover{color:rgba(255,255,255,.5)}
+
+/* ── Grid view ── */
+.grid-view{
+  display:none;
+  grid-template-columns:repeat(5,160px);
+  gap:12px;margin-top:28px;
+}
+.grid-view.on{display:grid}
+.grid-item{
+  width:160px;height:200px;
+  border-radius:2px;overflow:hidden;cursor:pointer;
+  border:2px solid transparent;transition:border-color .15s;
+  box-shadow:0 6px 20px rgba(0,0,0,.5);position:relative;flex-shrink:0;
+}
+.grid-item:hover{border-color:var(--copper)}
+.grid-item-inner{
+  width:400px;height:500px;
+  transform:scale(0.4);transform-origin:top left;
+  position:absolute;top:0;left:0;pointer-events:none;
+}
+.grid-label{
+  position:absolute;bottom:5px;right:6px;
+  font-size:8px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;
+  color:rgba(255,255,255,.45);text-shadow:0 1px 3px rgba(0,0,0,.9);
+}
+
+/* ── Shared slide elements ── */
+.pill{
+  display:inline-flex;align-items:center;
+  padding:4px 11px;border-radius:999px;
+  font-size:7.5px;font-weight:800;
+  letter-spacing:1.8px;text-transform:uppercase;
+  white-space:nowrap;line-height:1;
+}
+.pill-cop{background:var(--copper);color:#fff}
+.pill-dark{background:rgba(0,0,0,.45);color:rgba(255,255,255,.75)}
+.pill-out-c{border:1.5px solid var(--copper);color:var(--copper)}
+.pill-out-w{border:1.5px solid rgba(255,255,255,.45);color:rgba(255,255,255,.7)}
+
+.aring{
+  border-radius:50%;display:flex;align-items:center;
+  justify-content:center;font-size:14px;flex-shrink:0;
+}
+.ar-cop{border:1.5px solid var(--copper);color:var(--copper)}
+.ar-wht{border:1.5px solid rgba(255,255,255,.5);color:rgba(255,255,255,.7);background:rgba(255,255,255,.08)}
+.ar-dim{border:1.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.25)}
+.ar-blk{border:1.5px solid rgba(13,12,11,.22);color:rgba(13,12,11,.3)}
+
+.abar{height:3px;border-radius:2px;background:var(--copper)}
+
+/* Halftone dot circle
+   Uses currentColor so it inherits the parent's color.
+   Requires explicit width/height/positioning on the element. */
+.halo{
+  position:absolute;border-radius:50%;
+  background-image:radial-gradient(circle,currentColor var(--hd,1.4px),transparent var(--hd,1.4px));
+  background-size:var(--hs,9px) var(--hs,9px);
+  -webkit-mask-image:radial-gradient(
+    ellipse var(--hmx,85%) var(--hmy,85%) at center,
+    black 0%,rgba(0,0,0,.75) 35%,rgba(0,0,0,.38) 60%,transparent 78%
+  );
+  mask-image:radial-gradient(
+    ellipse var(--hmx,85%) var(--hmy,85%) at center,
+    black 0%,rgba(0,0,0,.75) 35%,rgba(0,0,0,.38) 60%,transparent 78%
+  );
+}
+
+/* ════════════════════════════════════════
+   SLIDE BACKGROUNDS & BASE LAYOUT
+   ════════════════════════════════════════ */
+
+.s1,.s5{background:var(--cream);display:flex;flex-direction:column}
+.s2,.s4{background:var(--black);display:flex;flex-direction:column}
+.s3    {background:var(--copper);display:flex;flex-direction:column}
+
+.s1,.s5{padding:28px 26px 30px}
+.s2    {padding:26px 24px 28px}
+.s3    {padding:26px 24px 28px}
+/* s4 has two sub-sections, no top-level padding */
+
+</style>
+</head>
+<body>
+<div class="viewer">
+  <div class="v-eyebrow">Instagram Carousel &nbsp;·&nbsp; 1080 × 1350 px &nbsp;·&nbsp; 4:5 &nbsp;·&nbsp; 5 Slides</div>
+
+  <div class="stage">
+    <button class="nbtn" id="prev" disabled>&#8592;</button>
+
+    <div class="slides-wrap">
+
+      <!-- ══════════════════════════════════════
+           SLIDE 1 — COVER (Cream)
+           Mirrors reference Panel 1: large halftone circle BR,
+           mixed-weight hero type, pill tag, arrow ring, small italic top text
+           ══════════════════════════════════════ -->
+      <div class="slide on s1">
+
+        <!-- Halftone circle: large, bottom-right (exact match to reference) -->
+        <div class="halo" style="
+          width:264px;height:264px;
+          bottom:-58px;right:-58px;
+          color:var(--copper);
+          --hs:10px;--hd:1.5px;
+        "></div>
+        <!-- Small halftone: upper-right accent -->
+        <div class="halo" style="
+          width:84px;height:84px;
+          top:20px;right:24px;
+          color:var(--copper);
+          --hs:6px;--hd:1px;--hmx:80%;--hmy:80%;
+          opacity:.35;
+        "></div>
+
+        <!-- Top: small italic context text (matches reference "Every great experience...") -->
+        <div>
+          <p style="font-size:11px;font-weight:300;font-style:italic;line-height:1.65;
+            color:rgba(13,12,11,.48);max-width:60%">
+            Every hospitality operator should be able to answer these three questions.
+          </p>
+        </div>
+
+        <!-- Arrow ring (copper, matches reference position) -->
+        <div style="margin-top:16px">
+          <div class="aring ar-cop" style="width:38px;height:38px">&#8594;</div>
+        </div>
+
+        <!-- Hero type: bottom-anchored, mixed weight -->
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;
+          gap:4px;position:relative;z-index:1">
+
+          <div class="abar" style="width:36px;margin-bottom:12px"></div>
+
+          <!-- Light italic "How Much of Your" — mirrors reference's "Meet" weight -->
+          <div style="font-size:17px;font-weight:400;font-style:italic;
+            color:rgba(13,12,11,.6);line-height:1.15;letter-spacing:.2px">
+            How Much of Your
+          </div>
+
+          <!-- Massive black "GUEST DATA" — mirrors reference's "THE TEAM" weight -->
+          <div style="font-size:65px;font-weight:900;line-height:.88;
+            letter-spacing:-2.5px;color:var(--black);text-transform:uppercase">
+            GUEST<br>DATA
+          </div>
+
+          <!-- Sub-line continuation -->
+          <div style="font-size:22px;font-weight:900;letter-spacing:-.4px;
+            color:var(--black);text-transform:uppercase;margin-top:5px;line-height:1.1">
+            DO YOU ACTUALLY<br>OWN TODAY?
+          </div>
+        </div>
+
+        <!-- Pill tag bottom (or keep at top — placing bottom-left for balance) -->
+        <div style="margin-top:16px;position:relative;z-index:1">
+          <span class="pill pill-cop">Your Turn · Discuss</span>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════
+           SLIDE 2 — QUESTION 01 (Dark)
+           Mirrors reference Panel 2: large name → large question text,
+           department pill → Q01 pill, photo → faint large number bg element
+           ══════════════════════════════════════ -->
+      <div class="slide s2">
+
+        <!-- Faint giant "01" where the photo would be -->
+        <div style="
+          position:absolute;top:14px;right:12px;
+          font-size:136px;font-weight:900;
+          color:rgba(255,255,255,.028);
+          line-height:1;letter-spacing:-5px;
+          user-select:none;pointer-events:none
+        ">01</div>
+
+        <!-- Halftone: bottom-left corner accent -->
+        <div class="halo" style="
+          width:170px;height:170px;
+          bottom:-32px;left:-32px;
+          color:rgba(255,255,255,.28);
+          --hs:7.5px;--hd:1.1px;
+          opacity:.38;
+        "></div>
+
+        <!-- Top row: pill + arrow (mirrors reference's name + dept layout) -->
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span class="pill pill-cop">Question 01</span>
+          <div class="aring ar-dim" style="width:32px;height:32px;font-size:12px">&#8594;</div>
+        </div>
+
+        <!-- Hero text block -->
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px">
+          <div class="abar" style="width:36px;opacity:.7"></div>
+
+          <!-- Large question setup — mirrors "MATTHEW COLLINS" scale in reference -->
+          <div style="font-size:38px;font-weight:900;line-height:.97;
+            letter-spacing:-.8px;color:#fff;text-transform:uppercase">
+            IF A REGULAR<br>STOPPED<br>COMING<br>TOMORROW,
+          </div>
+
+          <div style="height:1px;background:rgba(255,255,255,.08)"></div>
+
+          <!-- Question conclusion in copper (brand accent) -->
+          <div style="font-size:25px;font-weight:900;line-height:1.05;
+            letter-spacing:-.3px;color:var(--copper);text-transform:uppercase">
+            WOULD YOU<br>KNOW?<br>WOULD YOU<br>KNOW WHY?
+          </div>
+        </div>
+
+        <!-- Bottom: small body text (mirrors "Leading with vision and purpose.") -->
+        <div style="padding-top:10px;border-top:1px solid rgba(255,255,255,.07)">
+          <p style="font-size:10px;font-weight:300;font-style:italic;
+            line-height:1.65;color:rgba(255,255,255,.38)">
+            If a regular stopped coming tomorrow, would you know? Would you know why?
+          </p>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════
+           SLIDE 3 — QUESTION 02 (Copper)
+           Mirrors reference Panel 3: warm bg, small italic top-left text,
+           photo frame position → halftone circle, white type, white arrow ring
+           ══════════════════════════════════════ -->
+      <div class="slide s3">
+
+        <!-- Halftone circle: top-right (where the framed photo was in reference) -->
+        <div class="halo" style="
+          width:168px;height:168px;
+          top:-28px;right:-28px;
+          color:rgba(255,255,255,.5);
+          --hs:8px;--hd:1.3px;
+          opacity:.52;
+        "></div>
+
+        <!-- Top row: pill + arrow ring -->
+        <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1">
+          <span class="pill pill-dark">Question 02</span>
+          <div class="aring ar-wht" style="width:34px;height:34px;font-size:13px">&#8594;</div>
+        </div>
+
+        <!-- Small italic top text (mirrors "Creating a workplace where everyone can thrive.") -->
+        <p style="font-size:10.5px;font-weight:300;font-style:italic;line-height:1.65;
+          color:rgba(255,255,255,.72);max-width:58%;margin-top:14px">
+          If your top aggregator partner raised its commission next month,
+        </p>
+
+        <!-- Hero text block -->
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px">
+          <div class="abar" style="width:36px;background:#fff;opacity:.65"></div>
+
+          <!-- Large white question — mirrors "NATALIE COOPER" scale -->
+          <div style="font-size:38px;font-weight:900;line-height:.93;
+            letter-spacing:-.8px;color:#fff;text-transform:uppercase">
+            COULD YOU<br>REACH YOUR<br>GUESTS<br>DIRECTLY?
+          </div>
+        </div>
+
+        <!-- Bottom: small supporting text + pill (mirrors "Supporting our people..." + "Human Resources") -->
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="height:1px;background:rgba(255,255,255,.2)"></div>
+          <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:10px">
+            <p style="font-size:10px;font-weight:300;font-style:italic;
+              line-height:1.65;color:rgba(255,255,255,.65);flex:1">
+              Could you reach your guests directly?
+            </p>
+            <span class="pill pill-dark" style="flex-shrink:0">Guest Data</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════
+           SLIDE 4 — QUESTION 03 (Dark, two-section)
+           Mirrors reference Panel 4: dark bg, two stacked person sections →
+           two stacked content sections. Top = setup, Bottom = the quoted question.
+           ══════════════════════════════════════ -->
+      <div class="slide s4">
+
+        <!-- Halftone: top-right corner -->
+        <div class="halo" style="
+          width:152px;height:152px;
+          top:-22px;right:-22px;
+          color:var(--copper);
+          --hs:7.5px;--hd:1.2px;
+          opacity:.32;
+        "></div>
+
+        <!-- ── TOP SECTION (mirrors OLIVER SHAW area) ── -->
+        <div style="
+          flex:1;padding:26px 24px 20px;
+          display:flex;flex-direction:column;gap:13px;
+          border-bottom:1px solid rgba(255,255,255,.07);
+          position:relative;
+        ">
+          <!-- Nav arrows + pill (mirrors ← and → arrows in reference panel 4) -->
+          <div style="display:flex;align-items:center;justify-content:space-between">
+            <div class="aring ar-dim" style="width:30px;height:30px;font-size:11px">&#8592;</div>
+            <span class="pill pill-cop">Question 03</span>
+            <div class="aring ar-dim" style="width:30px;height:30px;font-size:11px">&#8594;</div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:11px">
+            <div class="abar" style="width:36px;opacity:.7"></div>
+            <p style="font-size:10px;font-weight:700;letter-spacing:2px;
+              text-transform:uppercase;color:rgba(255,255,255,.3)">
+              The real question is:
+            </p>
+            <!-- "OLIVER SHAW" equivalent — large bold name-scale text -->
+            <div style="font-size:34px;font-weight:900;line-height:.97;
+              letter-spacing:-.7px;color:#fff;text-transform:uppercase">
+              WHO CURRENTLY<br>OWNS THE<br>ANSWER TO:
+            </div>
+          </div>
+        </div>
+
+        <!-- ── BOTTOM SECTION (mirrors THOMAS RIDLEY area) ── -->
+        <div style="
+          padding:18px 24px 26px;
+          display:flex;flex-direction:column;gap:11px;
+          position:relative;
+        ">
+          <!-- Faint "03" background element -->
+          <div style="
+            position:absolute;bottom:8px;right:12px;
+            font-size:96px;font-weight:900;
+            color:rgba(255,255,255,.025);
+            line-height:1;letter-spacing:-3px;
+            user-select:none;pointer-events:none
+          ">03</div>
+
+          <!-- The quoted question — accented with copper left border (matches pill accent in reference) -->
+          <div style="
+            padding:12px 15px;
+            border-left:3px solid var(--copper);
+            background:rgba(196,120,64,.1);
+            border-radius:0 8px 8px 0;
+          ">
+            <div style="font-size:22px;font-weight:900;line-height:1.1;
+              letter-spacing:-.3px;color:var(--copper);text-transform:uppercase">
+              "WHO ARE MY<br>BEST 50<br>CUSTOMERS?"
+            </div>
+          </div>
+
+          <!-- Bottom row: pill + back arrow (mirrors dept pill + arrow in reference) -->
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
+            <span class="pill pill-out-c">Guest Data</span>
+            <div class="aring ar-cop" style="width:30px;height:30px;font-size:11px">&#8592;</div>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- ══════════════════════════════════════
+           SLIDE 5 — YOUR TURN (Cream)
+           Bookend to Slide 1. Mirror image:
+           halftone circle now bottom-LEFT (vs Slide 1's bottom-right),
+           "Now it's / YOUR TURN." mirrors "Meet / THE TEAM" mixed weight.
+           ══════════════════════════════════════ -->
+      <div class="slide s5">
+
+        <!-- Halftone: large, bottom-LEFT (mirror of Slide 1's bottom-right) -->
+        <div class="halo" style="
+          width:264px;height:264px;
+          bottom:-58px;left:-58px;
+          color:var(--copper);
+          --hs:10px;--hd:1.5px;
+        "></div>
+        <!-- Small halftone: upper-left accent -->
+        <div class="halo" style="
+          width:84px;height:84px;
+          top:20px;left:22px;
+          color:var(--copper);
+          --hs:6px;--hd:1px;--hmx:80%;--hmy:80%;
+          opacity:.3;
+        "></div>
+
+        <!-- Top: pill + arrow (right side for balance) -->
+        <div style="display:flex;align-items:center;justify-content:space-between;position:relative;z-index:1">
+          <span class="pill pill-cop">Your Turn · Discuss</span>
+          <div class="aring ar-blk" style="width:34px;height:34px;font-size:13px">&#8617;</div>
+        </div>
+
+        <!-- Hero type: mirrors "Meet THE TEAM" weight treatment -->
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;
+          gap:5px;position:relative;z-index:1">
+
+          <div class="abar" style="width:36px;margin-bottom:10px"></div>
+
+          <!-- Light italic "Now it's" — mirrors "Meet" weight in reference -->
+          <div style="font-size:17px;font-weight:400;font-style:italic;
+            color:rgba(13,12,11,.55);line-height:1.1">
+            Now it's
+          </div>
+
+          <!-- Massive "YOUR TURN." — mirrors "THE TEAM" weight in reference -->
+          <div style="font-size:70px;font-weight:900;line-height:.87;
+            letter-spacing:-2.5px;color:var(--black);text-transform:uppercase">
+            YOUR<br>TURN.
+          </div>
+
+          <div style="font-size:20px;font-weight:900;letter-spacing:3px;
+            color:rgba(13,12,11,.28);text-transform:uppercase;margin-top:7px">
+            DISCUSS.
+          </div>
+        </div>
+
+        <!-- Three numbered recap points (the three exact questions) -->
+        <div style="display:flex;flex-direction:column;gap:8px;position:relative;z-index:1">
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="width:17px;height:17px;border-radius:50%;background:var(--copper);
+              flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:7px;font-weight:800;color:#fff">01</span>
+            </div>
+            <p style="font-size:10px;font-weight:400;line-height:1.55;color:rgba(13,12,11,.52)">
+              If a regular stopped coming tomorrow, would you know? Would you know why?
+            </p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="width:17px;height:17px;border-radius:50%;background:var(--copper);
+              flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:7px;font-weight:800;color:#fff">02</span>
+            </div>
+            <p style="font-size:10px;font-weight:400;line-height:1.55;color:rgba(13,12,11,.52)">
+              If your top aggregator raised its commission next month, could you reach your guests directly?
+            </p>
+          </div>
+          <div style="display:flex;gap:8px;align-items:flex-start">
+            <div style="width:17px;height:17px;border-radius:50%;background:var(--copper);
+              flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center">
+              <span style="font-size:7px;font-weight:800;color:#fff">03</span>
+            </div>
+            <p style="font-size:10px;font-weight:400;line-height:1.55;color:rgba(13,12,11,.52)">
+              Who currently owns the answer to "who are my best 50 customers"?
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /slides-wrap -->
+
+    <button class="nbtn" id="next">&#8594;</button>
+  </div><!-- /stage -->
+
+  <!-- Controls -->
+  <div class="controls">
+    <div class="dots" id="dots">
+      <div class="dot on"  onclick="go(0)"></div>
+      <div class="dot"     onclick="go(1)"></div>
+      <div class="dot"     onclick="go(2)"></div>
+      <div class="dot"     onclick="go(3)"></div>
+      <div class="dot"     onclick="go(4)"></div>
+    </div>
+    <div class="counter" id="ctr">Slide 1 of 5</div>
+    <button class="view-all-btn" id="vaBtn" onclick="toggleGrid()">View All 5 Slides</button>
+  </div>
+
+  <!-- Grid overview -->
+  <div class="grid-view" id="grid"></div>
+</div>
+
+<script>
+const N = 5;
+let cur = 0;
+
+function go(i){
+  const slides = document.querySelectorAll('.slide');
+  const dots   = document.querySelectorAll('.dot');
+  slides[cur].classList.remove('on');
+  dots[cur].classList.remove('on');
+  cur = Math.max(0, Math.min(N-1, i));
+  slides[cur].classList.add('on');
+  dots[cur].classList.add('on');
+  document.getElementById('prev').disabled = cur === 0;
+  document.getElementById('next').disabled = cur === N-1;
+  document.getElementById('ctr').textContent = 'Slide ' + (cur+1) + ' of ' + N;
+}
+
+document.getElementById('prev').addEventListener('click', () => go(cur-1));
+document.getElementById('next').addEventListener('click', () => go(cur+1));
+document.addEventListener('keydown', e => {
+  if (e.key==='ArrowLeft'||e.key==='ArrowUp')    go(cur-1);
+  if (e.key==='ArrowRight'||e.key==='ArrowDown') go(cur+1);
+});
+
+/* Swipe support */
+let tx = 0;
+const sw = document.querySelector('.slides-wrap');
+sw.addEventListener('touchstart', e => { tx = e.touches[0].clientX; }, {passive:true});
+sw.addEventListener('touchend',   e => {
+  const d = tx - e.changedTouches[0].clientX;
+  if (Math.abs(d) > 40) go(d > 0 ? cur+1 : cur-1);
+}, {passive:true});
+
+/* Grid view */
+const LABELS = ['Cover','Q01 — Regular','Q02 — Aggregator','Q03 — Best 50','Your Turn'];
+function toggleGrid(){
+  const g = document.getElementById('grid');
+  const b = document.getElementById('vaBtn');
+  const on = g.classList.toggle('on');
+  b.textContent = on ? 'Back to Single View' : 'View All 5 Slides';
+  if (on && !g.children.length) buildGrid();
+}
+function buildGrid(){
+  const g = document.getElementById('grid');
+  document.querySelectorAll('.slide').forEach((sl, i) => {
+    const item = document.createElement('div');
+    item.className = 'grid-item';
+
+    const inner = document.createElement('div');
+    inner.className = 'grid-item-inner';
+
+    const clone = sl.cloneNode(true);
+    clone.style.cssText = 'position:absolute;inset:0;opacity:1;pointer-events:none;width:400px;height:500px;overflow:hidden';
+    inner.appendChild(clone);
+    item.appendChild(inner);
+
+    const lbl = document.createElement('div');
+    lbl.className = 'grid-label';
+    lbl.textContent = LABELS[i];
+    item.appendChild(lbl);
+
+    item.addEventListener('click', () => { toggleGrid(); go(i); });
+    g.appendChild(item);
+  });
+}
+</script>
+</body>
+</html>
