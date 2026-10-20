@@ -14,11 +14,12 @@ const bot = (left, last) => last
 const center = html => `<div style="margin-top:auto;margin-bottom:auto">${html}</div>`;
 
 const row = (label, total) => `<div class="row${total ? ' total' : ''}"><span>${label}</span><span class="blank"></span></div>`;
-const cta = (title, text, comment) => center(`
+const li = (icon, title, note) => `<div class="li"><div class="ic">${icon}</div><div>${title}${note ? `<small>${note}</small>` : ''}</div></div>`;
+const cta = (title, text, comment, save = 'Save it to run your numbers') => center(`
   <h1 style="font-size:92px">${title}</h1>
   <p class="sub" style="margin:40px 0 60px">${text}</p>
   <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
-    <div>🔖 &nbsp;Save it to run your numbers</div>
+    <div>🔖 &nbsp;${save}</div>
     <div>💬 &nbsp;${comment}</div>
     <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
   </div>`);
@@ -105,6 +106,42 @@ const carousels = {
     { theme: 'dark', last: true, body: cta('Stop marketing <span class="gold">alone.</span>',
       'If your LTV:CAC is under 3×, your problem isn\'t the budget. It\'s discovery and repeat visits.',
       'Comment your LTV:CAC ratio') },
+  ],
+  '4-google-reviews': [
+    { theme: 'dark', foot: 'Save this for later', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Marketing</span>
+      <h1>Your Google reviews are a <span class="gold">free customer survey.</span></h1>
+      <p class="sub" style="margin-top:44px">What restaurants can learn from them, what they can't, and how to use it.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">What you can see</span>
+      <h2 style="margin:40px 0 30px">Every review in your <span class="rose">Google Business Profile</span> shows:</h2>
+      ${li('⭐', 'Star rating')}${li('💬', 'Written comment')}${li('📅', 'Date')}${li('📷', 'Photos')}${li('👤', "Reviewer's public name")}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">What you can't see</span>
+      <h2 style="margin:40px 0 30px">Google <span class="gold">doesn't share</span> reviewers' emails.</h2>
+      <p class="sub">So you can't pull emails from reviews to run campaigns. To build a list, ask customers directly and get their permission:</p>
+      <div style="margin-top:20px">${li('📲', 'Bookings')}${li('🎁', 'Loyalty programs')}${li('📶', 'Wi-Fi sign-ups')}</div>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">What the data tells you</span>
+      <h2 style="margin:40px 0 36px">Read reviews <span class="rose">like data</span></h2>
+      <div class="ratio">
+        <div style="background:#fff"><div style="font:700 28px Inter;color:var(--rose)">What they love</div><div style="font:600 30px/1.4 Inter;margin-top:14px">"That pasta is the best in town"</div></div>
+        <div style="background:var(--ink);color:var(--cream)"><div style="font:700 28px Inter;color:var(--gold)">What annoys them</div><div style="font:600 30px/1.4 Inter;margin-top:14px">"Waited 40 min for our food"</div></div>
+      </div>
+      <p style="font:700 28px Inter;margin:40px 0 18px">Repeated words show who your customers are:</p>
+      <div class="chips"><span class="chip">family</span><span class="chip">date night</span><span class="chip">business lunch</span></div>
+      <p class="sub" style="margin-top:34px;font-size:28px">Busy dates and review languages show who visits, and when.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">How to use it</span>
+      <h2 style="margin:40px 0 30px">Turn feedback into <span class="rose">action</span></h2>
+      ${li('🍽️', 'Improve food & service', 'Fix what keeps coming up')}${li('🧑‍🍳', 'Train your staff', 'Use real comments as examples')}${li('🔥', 'Highlight popular dishes', 'Put the favourites front and centre')}${li('🎯', 'Aim your ads', 'At the customers who already love you')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">Why it pays off</span>
+      <h2 style="margin:40px 0 30px">More reviews + replies = <span class="gold">more bookings</span></h2>
+      ${li('1', 'Rank higher', 'In Google Search & Maps')}${li('2', 'Get found more easily', 'By people searching nearby')}${li('3', 'Build trust', 'With customers who\'ve never visited')}${li('4', 'Fill more tables', 'More visibility, more bookings')}`) },
+    { theme: 'dark', last: true, body: cta('Reply to <span class="gold">every review.</span>',
+      'Good or bad, every reply shows new customers you\'re listening, and helps you rank higher.',
+      'Comment the word your reviews mention most', 'Save this for your next review check') },
   ],
 };
 

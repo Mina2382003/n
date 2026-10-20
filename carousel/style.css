@@ -37,3 +37,10 @@ h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-heig
 .ratio>div{flex:1;border-radius:28px;padding:44px 40px}
 .ratio .v{font:800 120px/1 Inter;margin:18px 0}
 .sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}

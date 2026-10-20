@@ -1,0 +1,85 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+</style></head><body><section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Marketing</span>
+      <h1>Your Google reviews are a <span class="gold">free customer survey.</span></h1>
+      <p class="sub" style="margin-top:44px">What restaurants can learn from them, what they can't, and how to use it.</p></div><div class="bot"><span>Save this for later</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">What you can see</span>
+      <h2 style="margin:40px 0 30px">Every review in your <span class="rose">Google Business Profile</span> shows:</h2>
+      <div class="li"><div class="ic">⭐</div><div>Star rating</div></div><div class="li"><div class="ic">💬</div><div>Written comment</div></div><div class="li"><div class="ic">📅</div><div>Date</div></div><div class="li"><div class="ic">📷</div><div>Photos</div></div><div class="li"><div class="ic">👤</div><div>Reviewer's public name</div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">What you can't see</span>
+      <h2 style="margin:40px 0 30px">Google <span class="gold">doesn't share</span> reviewers' emails.</h2>
+      <p class="sub">So you can't pull emails from reviews to run campaigns. To build a list, ask customers directly and get their permission:</p>
+      <div style="margin-top:20px"><div class="li"><div class="ic">📲</div><div>Bookings</div></div><div class="li"><div class="ic">🎁</div><div>Loyalty programs</div></div><div class="li"><div class="ic">📶</div><div>Wi-Fi sign-ups</div></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">What the data tells you</span>
+      <h2 style="margin:40px 0 36px">Read reviews <span class="rose">like data</span></h2>
+      <div class="ratio">
+        <div style="background:#fff"><div style="font:700 28px Inter;color:var(--rose)">What they love</div><div style="font:600 30px/1.4 Inter;margin-top:14px">"That pasta is the best in town"</div></div>
+        <div style="background:var(--ink);color:var(--cream)"><div style="font:700 28px Inter;color:var(--gold)">What annoys them</div><div style="font:600 30px/1.4 Inter;margin-top:14px">"Waited 40 min for our food"</div></div>
+      </div>
+      <p style="font:700 28px Inter;margin:40px 0 18px">Repeated words show who your customers are:</p>
+      <div class="chips"><span class="chip">family</span><span class="chip">date night</span><span class="chip">business lunch</span></div>
+      <p class="sub" style="margin-top:34px;font-size:28px">Busy dates and review languages show who visits, and when.</p></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">How to use it</span>
+      <h2 style="margin:40px 0 30px">Turn feedback into <span class="rose">action</span></h2>
+      <div class="li"><div class="ic">🍽️</div><div>Improve food & service<small>Fix what keeps coming up</small></div></div><div class="li"><div class="ic">🧑‍🍳</div><div>Train your staff<small>Use real comments as examples</small></div></div><div class="li"><div class="ic">🔥</div><div>Highlight popular dishes<small>Put the favourites front and centre</small></div></div><div class="li"><div class="ic">🎯</div><div>Aim your ads<small>At the customers who already love you</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">Why it pays off</span>
+      <h2 style="margin:40px 0 30px">More reviews + replies = <span class="gold">more bookings</span></h2>
+      <div class="li"><div class="ic">1</div><div>Rank higher<small>In Google Search & Maps</small></div></div><div class="li"><div class="ic">2</div><div>Get found more easily<small>By people searching nearby</small></div></div><div class="li"><div class="ic">3</div><div>Build trust<small>With customers who've never visited</small></div></div><div class="li"><div class="ic">4</div><div>Fill more tables<small>More visibility, more bookings</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 07</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <h1 style="font-size:92px">Reply to <span class="gold">every review.</span></h1>
+  <p class="sub" style="margin:40px 0 60px">Good or bad, every reply shows new customers you're listening, and helps you rank higher.</p>
+  <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+    <div>🔖 &nbsp;Save this for your next review check</div>
+    <div>💬 &nbsp;Comment the word your reviews mention most</div>
+    <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
+  </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>
