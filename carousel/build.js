@@ -181,6 +181,51 @@ const carousels = {
       'From Kimbo in the cup to Frusta on the counter, guests notice what you serve. And kitchens are getting smarter, fast.',
       'Which one would you put in your venue?', 'Save this for your next café upgrade') },
   ],
+  '6-hiring-sales': [
+    { theme: 'dark', foot: 'Share with someone job hunting', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Now hiring · Reservya</span>
+      <h1>We're hiring <span class="gold">sales</span> in Alexandria & Cairo 📍</h1>
+      <p class="sub" style="margin-top:44px">Looking for a job in hospitality in Egypt? Swipe. This might be your next step.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Who we are</span>
+      <h2 style="margin:40px 0 30px">What is <span class="rose">Reservya?</span></h2>
+      <p class="sub" style="font-size:36px">A network that helps restaurants, cafés and venues get discovered by more guests and turn them into regulars.</p>
+      <div class="pill" style="margin-top:44px">I'm Mina, CEO of Reservya. I'm building the sales team myself.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">The role</span>
+      <h2 style="margin:40px 0 30px">Sales Executive</h2>
+      <p class="sub" style="margin-bottom:24px">You'll be the face of Reservya to venue owners in your city.</p>
+      ${li('🤝', 'Meet restaurant & café owners', 'Visit venues and build real relationships')}${li('📱', 'Show them Reservya', 'Explain how the network brings them more guests')}${li('✍️', 'Sign new partners', 'And help them succeed after they join')}${li('📈', 'Grow your city', 'Help build our network in Alex or Cairo')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Where</span>
+      <h2 style="margin:40px 0 44px">Two cities, <span class="rose">open now</span></h2>
+      <div class="cards">
+        <div class="card d"><div class="l">📍 Alexandria</div><div class="m">Sales Executive · Field sales</div></div>
+        <div class="card w"><div class="l">📍 Cairo</div><div class="m">Sales Executive · Field sales</div></div>
+      </div>
+      <p class="sub" style="margin-top:40px;font-size:30px">Live in or near the city you apply for.</p>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">Who we're looking for</span>
+      <h2 style="margin:40px 0 30px">You might be a fit if you…</h2>
+      ${li('☕', 'Love hospitality', 'You notice what makes a great restaurant great')}${li('🗣️', 'Talk easily with people', 'Confident in Arabic, English is a plus')}${li('🚀', 'Drive yourself', 'You don\'t wait to be told what to do next')}${li('🎯', 'Like targets', 'Sales or F&B experience is a plus, not a must')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">What you get</span>
+      <h2 style="margin:40px 0 30px">More than <span class="rose">a job title</span></h2>
+      ${li('🧠', 'Learn hospitality from the inside', 'How venues really make money')}${li('👋', 'Work directly with me', 'Not five layers away from decisions')}${li('🌐', 'Build your network', 'Venue owners across your whole city')}${li('🌱', 'Grow with us', 'Join early and grow as the team grows')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Not for you? Still useful</span>
+      <h2 style="margin:40px 0 30px">4 tips to land <span class="rose">any hospitality job</span> in Egypt</h2>
+      ${li('1', 'Know the venues', 'Visit them. Mention one by name in your interview')}${li('2', 'Show numbers', '"Served 200 covers a night" beats "hard worker"')}${li('3', 'Clean up your profiles', 'Recruiters check LinkedIn and Instagram')}${li('4', 'Follow up in 48 hours', 'A short, polite message gets you remembered')}`) },
+    { theme: 'dark', last: true, body: center(`
+      <span class="tag" style="margin-bottom:40px;display:inline-block">How to apply</span>
+      <h1 style="font-size:96px">DM me <span class="gold">"SALES"</span> + your city 📩</h1>
+      <p class="sub" style="margin:40px 0 60px">I'll reply with the next steps. Alexandria or Cairo.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>🔁 &nbsp;Share this with someone looking for work</div>
+        <div>🏷️ &nbsp;Tag a friend who'd be great at this</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for hospitality careers</div>
+      </div>`) },
+  ],
 };
 
 (async () => {
