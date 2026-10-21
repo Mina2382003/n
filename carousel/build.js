@@ -14,6 +14,9 @@ const bot = (left, last) => last
 const center = html => `<div style="margin-top:auto;margin-bottom:auto">${html}</div>`;
 
 const row = (label, total) => `<div class="row${total ? ' total' : ''}"><span>${label}</span><span class="blank"></span></div>`;
+const img = (name, pos) => `<img src="img/${name}.jpg" style="object-position:${pos}">`;
+const bg = (name, pos) => `<img class="photo" src="img/${name}.jpg" style="object-position:${pos}"><div class="shade"></div>`;
+const bottom = html => `<div style="margin-top:auto;position:relative">${html}</div>`;
 const li = (icon, title, note) => `<div class="li"><div class="ic">${icon}</div><div>${title}${note ? `<small>${note}</small>` : ''}</div></div>`;
 const cta = (title, text, comment, save = 'Save it to run your numbers') => center(`
   <h1 style="font-size:92px">${title}</h1>
@@ -143,6 +146,41 @@ const carousels = {
       'Good or bad, every reply shows new customers you\'re listening, and helps you rank higher.',
       'Comment the word your reviews mention most', 'Save this for your next review check') },
   ],
+  '5-hace-expo': [
+    { theme: 'dark', foot: 'Event diary', body: `${bg('badge', '50% 40%')}` + bottom(`
+      <span class="tag" style="margin-bottom:36px;display:inline-block">Event diary · HACE Hotel Expo</span>
+      <h1>A day at <span class="gold">HACE Hotel Expo</span> ☕</h1>
+      <p class="sub" style="margin-top:30px">The coffee, the tech and the ideas worth stealing for your venue.</p>`) },
+    { theme: 'dark', body: `${bg('arrival', '70% 30%')}` + bottom(`
+      <span class="tag">Arrival</span>
+      <h2 style="margin:34px 0 24px">Hotels, restaurants, cafés, <span class="gold">and everyone who supplies them.</span></h2>
+      <p class="sub">One hall, a full day, and a lot of espresso.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Coffee pick #1</span>
+      <div class="pic" style="height:640px;margin:34px 0 36px">${img('kimbo', '50% 50%')}</div>
+      <h2><span class="rose">Kimbo</span>, il caffè di Napoli</h2>
+      <p class="sub" style="margin-top:20px">Italian espresso brand from Naples. My cappuccino of the day came in this cup.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Coffee pick #2</span>
+      <div class="pic" style="height:640px;margin:34px 0 36px">${img('frusta', '50% 30%')}</div>
+      <h2><span class="rose">Frusta</span> coffee machines</h2>
+      <p class="sub" style="margin-top:20px">Compact espresso machines with one simple promise: quality coffee at the press of a button.</p>`) },
+    { theme: 'dark', body: `${bg('barista', '50% 40%')}` + bottom(`
+      <span class="tag">Don't miss</span>
+      <h2 style="margin:34px 0 24px">The <span class="gold">Barista Clash</span> competition</h2>
+      <p class="sub">Baristas going head to head, right at the hall entrance. Coffee is a craft, and the crowd shows it.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Beyond coffee</span>
+      <h2 style="margin:34px 0 40px">What else <span class="rose">caught my eye</span></h2>
+      <div style="display:flex;gap:22px">
+        <div style="flex:1"><div class="pic" style="height:500px">${img('unox', '30% 50%')}</div><p class="cap">UNOX live oven demo</p></div>
+        <div style="flex:1"><div class="pic" style="height:500px">${img('robot', '50% 50%')}</div><p class="cap">Serving robots</p></div>
+        <div style="flex:1"><div class="pic" style="height:500px">${img('dreem', '35% 50%')}</div><p class="cap">Dreem Food Services</p></div>
+      </div>`) },
+    { theme: 'dark', last: true, body: cta('Great coffee is now <span class="gold">a selling point.</span>',
+      'From Kimbo in the cup to Frusta on the counter, guests notice what you serve. And kitchens are getting smarter, fast.',
+      'Which one would you put in your venue?', 'Save this for your next café upgrade') },
+  ],
 };
 
 (async () => {
@@ -157,6 +195,7 @@ const carousels = {
     const file = path.join(dir, 'carousel.html');
     fs.writeFileSync(file, html);
     await page.goto('file://' + file, { waitUntil: 'networkidle' });
+    await page.evaluate(() => Promise.all([...document.images].map(i => i.decode())));
     await page.evaluate(() => document.fonts.ready);
     const els = await page.$$('.slide');
     for (let i = 0; i < els.length; i++)

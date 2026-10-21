@@ -44,3 +44,9 @@ h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-heig
 .li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
 .chips{display:flex;flex-wrap:wrap;gap:16px}
 .chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
