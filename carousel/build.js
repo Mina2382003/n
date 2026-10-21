@@ -226,6 +226,28 @@ const carousels = {
         <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for hospitality careers</div>
       </div>`) },
   ],
+  '7-hiring-short': [
+    { theme: 'dark', foot: 'Share with someone job hunting', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Now hiring · Reservya</span>
+      <h1>We're hiring <span class="gold">sales</span> in Alexandria & Cairo 📍</h1>
+      <p class="sub" style="margin-top:44px">Looking for a job in hospitality in Egypt? Swipe.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The role · Sales Executive</span>
+      <h2 style="margin:40px 0 30px">Be the face of <span class="rose">Reservya</span> in your city</h2>
+      ${li('🤝', 'Meet restaurant & café owners')}${li('📱', 'Show them how Reservya brings more guests')}${li('✍️', 'Sign new partner venues')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">You might be a fit if you…</span>
+      <h2 style="margin:40px 0 30px">Love hospitality and <span class="gold">love people</span></h2>
+      ${li('🗣️', 'Talk easily with people', 'Arabic, English is a plus')}${li('🚀', 'Drive yourself')}${li('🎯', 'Like targets', 'Sales or F&B experience is a plus, not a must')}`) },
+    { theme: 'dark', last: true, body: center(`
+      <span class="tag" style="margin-bottom:40px;display:inline-block">How to apply</span>
+      <h1 style="font-size:96px">DM me <span class="gold">"SALES"</span> + your city 📩</h1>
+      <p class="sub" style="margin:40px 0 60px">Alexandria or Cairo. I'll reply with the next steps.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>🔁 &nbsp;Share this with someone looking for work</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for hospitality careers</div>
+      </div>`) },
+  ],
 };
 
 (async () => {
