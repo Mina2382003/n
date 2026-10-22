@@ -384,6 +384,27 @@ const carousels = {
       'The best deals are the ones where both sides make money. That\'s the deal that lasts.',
       'Comment your biggest aggregator question', 'Save this before your next meeting') },
   ],
+  '11-loyalty-data': [
+    { theme: 'dark', foot: 'Save this for later', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Data</span>
+      <h1>A loyalty card isn't a discount. <span class="gold">It's a data machine.</span></h1>
+      <p class="sub" style="margin-top:44px">Here's what one card can tell you about your guests.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Who they are</span>
+      <h2 style="margin:40px 0 30px">Know your <span class="rose">guests by name</span></h2>
+      ${li('👤', 'Name & phone number', 'Collected with their permission')}${li('🎂', 'Birthday', 'The easiest reason to invite them back')}${li('📍', 'Area they live in', 'Where your guests actually come from')}${li('🔎', 'How they found you', 'Which channel really brings guests')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">How they behave</span>
+      <h2 style="margin:40px 0 30px">Know what they <span class="gold">do</span></h2>
+      ${li('🔁', 'How often they visit', 'Your real regulars vs one-timers')}${li('🍽️', 'What they order & spend', 'Favourite dishes and average check')}${li('📅', 'When they come', 'Their favourite days and times')}${li('⏳', 'When they last visited', 'Spot who\'s slipping away early')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Use it</span>
+      <h2 style="margin:40px 0 30px">Turn the data into <span class="rose">visits</span></h2>
+      ${li('🎂', 'Send birthday offers', 'Personal, timely, almost always used')}${li('👋', 'Win back quiet guests', 'Not seen in 30 days? Send them a reason')}${li('⭐', 'Reward your top 20%', 'They bring most of your revenue')}${li('📊', 'Plan menu & staff', 'Based on what regulars actually do')}`) },
+    { theme: 'dark', last: true, body: cta('Stop giving discounts. <span class="gold">Start collecting data.</span>',
+      'Every stamp is a data point. Every data point is a reason to bring a guest back.',
+      'Do you run a loyalty program? Yes or no', 'Save this for your next loyalty launch') },
+  ],
 };
 
 (async () => {
