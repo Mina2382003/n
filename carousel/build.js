@@ -405,6 +405,31 @@ const carousels = {
       'Every stamp is a data point. Every data point is a reason to bring a guest back.',
       'Do you run a loyalty program? Yes or no', 'Save this for your next loyalty launch') },
   ],
+  '12-tripadvisor': [
+    { theme: 'dark', foot: 'Save this for later', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Marketing</span>
+      <h1>Tourists are looking for a place to eat. <span class="gold">Can they find you?</span></h1>
+      <p class="sub" style="margin-top:44px">What TripAdvisor tells you about your guests, and why your restaurant should be on it.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The data · Part 1</span>
+      <h2 style="margin:40px 0 30px">What every <span class="rose">review</span> tells you</h2>
+      ${li('⭐', 'Overall rating & written review', 'What guests loved, and what they didn\'t')}${li('🍽️', 'Food, service, value, atmosphere', 'See exactly which part needs work')}${li('👨‍👩‍👧', 'Who they came with', 'Families, couples, friends, business')}${li('🌍', 'Where reviewers are from', 'Tourists vs locals, and which countries')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">The data · Part 2</span>
+      <h2 style="margin:40px 0 30px">What your <span class="gold">listing</span> tells you</h2>
+      ${li('🏆', 'Your ranking in your city', '"#12 of 800 restaurants in Cairo"')}${li('👀', 'How many people view your page', 'From the free owner dashboard')}${li('📷', 'Guest photos', 'What people actually share about you')}${li('🔍', 'Your competitors\' reviews', 'Learn from what guests say about them')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The benefits</span>
+      <h2 style="margin:40px 0 30px">Why it's <span class="rose">worth it</span></h2>
+      ${li('✈️', 'Reach tourists & travellers', 'People who don\'t know your area yet')}${li('🤝', 'Build trust before they visit', 'Reviews from strangers sell better than ads')}${li('📈', 'Climb your city ranking', 'More good reviews, more visibility')}${li('🏅', 'Earn the Travelers\' Choice badge', 'For consistently great reviews')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">How to start</span>
+      <h2 style="margin:40px 0 30px">4 steps, <span class="gold">this week</span></h2>
+      ${li('1', 'Claim your listing', 'It\'s free')}${li('2', 'Add photos, menu & hours', 'A complete page gets more clicks')}${li('3', 'Ask happy guests to review', 'A card on the table or a QR code')}${li('4', 'Reply to every review', 'Good or bad. Future guests read your replies')}`) },
+    { theme: 'dark', last: true, body: cta('Get found by <span class="gold">every tourist</span> in town.',
+      'Google brings the locals. TripAdvisor brings the travellers. A good restaurant needs both.',
+      'Is your restaurant on TripAdvisor? Yes or no', 'Save this for your setup') },
+  ],
 };
 
 (async () => {
