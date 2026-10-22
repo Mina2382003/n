@@ -309,6 +309,40 @@ const carousels = {
       'Most venues stop at level 1: the data is there, but nobody reads it. The money is in levels 3 and 4.',
       'Comment 1, 2, 3 or 4', 'Save this as your roadmap') },
   ],
+  '9-restaurant-types': (() => {
+    const types = [
+      ['Fine Dining', 'The full experience. Chef-led menus, premium ingredients, white-glove service.', '$$$$', '2–3 hours', 'Table service, often tasting menus', 'Average check & reservation fill rate'],
+      ['Casual Dining', 'Sit-down meals at mid-range prices. Relaxed, family and friends friendly.', '$$–$$$', '45–90 min', 'Table service, full menu', 'Table turnover per shift'],
+      ['Fast Casual', 'Better quality than fast food, no table service. Order at the counter, eat fresh.', '$$', '20–40 min', 'Counter order, food brought or picked up', 'Orders per hour at peak'],
+      ['Fast Food (QSR)', 'Quick Service Restaurant. Standard menu, high volume, speed above all. The closest thing to FMCG in food.', '$', 'Under 15 min', 'Counter, drive-thru, delivery', 'Speed of service & daily volume'],
+      ['Café', 'Coffee first, food second. A place people come back to again and again.', '$–$$', '30 min to hours', 'Counter or light table service', 'Repeat visits per guest'],
+      ['Cloud Kitchen', 'Delivery only. No dining room, just a kitchen and the apps.', '$–$$', 'Delivery only', 'Delivery apps & own ordering', 'App rating & commission per order'],
+    ];
+    const slides = [
+      { theme: 'dark', foot: 'Save this for later', body: center(`
+        <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant 101</span>
+        <h1>Not every restaurant <span class="gold">plays the same game.</span></h1>
+        <p class="sub" style="margin-top:44px">6 types of restaurants, how each one works, and the one number each should watch.</p>`) },
+      { theme: 'light', body: center(`
+        <span class="tag">At a glance</span>
+        <h2 style="margin:40px 0 36px">From <span class="rose">$ to $$$$</span></h2>
+        <div style="display:flex;justify-content:space-between;font:800 22px Inter;letter-spacing:2px;opacity:.55;padding-bottom:12px;border-bottom:3px solid var(--ink)"><span>TYPE</span><span style="display:flex;gap:40px"><span style="width:150px;text-align:right">PRICE</span><span style="width:250px;text-align:right">TIME AT TABLE</span></span></div>
+        ${types.map(t => `<div style="display:flex;justify-content:space-between;align-items:center;padding:24px 0;border-bottom:2px solid #e0d2c4;font:700 32px Inter"><span>${t[0]}</span><span style="display:flex;gap:40px;font-weight:600"><span class="rose" style="width:150px;text-align:right">${t[2]}</span><span style="width:250px;text-align:right;opacity:.75">${t[3]}</span></span></div>`).join('')}`) },
+    ];
+    types.forEach((t, i) => {
+      const dark = i % 2 === 1;
+      slides.push({ theme: dark ? 'dark' : 'light', body: `<div class="huge" style="opacity:${dark ? .22 : .18}">0${i + 1}</div>` + center(`
+        <span class="tag">Type ${i + 1} of 6</span>
+        <h2 style="margin:40px 0 24px">${t[0]}</h2>
+        <p class="sub" style="margin-bottom:24px">${t[1]}</p>
+        ${li('💰', 'Price: ' + t[2])}${li('⏱️', 'Time at table: ' + t[3])}${li('🍽️', t[4])}
+        <div class="pill" style="margin-top:36px">📊 Number to watch: ${t[5]}</div>`) });
+    });
+    slides.push({ theme: 'dark', last: true, body: cta('Which type <span class="gold">do you run?</span>',
+      'Every type wins differently. Copy the playbook of the wrong type and you\'ll chase the wrong numbers.',
+      'Comment your restaurant type', 'Save this for your next concept') });
+    return slides;
+  })(),
 };
 
 (async () => {
