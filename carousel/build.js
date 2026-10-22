@@ -430,6 +430,43 @@ const carousels = {
       'Google brings the locals. TripAdvisor brings the travellers. A good restaurant needs both.',
       'Is your restaurant on TripAdvisor? Yes or no', 'Save this for your setup') },
   ],
+  '13-google-vs-tripadvisor': (() => {
+    const vs = (rows, dark) => `<div class="vs"><div class="h"></div><div class="h ${dark ? 'gold' : 'rose'}">Google</div><div class="h ${dark ? 'gold' : 'rose'}">TripAdvisor</div>` +
+      rows.map(([k, g, t]) => `<div class="k">${k}</div><div>${g}</div><div>${t}</div>`).join('') + `</div>`;
+    return [
+      { theme: 'dark', foot: 'Save this for later', body: center(`
+        <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Data · Head to head</span>
+        <h1>Google reviews <span class="gold">vs</span> TripAdvisor.</h1>
+        <p class="sub" style="margin-top:44px">What data each one gives you, what each one brings you, and which your restaurant needs.</p>`) },
+      { theme: 'light', body: center(`
+        <span class="tag">Round 1 · The audience</span>
+        <h2 style="margin:40px 0 40px">Who's <span class="rose">looking at you?</span></h2>
+        ${vs([['Who', 'Locals & anyone nearby', 'Tourists & travellers'], ['When', 'Right now: "restaurant near me"', 'Before & during a trip'], ['Where', 'Google Search & Maps', 'TripAdvisor app & site']])}`) },
+      { theme: 'dark', body: center(`
+        <span class="tag">Round 2 · Review data</span>
+        <h2 style="margin:40px 0 40px">What each <span class="gold">review</span> tells you</h2>
+        ${vs([['Rating', '1–5 stars', '1–5 bubbles'], ['Details', 'Food, service, atmosphere', 'Food, service, value, atmosphere'], ['Context', 'Dine-in, takeaway or delivery', 'Who they came with: family, couple, business'], ['Reviewer', 'Public name & photos', 'Name & where they\'re from']], true)}`) },
+      { theme: 'light', body: center(`
+        <span class="tag">Round 3 · Business data</span>
+        <h2 style="margin:40px 0 40px">What your <span class="rose">dashboard</span> shows</h2>
+        ${vs([['Reach', 'Searches & views on Maps', 'Page views'], ['Actions', 'Calls, directions, website clicks', 'How visitors engage with your page'], ['Search', 'The words people searched to find you', 'Your ranking: "#12 of 800 in Cairo"'], ['Cost', 'Free', 'Free']])}`) },
+      { theme: 'dark', body: center(`
+        <span class="tag">Round 4 · Benefits</span>
+        <h2 style="margin:40px 0 40px">What each one <span class="gold">brings you</span></h2>
+        ${vs([['Guests', 'Everyday locals & walk-ins', 'Tourists who don\'t know the area'], ['Trust', 'Star rating right on the map', 'Rankings & Travelers\' Choice badge'], ['Growth', 'Rank higher in Maps', 'Climb your city ranking']], true)}`) },
+      { theme: 'light', body: center(`
+        <span class="tag">The verdict</span>
+        <h2 style="margin:40px 0 36px">You need <span class="rose">both.</span></h2>
+        <div class="ratio">
+          <div style="background:#fff"><div style="font:800 30px Inter;color:var(--rose)">Google</div><div style="font:600 30px/1.4 Inter;margin-top:14px">Fills your tables every day with locals.</div></div>
+          <div style="background:var(--ink);color:var(--cream)"><div style="font:800 30px Inter;color:var(--gold)">TripAdvisor</div><div style="font:600 30px/1.4 Inter;margin-top:14px">Brings the tourists who'd never find you.</div></div>
+        </div>
+        <div class="pill" style="margin-top:36px">In a tourist area like Downtown, Zamalek or the coast? Give TripAdvisor the same attention as Google.</div>`) },
+      { theme: 'dark', last: true, body: cta('Reply on <span class="gold">both.</span> Read <span class="gold">both.</span>',
+        'Two platforms, two audiences, twice the data on what your guests think.',
+        'Which one gets you more guests: Google or TripAdvisor?', 'Save this comparison') },
+    ];
+  })(),
 };
 
 (async () => {
