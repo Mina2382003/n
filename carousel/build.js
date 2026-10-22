@@ -17,6 +17,31 @@ const row = (label, total) => `<div class="row${total ? ' total' : ''}"><span>${
 const img = (name, pos) => `<img src="img/${name}.jpg" style="object-position:${pos}">`;
 const bg = (name, pos) => `<img class="photo" src="img/${name}.jpg" style="object-position:${pos}"><div class="shade"></div>`;
 const bottom = html => `<div style="margin-top:auto;position:relative">${html}</div>`;
+// Nested-ellipse "journey" diagram: every stage shares the left edge, each ring wraps the one before.
+const journey = (stages) => {
+  const L = 90, CY = 470, rings = [[160, 230], [270, 300], [370, 350], [450, 390]];
+  const edge = (i, dy, side) => { const [rx, ry] = rings[i]; const k = Math.sqrt(Math.max(0, 1 - (dy / ry) ** 2)); return L + rx + side * rx * k; };
+  let s = `<svg width="1080" height="830" viewBox="0 60 1080 830" style="margin:0 -90px;display:block">`;
+  rings.forEach(([rx, ry], i) => {
+    s += `<ellipse cx="${L + rx}" cy="${CY}" rx="${rx}" ry="${ry}" fill="none" stroke="${i === 3 ? 'var(--gold)' : 'rgba(243,235,225,.85)'}" stroke-width="${i === 3 ? 4 : 2.5}"/>`;
+  });
+  s += `<line x1="${L}" y1="${CY}" x2="1035" y2="${CY}" stroke="var(--cream)" stroke-width="3"/><circle cx="${L}" cy="${CY}" r="11" fill="var(--cream)"/><path d="M1030 ${CY - 12} L1052 ${CY} L1030 ${CY + 12}Z" fill="var(--cream)"/>`;
+  const centers = [250, 520, 730, 910];
+  stages.forEach((st, i) => {
+    const w = st.label.length * 30 + 20;
+    s += `<rect x="${centers[i] - w / 2}" y="${CY - 30}" width="${w}" height="60" fill="var(--ink)"/>`;
+    s += `<text x="${centers[i]}" y="${CY + 16}" text-anchor="middle" font-family="Inter" font-weight="800" font-size="40" fill="var(--gold)">${st.label}</text>`;
+    const dys = i === 0 ? [-160, -80, 70, 150] : i === 3 ? [-195, -100, 85, 175] : [-215, -110, 85, 190];
+    st.items.forEach((lines, j) => {
+      const dy = dys[j];
+      const x = i === 0 ? edge(0, dy, -1) + 30 : edge(i - 1, dy, 1) + 22;
+      s += `<circle cx="${x}" cy="${CY + dy - 7}" r="5" fill="var(--gold)"/>`;
+      s += `<text x="${x + 16}" y="${CY + dy}" font-family="Inter" font-weight="500" font-size="23" fill="var(--cream)">` +
+        lines.map((t, k) => `<tspan x="${x + 16}" dy="${k ? 28 : 0}">${t}</tspan>`).join('') + `</text>`;
+    });
+  });
+  return s + `</svg>`;
+};
 const li = (icon, title, note) => `<div class="li"><div class="ic">${icon}</div><div>${title}${note ? `<small>${note}</small>` : ''}</div></div>`;
 const cta = (title, text, comment, save = 'Save it to run your numbers') => center(`
   <h1 style="font-size:92px">${title}</h1>
@@ -247,6 +272,42 @@ const carousels = {
         <div>🔁 &nbsp;Share this with someone looking for work</div>
         <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for hospitality careers</div>
       </div>`) },
+  ],
+  '8-data-journey': [
+    { theme: 'dark', foot: 'Save this for later', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant Data · 4 levels</span>
+      <h1>Your restaurant is <span class="gold">sitting on data.</span><br>Are you using it?</h1>
+      <p class="sub" style="margin-top:44px">The 4 levels every restaurant goes through, from the first booking to real growth.</p>`) },
+    { theme: 'dark', body: `
+      <div style="text-align:center;margin-top:40px">
+        <div style="font:800 64px/1.05 Inter;letter-spacing:-1px"><span class="gold">THE RESTAURANT</span> DATA JOURNEY</div>
+        <div style="font:400 30px Inter;letter-spacing:6px;margin-top:16px;opacity:.9">FROM FIRST BOOKING TO GROWTH</div>
+      </div>
+      <div style="margin-top:30px">${journey([
+        { label: 'TRACK', items: [['Log every', 'booking'], ['Capture guest', 'contacts (opt-in)'], ['Record sales', 'by dish'], ['Read every', 'review']] },
+        { label: 'LEARN', items: [['Peak & quiet', 'hours'], ['Best & worst', 'dishes'], ['New vs repeat', 'guests'], ['No-show', 'rate']] },
+        { label: 'ACT', items: [['Fill quiet', 'hours'], ['Fix the', 'menu'], ['Staff to', 'demand'], ['Reply to', 'reviews']] },
+        { label: 'GROW', items: [['Win back', 'regulars'], ['Loyalty', 'rewards'], ['Smarter', 'ads'], ['Know', 'your LTV']] },
+      ])}</div>` },
+    { theme: 'light', body: `<div class="huge" style="opacity:.18">01</div>` + center(`
+      <span class="tag">Level 1 · Track</span>
+      <h2 style="margin:40px 0 30px">You can't fix what you <span class="rose">don't measure</span></h2>
+      ${li('📅', 'Every booking & walk-in', 'Date, time, party size')}${li('📲', 'Guest contacts, with permission', 'Via bookings, loyalty or Wi-Fi sign-ups')}${li('🧾', 'Sales by dish & by shift', 'Straight from your POS')}${li('⭐', 'Reviews & no-shows', 'Every one, every week')}`) },
+    { theme: 'light', body: `<div class="huge" style="opacity:.18">02</div>` + center(`
+      <span class="tag">Level 2 · Learn</span>
+      <h2 style="margin:40px 0 30px">Turn records into <span class="rose">answers</span></h2>
+      ${li('⏰', 'When are we full, and when empty?', 'Your peak and dead hours')}${li('🍽️', 'Which dishes make money?', 'And which just take up menu space')}${li('🔁', 'How many guests come back?', 'New vs repeat, month by month')}${li('💬', 'What do reviews keep saying?', 'The praise and the complaints')}`) },
+    { theme: 'dark', body: `<div class="huge" style="opacity:.22">03</div>` + center(`
+      <span class="tag">Level 3 · Act</span>
+      <h2 style="margin:40px 0 30px">One insight, <span class="gold">one change</span></h2>
+      ${li('📉', 'Quiet Tuesday?', 'Run a weekday offer')}${li('💸', 'Low-margin dish?', 'Reprice it or cut it')}${li('👥', 'Packed Friday?', 'Add staff to that shift')}${li('🔁', 'Same complaint 3 times?', 'Train the team on it this week')}`) },
+    { theme: 'dark', body: `<div class="huge" style="opacity:.22">04</div>` + center(`
+      <span class="tag">Level 4 · Grow</span>
+      <h2 style="margin:40px 0 30px">Data that <span class="gold">brings guests back</span></h2>
+      ${li('👋', 'Win back lapsed regulars', 'A message to guests who opted in')}${li('🎂', 'Loyalty & birthday rewards', 'Give regulars a reason to return')}${li('🎯', 'Ads aimed at your real guests', 'Families, date nights, business lunches')}${li('📊', 'Track CAC & LTV monthly', 'Know what each guest costs and is worth')}`) },
+    { theme: 'dark', last: true, body: cta('Which level is <span class="gold">your restaurant</span> at?',
+      'Most venues stop at level 1: the data is there, but nobody reads it. The money is in levels 3 and 4.',
+      'Comment 1, 2, 3 or 4', 'Save this as your roadmap') },
   ],
 };
 
