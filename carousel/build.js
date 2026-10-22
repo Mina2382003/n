@@ -343,6 +343,47 @@ const carousels = {
       'Comment your restaurant type', 'Save this for your next concept') });
     return slides;
   })(),
+  '10-aggregator-negotiation': [
+    { theme: 'dark', foot: 'Save this before your next meeting', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Restaurant × Aggregators</span>
+      <h1>Asking for <span class="gold">0% commission?</span><br>Here's why it's a no.</h1>
+      <p class="sub" style="margin-top:44px">How aggregators actually work, and how to negotiate a deal that makes sense for both sides.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">How it works</span>
+      <h2 style="margin:40px 0 30px">Follow the <span class="rose">money</span></h2>
+      ${li('1', 'The guest pays the aggregator', 'By card, wallet or app')}${li('2', 'The bank takes its fee first', 'Every single transaction has a processing cost')}${li('3', 'The aggregator takes its commission', 'This pays for everything that brought you the guest')}${li('4', 'You get your payout', 'On a set cycle: weekly, bi-weekly or monthly')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">Where the commission goes</span>
+      <h2 style="margin:40px 0 30px">It's not <span class="gold">pure profit</span></h2>
+      ${li('🏦', 'Bank & payment fees', 'Paid on every order, no matter what')}${li('📣', 'Marketing', 'Ads and promos that bring guests to you')}${li('📱', 'Tech & the app', 'Developers, servers, maintenance')}${li('🎧', 'Customer support', 'Handling complaints, refunds and cancellations')}`) },
+    { theme: 'light', foot: 'Illustrative numbers', body: center(`
+      <span class="tag">Why 0% is impossible</span>
+      <h2 style="margin:40px 0 36px">At 0%, they <span class="rose">pay to serve you</span></h2>
+      <div class="cards">
+        <div class="card w"><div class="l">Guest pays</div><div class="big" style="margin-top:4px">EGP 500</div></div>
+        <div class="card d"><div class="l">Bank fee (e.g. 2.5%)</div><div class="m">Taken before anyone else is paid</div><div class="big">− EGP 12.5</div></div>
+      </div>
+      <div class="pill" style="margin-top:36px">At 0% commission, the aggregator loses money on every order you get. No business signs that deal.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">Before the meeting</span>
+      <h2 style="margin:40px 0 30px">Know <span class="gold">your numbers</span> first</h2>
+      ${li('🧾', 'Average order & margin per dish', 'So you know the commission you can afford')}${li('💸', 'Your CAC on your own', 'What a new guest costs you without them')}${li('📈', 'The volume they can bring', 'Ask for real numbers from your area')}${li('📄', 'The contract terms', 'Exclusivity, payout cycle, refunds, price rules')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">What you CAN negotiate</span>
+      <h2 style="margin:40px 0 30px">Ask for value, <span class="rose">not zero</span></h2>
+      ${li('📊', 'Tiered commission', 'A lower rate once you hit agreed volumes')}${li('🚀', 'A launch period', 'A reduced rate for your first months')}${li('⭐', 'Visibility', 'Featured placement, banners, co-funded promos')}${li('⏱️', 'Faster payouts', 'Cash flow matters as much as the rate')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">How to negotiate</span>
+      <h2 style="margin:40px 0 30px">Give something, <span class="gold">get something</span></h2>
+      ${li('1', 'Bring data, not feelings', '"Our average order is X, we can do Y orders a month"')}${li('2', 'Offer something in return', 'Exclusivity in your area, a volume commitment, promos')}${li('3', 'Get it in writing', 'Rates, tiers, payout dates, who pays refunds')}${li('4', 'Review every 3–6 months', 'Your numbers change, so should your deal')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Mistakes to avoid</span>
+      <h2 style="margin:40px 0 30px">Don't <span class="rose">lose the deal</span> before it starts</h2>
+      ${li('✕', 'Opening with "0% or nothing"', 'It ends the conversation, not the cost')}${li('✕', 'Signing exclusivity for free', 'It\'s your strongest card. Trade it')}${li('✕', 'Ignoring the small print', 'Promo costs, refunds and extra fees add up')}${li('✕', 'Not tracking results', 'If you don\'t measure orders, you can\'t renegotiate')}`) },
+    { theme: 'dark', last: true, body: cta('Negotiate for <span class="gold">value,</span> not zero.',
+      'The best deals are the ones where both sides make money. That\'s the deal that lasts.',
+      'Comment your biggest aggregator question', 'Save this before your next meeting') },
+  ],
 };
 
 (async () => {
