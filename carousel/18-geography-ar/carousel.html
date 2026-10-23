@@ -1,0 +1,138 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat{border-radius:28px;padding:34px 36px;background:#fff;color:var(--ink)}
+.dark .stat{background:var(--ink2);color:var(--cream)}
+.stat b{display:block;font:800 64px/1.05 Inter;color:var(--rose);margin-bottom:12px}
+.dark .stat b{color:var(--gold)}
+.stat .lbl{font:600 26px/1.35 Inter;opacity:.8}
+.rtl .lbl,.rtl .li,.rtl .li small,.rtl .card .l,.rtl .card .m,.rtl .cta-list{font-family:'Cairo','Inter',sans-serif}
+.rtl .stat b,.rtl .card .big{direction:ltr;text-align:right;unicode-bidi:isolate}
+</style></head><body><section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag" style="margin-bottom:44px;display:inline-block">جغرافيا ١٠١</span>
+      <h1>إنت <span class="gold">عارف كوكبنا</span> قد إيه؟</h1>
+      <p class="sub" style="margin-top:44px">١٠ معلومات عن الدول والتوقيتات والخريطة، ناس كتير متعرفهاش.</p></div><div class="bot"><span>احفظه لبعدين</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ١ · الكوكب</span>
+      <h2 style="margin:40px 0 36px">كوكبنا <span class="rose">بالأرقام</span></h2>
+      <div class="stats"><div class="stat"><b>71%</b><span class="lbl">من سطح الأرض مية</span></div><div class="stat"><b>7</b><span class="lbl">قارات</span></div><div class="stat"><b>5</b><span class="lbl">محيطات</span></div><div class="stat"><b>40,075 km</b><span class="lbl">طول خط الاستوا</span></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٢ · الدول</span>
+      <h2 style="margin:40px 0 36px">العالم فيه <span class="gold">كام دولة؟</span></h2>
+      <div class="stats"><div class="stat"><b>193</b><span class="lbl">دولة عضو في الأمم المتحدة</span></div><div class="stat"><b>2</b><span class="lbl">دولتين بصفة مراقب: الفاتيكان وفلسطين</span></div></div>
+      <div class="pill" style="margin-top:36px">أحدث دولة انضمت للأمم المتحدة هي جنوب السودان، سنة ٢٠١١.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٣ · التوقيتات</span>
+      <h2 style="margin:40px 0 36px">ليه <span class="rose">٢٤</span> توقيت؟</h2>
+      <div class="stats"><div class="stat"><b>360°</b><span class="lbl">الأرض بتلف لفة كاملة في ٢٤ ساعة</span></div><div class="stat"><b>15°</b><span class="lbl">= ساعة واحدة</span></div></div>
+      <div class="pill" style="margin-top:36px">بس في الحقيقة العالم بيستخدم حوالي ٣٨ توقيت، لأن في أماكن بتفرق نص ساعة أو ٤٥ دقيقة.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٤ · التوقيتات</span>
+      <h2 style="margin:40px 0 30px">التوقيتات <span class="gold">ليها حكايات</span></h2>
+      <div class="li"><div class="ic">🇫🇷</div><div>فرنسا عندها أكبر عدد: ١٢ توقيت<small>بسبب أراضيها اللي برّه أوروبا</small></div></div>
+      <div class="li"><div class="ic">🇷🇺</div><div>روسيا فيها ١١ توقيت<small>من أوروبا لحد المحيط الهادي</small></div></div>
+      <div class="li"><div class="ic">🇨🇳</div><div>الصين بتستخدم توقيت واحد بس<small>رغم إن عرضها يكفي ٥ توقيتات</small></div></div>
+      <div class="li"><div class="ic">🌏</div><div>٢٦ ساعة فرق<small>بين UTC+14 (كيريباتي) و UTC−12</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٥ · المساحة</span>
+      <h2 style="margin:40px 0 36px">الأكبر <span class="rose">والأصغر</span></h2>
+      <div class="cards">
+        <div class="card d"><div class="l">🇷🇺 روسيا · أكبر دولة</div><div class="m">حوالي ١١٪ من يابس الأرض كله</div><div class="big">17.1M km²</div></div>
+        <div class="card w"><div class="l">🇻🇦 الفاتيكان · أصغر دولة</div><div class="m">قد حوالي ٦٠ ملعب كورة</div><div class="big">0.44 km²</div></div>
+      </div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٦ · السكان</span>
+      <h2 style="margin:40px 0 36px">الناس <span class="gold">فين؟</span></h2>
+      <div class="stats"><div class="stat"><b>8B+</b><span class="lbl">إنسان على الأرض</span></div><div class="stat"><b>الهند</b><span class="lbl">أكبر دولة في عدد السكان من ٢٠٢٣</span></div></div>
+      <div class="pill" style="margin-top:36px">الهند عدّت الصين سنة ٢٠٢٣، والاتنين سكانهم أكتر من ١.٤ مليار.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">08 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٧ · أطراف الأرض</span>
+      <h2 style="margin:40px 0 36px">الأعلى <span class="rose">والأعمق</span></h2>
+      <div class="stats"><div class="stat"><b>8,849 m</b><span class="lbl">جبل إيفرست، أعلى نقطة على الأرض</span></div><div class="stat"><b>~11,000 m</b><span class="lbl">تشالنجر ديب في خندق ماريانا، أعمق نقطة</span></div></div>
+      <div class="pill" style="margin-top:36px">لو حطيت إيفرست في الخندق، قمته هتفضل تحت المية بحوالي ٢ كيلو.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">09 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٨ · الأنهار</span>
+      <h2 style="margin:40px 0 36px"><span class="gold">النيل</span></h2>
+      <div class="stats"><div class="stat"><b>6,650 km</b><span class="lbl">غالباً بيتصنف أطول نهر في العالم</span></div><div class="stat"><b>11</b><span class="lbl">دولة في حوض النيل</span></div></div>
+      <div class="pill" style="margin-top:36px">بيجري من الجنوب للشمال، من قلب أفريقيا للبحر المتوسط. (في دراسات بتدّي لقب "الأطول" للأمازون.)</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">10 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ٩ · الصحاري</span>
+      <h2 style="margin:40px 0 36px">أكبر صحرا <span class="rose">مش حَر</span></h2>
+      <div class="stats"><div class="stat"><b>9.2M km²</b><span class="lbl">الصحرا الكبرى، أكبر صحرا حارة، قد أمريكا تقريباً</span></div><div class="stat"><b>14M km²</b><span class="lbl">أنتاركتيكا، أكبر صحرا في العالم</span></div></div>
+      <div class="pill" style="margin-top:36px">الصحرا بتتحسب بقلة المطر، مش بدرجة الحرارة.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">11 / 12</div></div><div style="margin-top:auto;margin-bottom:auto"><span class="tag">معلومة ١٠ · مصر</span>
+      <h2 style="margin:40px 0 30px">مصر <span class="gold">على الخريطة</span></h2>
+      <div class="li"><div class="ic">🌍</div><div>في قارتين<small>أفريقيا، وآسيا عن طريق سينا</small></div></div>
+      <div class="li"><div class="ic">📐</div><div>حوالي مليون كم²<small>من أكبر ٣٠ دولة في العالم</small></div></div>
+      <div class="li"><div class="ic">🏜️</div><div>حوالي ٩٥٪ صحرا<small>أغلب الناس عايشين على النيل والدلتا</small></div></div>
+      <div class="li"><div class="ic">⏰</div><div>UTC+2<small>و UTC+3 في الصيف</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">12 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <h1 style="font-size:92px">أنهي معلومة <span class="gold">فاجئتك؟</span></h1>
+      <p class="sub" style="margin:40px 0 60px">الجغرافيا مش حفظ خرايط. الجغرافيا إنك تفهم العالم اللي بنعيش ونشتغل فيه.</p>
+      <div class="cta-list" style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;اكتب رقم المعلومة في الكومنتات</div>
+        <div>🏷️ &nbsp;اعمل تاج لصاحبك اللي بيحب الخرايط</div>
+        <div>➕ &nbsp;تابع <span class="gold" dir="ltr">@mina_monir8</span></div>
+      </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>

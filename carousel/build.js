@@ -52,6 +52,73 @@ const cta = (title, text, comment, save = 'Save it to run your numbers') => cent
     <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
   </div>`);
 
+const geo = (ar) => {
+  const t = (en, a) => ar ? a : en;
+  const S = ar ? 'اسحب →' : undefined, cls = ar ? 'rtl' : '';
+  const stats = (rows) => `<div class="stats">${rows.map(([b, en, a]) => `<div class="stat"><b>${b}</b><span class="lbl">${t(en, a)}</span></div>`).join('')}</div>`;
+  const tag = (n, en, a) => `<span class="tag">${t(`Fact ${n} · ${en}`, `معلومة ${'١٢٣٤٥٦٧٨٩'[n - 1] || '١٠'} · ${a}`)}</span>`;
+  const note = (en, a) => `<div class="pill" style="margin-top:36px">${t(en, a)}</div>`;
+  const s = (theme, body, extra = {}) => ({ theme, cls, swipe: S, body, ...extra });
+  return [
+    s('dark', center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">${t('Geography 101', 'جغرافيا ١٠١')}</span>
+      <h1>${t('How well do you <span class="gold">know our planet?</span>', 'إنت <span class="gold">عارف كوكبنا</span> قد إيه؟')}</h1>
+      <p class="sub" style="margin-top:44px">${t('10 facts about countries, time zones and the map that most people get wrong.', '١٠ معلومات عن الدول والتوقيتات والخريطة، ناس كتير متعرفهاش.')}</p>`), { foot: t('Save this for later', 'احفظه لبعدين') }),
+    s('light', center(`${tag(1, 'The planet', 'الكوكب')}
+      <h2 style="margin:40px 0 36px">${t('Our planet <span class="rose">in numbers</span>', 'كوكبنا <span class="rose">بالأرقام</span>')}</h2>
+      ${stats([['71%', 'of Earth\'s surface is water', 'من سطح الأرض مية'], ['7', 'continents', 'قارات'], ['5', 'oceans', 'محيطات'], ['40,075 km', 'around the equator', 'طول خط الاستوا']])}`)),
+    s('dark', center(`${tag(2, 'Countries', 'الدول')}
+      <h2 style="margin:40px 0 36px">${t('How many countries <span class="gold">are there?</span>', 'العالم فيه <span class="gold">كام دولة؟</span>')}</h2>
+      ${stats([['193', 'UN member states', 'دولة عضو في الأمم المتحدة'], ['2', 'observer states: Vatican & Palestine', 'دولتين بصفة مراقب: الفاتيكان وفلسطين']])}
+      ${note('The newest UN member is South Sudan. It joined in 2011.', 'أحدث دولة انضمت للأمم المتحدة هي جنوب السودان، سنة ٢٠١١.')}`)),
+    s('light', center(`${tag(3, 'Time zones', 'التوقيتات')}
+      <h2 style="margin:40px 0 36px">${t('Why <span class="rose">24</span> time zones?', 'ليه <span class="rose">٢٤</span> توقيت؟')}</h2>
+      ${stats([['360°', 'Earth turns fully in 24 hours', 'الأرض بتلف لفة كاملة في ٢٤ ساعة'], ['15°', '= 1 hour of time', '= ساعة واحدة']])}
+      ${note('In reality the world uses about 38 local times, because some places shift by 30 or 45 minutes.', 'بس في الحقيقة العالم بيستخدم حوالي ٣٨ توقيت، لأن في أماكن بتفرق نص ساعة أو ٤٥ دقيقة.')}`)),
+    s('dark', center(`${tag(4, 'Time zones', 'التوقيتات')}
+      <h2 style="margin:40px 0 30px">${t('Time zones <span class="gold">get weird</span>', 'التوقيتات <span class="gold">ليها حكايات</span>')}</h2>
+      ${li('🇫🇷', t('France has the most: 12', 'فرنسا عندها أكبر عدد: ١٢ توقيت'), t('Thanks to its overseas territories', 'بسبب أراضيها اللي برّه أوروبا'))}
+      ${li('🇷🇺', t('Russia spans 11', 'روسيا فيها ١١ توقيت'), t('From Europe to the Pacific', 'من أوروبا لحد المحيط الهادي'))}
+      ${li('🇨🇳', t('China uses just 1', 'الصين بتستخدم توقيت واحد بس'), t('Even though it\'s as wide as 5', 'رغم إن عرضها يكفي ٥ توقيتات'))}
+      ${li('🌏', t('26 hours apart', '٢٦ ساعة فرق'), t('Between UTC+14 (Kiribati) and UTC−12', 'بين UTC+14 (كيريباتي) و UTC−12'))}`)),
+    s('light', center(`${tag(5, 'Size', 'المساحة')}
+      <h2 style="margin:40px 0 36px">${t('The biggest <span class="rose">and the smallest</span>', 'الأكبر <span class="rose">والأصغر</span>')}</h2>
+      <div class="cards">
+        <div class="card d"><div class="l">${t('🇷🇺 Russia · biggest country', '🇷🇺 روسيا · أكبر دولة')}</div><div class="m">${t('About 11% of all the land on Earth', 'حوالي ١١٪ من يابس الأرض كله')}</div><div class="big">17.1M km²</div></div>
+        <div class="card w"><div class="l">${t('🇻🇦 Vatican City · smallest country', '🇻🇦 الفاتيكان · أصغر دولة')}</div><div class="m">${t('About the size of 60 football pitches', 'قد حوالي ٦٠ ملعب كورة')}</div><div class="big">0.44 km²</div></div>
+      </div>`)),
+    s('dark', center(`${tag(6, 'People', 'السكان')}
+      <h2 style="margin:40px 0 36px">${t('Where <span class="gold">the people</span> are', 'الناس <span class="gold">فين؟</span>')}</h2>
+      ${stats([['8B+', 'people on Earth', 'إنسان على الأرض'], [t('India', 'الهند'), 'most populous country, since 2023', 'أكبر دولة في عدد السكان من ٢٠٢٣']])}
+      ${note('India passed China in 2023. Each has more than 1.4 billion people.', 'الهند عدّت الصين سنة ٢٠٢٣، والاتنين سكانهم أكتر من ١.٤ مليار.')}`)),
+    s('light', center(`${tag(7, 'Extremes', 'أطراف الأرض')}
+      <h2 style="margin:40px 0 36px">${t('Highest <span class="rose">vs deepest</span>', 'الأعلى <span class="rose">والأعمق</span>')}</h2>
+      ${stats([['8,849 m', 'Mount Everest, the highest point on Earth', 'جبل إيفرست، أعلى نقطة على الأرض'], ['~11,000 m', 'Challenger Deep, Mariana Trench, the deepest point', 'تشالنجر ديب في خندق ماريانا، أعمق نقطة']])}
+      ${note('Drop Everest into the trench and its peak would still be about 2 km underwater.', 'لو حطيت إيفرست في الخندق، قمته هتفضل تحت المية بحوالي ٢ كيلو.')}`)),
+    s('dark', center(`${tag(8, 'Rivers', 'الأنهار')}
+      <h2 style="margin:40px 0 36px">${t('The <span class="gold">Nile</span>', '<span class="gold">النيل</span>')}</h2>
+      ${stats([['6,650 km', 'usually ranked the longest river in the world', 'غالباً بيتصنف أطول نهر في العالم'], ['11', 'countries in the Nile basin', 'دولة في حوض النيل']])}
+      ${note('It flows north, from the heart of Africa to the Mediterranean. (Some studies give the "longest" title to the Amazon.)', 'بيجري من الجنوب للشمال، من قلب أفريقيا للبحر المتوسط. (في دراسات بتدّي لقب "الأطول" للأمازون.)')}`)),
+    s('light', center(`${tag(9, 'Deserts', 'الصحاري')}
+      <h2 style="margin:40px 0 36px">${t('The biggest desert <span class="rose">isn\'t hot</span>', 'أكبر صحرا <span class="rose">مش حَر</span>')}</h2>
+      ${stats([['9.2M km²', 'the Sahara, the biggest hot desert, nearly the size of the USA', 'الصحرا الكبرى، أكبر صحرا حارة، قد أمريكا تقريباً'], ['14M km²', 'Antarctica, the biggest desert of all', 'أنتاركتيكا، أكبر صحرا في العالم']])}
+      ${note('A desert is about how little rain falls, not how hot it is.', 'الصحرا بتتحسب بقلة المطر، مش بدرجة الحرارة.')}`)),
+    s('dark', center(`${tag(10, 'Egypt', 'مصر')}
+      <h2 style="margin:40px 0 30px">${t('Egypt <span class="gold">on the map</span>', 'مصر <span class="gold">على الخريطة</span>')}</h2>
+      ${li('🌍', t('On two continents', 'في قارتين'), t('Africa, and Asia through Sinai', 'أفريقيا، وآسيا عن طريق سينا'))}
+      ${li('📐', t('About 1 million km²', 'حوالي مليون كم²'), t('One of the 30 biggest countries in the world', 'من أكبر ٣٠ دولة في العالم'))}
+      ${li('🏜️', t('About 95% desert', 'حوالي ٩٥٪ صحرا'), t('Most people live along the Nile and the Delta', 'أغلب الناس عايشين على النيل والدلتا'))}
+      ${li('⏰', 'UTC+2', t('And UTC+3 in summer', 'و UTC+3 في الصيف'))}`)),
+    s('dark', center(`
+      <h1 style="font-size:92px">${t('Which fact <span class="gold">surprised you?</span>', 'أنهي معلومة <span class="gold">فاجئتك؟</span>')}</h1>
+      <p class="sub" style="margin:40px 0 60px">${t('Geography isn\'t about memorising maps. It\'s about understanding the world we live and work in.', 'الجغرافيا مش حفظ خرايط. الجغرافيا إنك تفهم العالم اللي بنعيش ونشتغل فيه.')}</p>
+      <div class="cta-list" style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;${t('Comment the number of the fact', 'اكتب رقم المعلومة في الكومنتات')}</div>
+        <div>🏷️ &nbsp;${t('Tag a friend who loves maps', 'اعمل تاج لصاحبك اللي بيحب الخرايط')}</div>
+        <div>➕ &nbsp;${t('Follow', 'تابع')} <span class="gold" dir="ltr">@mina_monir8</span></div>
+      </div>`), { last: true }),
+  ];
+};
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -597,6 +664,8 @@ const carousels = {
       </div>`) });
     return slides;
   })(),
+  '17-geography': geo(false),
+  '18-geography-ar': geo(true),
 };
 
 (async () => {
