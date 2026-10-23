@@ -467,6 +467,42 @@ const carousels = {
         'Which one gets you more guests: Google or TripAdvisor?', 'Save this comparison') },
     ];
   })(),
+  '14-reservya-expansion': [
+    { theme: 'dark', foot: 'Restaurant owners, this is for you', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">Reservya · New cities</span>
+      <h1>From El Gouna to <span class="gold">Cairo & Alexandria</span> 📍</h1>
+      <p class="sub" style="margin-top:44px">Reservya is coming to your city, and we're looking for our first partner venues.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Our story</span>
+      <h2 style="margin:40px 0 30px">It started in <span class="rose">El Gouna</span></h2>
+      <p class="sub" style="font-size:36px">We built Reservya with restaurants in El Gouna, learning what venues need to bring guests in and keep them coming back.</p>
+      <div class="pill" style="margin-top:44px">Now we're bringing it to the two biggest food scenes in Egypt: Cairo and Alexandria.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">What Reservya does for you</span>
+      <h2 style="margin:40px 0 30px">More guests. <span class="gold">More regulars.</span></h2>
+      ${li('🔎', 'Get discovered', 'Guests find you through the whole network, not just your own page')}${li('🔁', 'Turn visitors into regulars', 'Loyalty that carries across every partner venue')}${li('📅', 'Easy bookings', 'Guests reserve in seconds')}${li('📊', 'Know your guests', 'Data on who comes, when and how often')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Why join early</span>
+      <h2 style="margin:40px 0 30px">Be one of the <span class="rose">first</span> in your city</h2>
+      ${li('⭐', 'Get seen first', 'Early venues are the ones guests discover first')}${li('🤝', 'Work directly with me', 'I\'m personally onboarding our first partners')}${li('🛠️', 'Shape the product', 'Your feedback decides what we build next')}`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">Who we're looking for</span>
+      <h2 style="margin:40px 0 36px">Is this <span class="gold">your venue?</span></h2>
+      <div class="chips" style="margin-bottom:40px"><span class="chip" style="background:var(--cream);color:var(--ink)">Restaurants</span><span class="chip" style="background:var(--cream);color:var(--ink)">Cafés</span><span class="chip" style="background:var(--cream);color:var(--ink)">Lounges</span><span class="chip" style="background:var(--cream);color:var(--ink)">Rooftops</span><span class="chip" style="background:var(--cream);color:var(--ink)">Fine dining</span></div>
+      <div class="ratio">
+        <div style="background:var(--ink2)"><div style="font:800 34px Inter;color:var(--gold)">📍 Cairo</div><div style="font:500 26px/1.4 Inter;margin-top:12px;opacity:.8">Partner spots open</div></div>
+        <div style="background:var(--ink2)"><div style="font:800 34px Inter;color:var(--gold)">📍 Alexandria</div><div style="font:500 26px/1.4 Inter;margin-top:12px;opacity:.8">Partner spots open</div></div>
+      </div>`) },
+    { theme: 'dark', last: true, body: center(`
+      <span class="tag" style="margin-bottom:40px;display:inline-block">Let's talk</span>
+      <h1 style="font-size:92px">DM me <span class="gold">"PARTNER"</span></h1>
+      <p class="sub" style="margin:40px 0 60px">Send your venue name and city. I'll get back to you personally.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>🏷️ &nbsp;Tag a restaurant owner in Cairo or Alex</div>
+        <div>🔁 &nbsp;Share with someone who runs a venue</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
+      </div>`) },
+  ],
 };
 
 (async () => {
