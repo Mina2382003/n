@@ -5,12 +5,12 @@ const path = require('path');
 const { chromium } = require('playwright');
 
 const style = fs.readFileSync(path.join(__dirname, 'style.css'), 'utf8');
-const fonts = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">';
+const fonts = '<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet">';
 
 const top = (n, total) => `<div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">${String(n).padStart(2, '0')} / ${String(total).padStart(2, '0')}</div></div>`;
-const bot = (left, last) => last
+const bot = (left, last, swipe = 'Swipe →') => last
   ? `<div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div>`
-  : `<div class="bot"><span>${left || '@mina_monir8'}</span><span class="sw">Swipe →</span></div>`;
+  : `<div class="bot"><span>${left || '@mina_monir8'}</span><span class="sw">${swipe}</span></div>`;
 const center = html => `<div style="margin-top:auto;margin-bottom:auto">${html}</div>`;
 
 const row = (label, total) => `<div class="row${total ? ' total' : ''}"><span>${label}</span><span class="blank"></span></div>`;
@@ -549,6 +549,54 @@ const carousels = {
       </div>`) });
     return slides;
   })(),
+  '16-teamwork-ar': (() => {
+    const L = [
+      ['T', 'Trust', 'الثقة', 'مفيش ثقة يبقى مفيش تيم. كل حاجة تانية مبنية عليها.', [['Transparency', 'شفافية'], ['Truth', 'صدق'], ['Time together', 'وقت سوا'], ['Teaching', 'تعليم'], ['Tolerance', 'تسامح']], 'التيم مش مجموعة ناس بتشتغل مع بعض. التيم مجموعة ناس بتثق في بعض.', 'سايمون سينك'],
+      ['E', 'Empathy', 'التعاطف', 'افهم زميلك حاسس بإيه، مش بس بيعمل إيه.', [['Encouragement', 'تشجيع'], ['Engagement', 'مشاركة'], ['Energy', 'طاقة'], ['Equality', 'مساواة'], ['Effort', 'مجهود']], 'لوحدنا نقدر نعمل حاجة صغيرة، ومع بعض نقدر نعمل حاجات كتير.', 'هيلين كيلر'],
+      ['A', 'Accountability', 'المسؤولية', 'كل واحد شايل الجزء بتاعه، وبيعترف بغلطه.', [['Alignment', 'نفس الاتجاه'], ['Attitude', 'أسلوب'], ['Appreciation', 'تقدير'], ['Adaptability', 'مرونة'], ['Ambition', 'طموح']], 'التيم ورك هو إننا نقدر نشتغل مع بعض ناحية رؤية واحدة.', 'أندرو كارنيجي'],
+      ['M', 'Mutual Respect', 'الاحترام المتبادل', 'الاحترام رايح جاي، من المدير لأحدث واحد في التيم.', [['Motivation', 'تحفيز'], ['Mentorship', 'توجيه'], ['Morale', 'روح معنوية'], ['Mission', 'هدف'], ['Mindset', 'طريقة تفكير']], 'قوة التيم في كل فرد فيه، وقوة كل فرد في التيم.', 'فيل جاكسون'],
+      ['W', 'Willingness', 'الاستعداد', 'تبقى جاهز تساعد، حتى لو مش «شغلتك».', [['Win together', 'نكسب سوا'], ['Workload sharing', 'نشيل الشغل سوا'], ['Wellbeing', 'راحة الفريق'], ['Welcome', 'ترحيب'], ['Wisdom', 'حكمة']], 'الموهبة بتكسب ماتشات، لكن التيم ورك والذكاء بيكسبوا بطولات.', 'مايكل جوردان'],
+      ['O', 'Open Communication', 'التواصل المفتوح', 'قول الكلام بوضوح، وبدري، واسمع للآخر.', [['One goal', 'هدف واحد'], ['Ownership', 'ملكية'], ['Optimism', 'تفاؤل'], ['Openness to feedback', 'تقبّل الفيدباك'], ['Organization', 'تنظيم']], 'مفيش حد فينا أذكى مننا كلنا مع بعض.', 'كين بلانشارد'],
+      ['R', 'Respect', 'الاحترام', 'احترم وقت الناس وأدوارهم وأفكارهم.', [['Responsibility', 'مسؤولية'], ['Reliability', 'تقدر تعتمد عليه'], ['Roles', 'أدوار'], ['Recognition', 'تقدير'], ['Resilience', 'صمود']], 'الحاجات العظيمة في البيزنس عمرها ما بتتعمل بشخص واحد. بتتعمل بتيم.', 'ستيف جوبز'],
+      ['K', 'Kindness', 'اللطف', 'الحاجات الصغيرة اللطيفة بتبني تيمات كبيرة.', [['Knowledge sharing', 'مشاركة المعرفة'], ['Keeping promises', 'الالتزام بالوعد'], ['Keep going', 'كمّل'], ['Kudos', 'شكر'], ['Knowing each other', 'نعرف بعض']], 'لو عايز تمشي بسرعة، امشي لوحدك. لو عايز توصل بعيد، امشوا مع بعض.', 'مثل أفريقي'],
+    ];
+    const S = 'اسحب →';
+    const slides = [
+      { theme: 'dark', cls: 'rtl', swipe: S, foot: 'احفظه لاجتماع التيم الجاي', body: center(`
+        <span class="tag" style="margin-bottom:44px;display:inline-block">تيم بيلدنج</span>
+        <h1>٨ حروف. ٤٨ كلمة. <span class="gold">تيم واحد.</span></h1>
+        <p class="sub" style="margin-top:44px">تعالوا نفكك كلمة TEAMWORK حرف حرف، ونشوف إيه اللي بيخلّي التيم تيم بجد.</p>`) },
+      { theme: 'light', cls: 'rtl', swipe: S, body: center(`
+        <span class="tag">الكلمة</span>
+        <h2 style="margin:40px 0 40px">كل حرف <span class="rose">درس</span></h2>
+        <div class="tiles">${L.map(l => `<span>${l[0]}</span>`).join('')}</div>
+        <div class="quote" style="margin-top:60px">«مش الفلوس، ولا الاستراتيجية، ولا التكنولوجيا. الشغل كتيم هو الميزة التنافسية الحقيقية، لأنه قوي جداً ونادر جداً.»<small>باتريك لينسيوني</small></div>`) },
+    ];
+    L.forEach(([ch, en, ar, meaning, words, q, who], i) => {
+      const dark = i % 2 === 0;
+      slides.push({ theme: dark ? 'dark' : 'light', cls: 'rtl', swipe: S, body: center(`
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:24px"><span class="letter">${ch}</span><span class="tag" style="margin-bottom:10px">حرف ${'١٢٣٤٥٦٧٨'[i]} من ٨</span></div>
+        <h2 style="margin-bottom:6px">${ar}</h2>
+        <div class="en" style="font:700 40px 'Playfair Display',serif;opacity:.7;margin-bottom:18px">${en}</div>
+        <p class="sub" style="margin-bottom:28px">${meaning}</p>
+        <div class="chips" style="margin-bottom:44px">${words.map(([e, a]) => `<span class="chip alt">${a} · <span dir="ltr">${e}</span></span>`).join('')}</div>
+        <div class="quote">«${q}»<small>${who}</small></div>`) });
+    });
+    slides.push({ theme: 'light', cls: 'rtl', swipe: S, body: center(`
+      <span class="tag">الكلمة كاملة</span>
+      <h2 style="margin:40px 0 24px">ده هو <span class="rose">TEAMWORK</span></h2>
+      ${L.map(([ch, en, ar]) => `<div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px;text-align:center">${ch}</span><span class="ar" style="font-weight:700;font-size:34px">${ar}</span><span style="font:600 26px Inter;opacity:.55;margin-right:auto" dir="ltr">${en}</span></div>`).join('')}`) });
+    slides.push({ theme: 'dark', cls: 'rtl', last: true, body: center(`
+      <h1 style="font-size:92px">تيمك محتاج <span class="gold">أنهي حرف</span> أكتر؟</h1>
+      <p class="sub" style="margin:40px 0 60px">التيمات العظيمة مش بتتولد كده. بتتبني، حرف حرف.</p>
+      <div class="ar" style="display:flex;flex-direction:column;gap:22px;font-weight:600;font-size:34px">
+        <div>💬 &nbsp;اكتب الحرف اللي تيمك محتاجه في الكومنتات</div>
+        <div>🏷️ &nbsp;اعمل تاج لزميلك</div>
+        <div>🔖 &nbsp;احفظه لاجتماع التيم الجاي</div>
+        <div>➕ &nbsp;تابع <span class="gold" dir="ltr">@mina_monir8</span></div>
+      </div>`) });
+    return slides;
+  })(),
 };
 
 (async () => {
@@ -558,7 +606,7 @@ const carousels = {
     const dir = path.join(__dirname, name);
     fs.mkdirSync(dir, { recursive: true });
     const html = `<!doctype html><html><head><meta charset="utf-8">${fonts}<style>${style}</style></head><body>` +
-      slides.map((s, i) => `<section class="slide ${s.theme}">${top(i + 1, slides.length)}${s.body}${bot(s.foot, s.last)}</section>`).join('\n') +
+      slides.map((s, i) => `<section class="slide ${s.theme} ${s.cls || ''}">${top(i + 1, slides.length)}${s.body}${bot(s.foot, s.last, s.swipe)}</section>`).join('\n') +
       '</body></html>';
     const file = path.join(dir, 'carousel.html');
     fs.writeFileSync(file, html);

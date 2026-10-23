@@ -64,3 +64,10 @@ h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-heig
 .light .chip.alt{background:#fff;color:var(--ink)}
 .tiles{display:flex;gap:12px}
 .tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
