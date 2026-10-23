@@ -503,6 +503,52 @@ const carousels = {
         <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
       </div>`) },
   ],
+  '15-teamwork': (() => {
+    const L = [
+      ['T', 'Trust', 'No trust, no team. Everything else is built on it.', ['Transparency', 'Truth', 'Time together', 'Teaching', 'Tolerance'], 'A team is not a group of people who work together. A team is a group of people who trust each other.', 'Simon Sinek'],
+      ['E', 'Empathy', 'Understand how your teammates feel, not just what they do.', ['Encouragement', 'Engagement', 'Energy', 'Equality', 'Effort'], 'Alone we can do so little; together we can do so much.', 'Helen Keller'],
+      ['A', 'Accountability', 'Everyone owns their part, and owns their mistakes.', ['Alignment', 'Attitude', 'Appreciation', 'Adaptability', 'Ambition'], 'Teamwork is the ability to work together toward a common vision.', 'Andrew Carnegie'],
+      ['M', 'Mutual Respect', 'Respect goes both ways, from the CEO to the newest hire.', ['Motivation', 'Mentorship', 'Morale', 'Mission', 'Mindset'], 'The strength of the team is each individual member. The strength of each member is the team.', 'Phil Jackson'],
+      ['W', 'Willingness', 'Ready to help, even when it\'s not "your job".', ['Win together', 'Workload sharing', 'Wellbeing', 'Welcome', 'Wisdom'], 'Talent wins games, but teamwork and intelligence win championships.', 'Michael Jordan'],
+      ['O', 'Open Communication', 'Say it clearly, say it early, and listen fully.', ['One goal', 'Ownership', 'Optimism', 'Openness to feedback', 'Organization'], 'None of us is as smart as all of us.', 'Ken Blanchard'],
+      ['R', 'Respect', 'Respect people\'s time, roles and ideas.', ['Responsibility', 'Reliability', 'Roles', 'Recognition', 'Resilience'], 'Great things in business are never done by one person. They\'re done by a team of people.', 'Steve Jobs'],
+      ['K', 'Kindness', 'Small acts of kindness build big teams.', ['Knowledge sharing', 'Keeping promises', 'Keep going', 'Kudos', 'Knowing each other'], 'If you want to go fast, go alone. If you want to go far, go together.', 'African proverb'],
+    ];
+    const slides = [
+      { theme: 'dark', foot: 'Save this for your next team meeting', body: center(`
+        <span class="tag" style="margin-bottom:44px;display:inline-block">Team Building</span>
+        <h1>8 letters. 48 words. <span class="gold">One team.</span></h1>
+        <p class="sub" style="margin-top:44px">Let's break down the word TEAMWORK, letter by letter, to see what really holds a team together.</p>`) },
+      { theme: 'light', body: center(`
+        <span class="tag">The word</span>
+        <h2 style="margin:40px 0 40px">Every letter is <span class="rose">a lesson</span></h2>
+        <div class="tiles">${L.map(l => `<span>${l[0]}</span>`).join('')}</div>
+        <div class="quote" style="margin-top:60px">"Not finance. Not strategy. Not technology. It is teamwork that remains the ultimate competitive advantage, both because it is so powerful and so rare."<small>Patrick Lencioni</small></div>`) },
+    ];
+    L.forEach(([ch, word, meaning, words, q, who], i) => {
+      const dark = i % 2 === 0;
+      slides.push({ theme: dark ? 'dark' : 'light', body: center(`
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">${ch}</span><span class="tag" style="margin-bottom:10px">Letter ${i + 1} of 8</span></div>
+        <h2 style="margin-bottom:18px">${word}</h2>
+        <p class="sub" style="margin-bottom:30px">${meaning}</p>
+        <div class="chips" style="margin-bottom:46px">${words.map(w => `<span class="chip alt">${w}</span>`).join('')}</div>
+        <div class="quote">"${q}"<small>${who}</small></div>`) });
+    });
+    slides.push({ theme: 'light', body: center(`
+      <span class="tag">The full word</span>
+      <h2 style="margin:40px 0 24px">This is <span class="rose">TEAMWORK</span></h2>
+      ${L.map(([ch, word]) => `<div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">${ch}</span><span style="font:700 34px Inter">${word}</span></div>`).join('')}`) });
+    slides.push({ theme: 'dark', last: true, body: center(`
+      <h1 style="font-size:92px">Which letter does <span class="gold">your team</span> need most?</h1>
+      <p class="sub" style="margin:40px 0 60px">Great teams aren't born. They're built, one letter at a time.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;Comment the letter your team needs</div>
+        <div>🏷️ &nbsp;Tag your teammate</div>
+        <div>🔖 &nbsp;Save it for your next team meeting</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span></div>
+      </div>`) });
+    return slides;
+  })(),
 };
 
 (async () => {

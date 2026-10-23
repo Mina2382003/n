@@ -1,0 +1,136 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+</style></head><body><section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <span class="tag" style="margin-bottom:44px;display:inline-block">Team Building</span>
+        <h1>8 letters. 48 words. <span class="gold">One team.</span></h1>
+        <p class="sub" style="margin-top:44px">Let's break down the word TEAMWORK, letter by letter, to see what really holds a team together.</p></div><div class="bot"><span>Save this for your next team meeting</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <span class="tag">The word</span>
+        <h2 style="margin:40px 0 40px">Every letter is <span class="rose">a lesson</span></h2>
+        <div class="tiles"><span>T</span><span>E</span><span>A</span><span>M</span><span>W</span><span>O</span><span>R</span><span>K</span></div>
+        <div class="quote" style="margin-top:60px">"Not finance. Not strategy. Not technology. It is teamwork that remains the ultimate competitive advantage, both because it is so powerful and so rare."<small>Patrick Lencioni</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">T</span><span class="tag" style="margin-bottom:10px">Letter 1 of 8</span></div>
+        <h2 style="margin-bottom:18px">Trust</h2>
+        <p class="sub" style="margin-bottom:30px">No trust, no team. Everything else is built on it.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Transparency</span><span class="chip alt">Truth</span><span class="chip alt">Time together</span><span class="chip alt">Teaching</span><span class="chip alt">Tolerance</span></div>
+        <div class="quote">"A team is not a group of people who work together. A team is a group of people who trust each other."<small>Simon Sinek</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">E</span><span class="tag" style="margin-bottom:10px">Letter 2 of 8</span></div>
+        <h2 style="margin-bottom:18px">Empathy</h2>
+        <p class="sub" style="margin-bottom:30px">Understand how your teammates feel, not just what they do.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Encouragement</span><span class="chip alt">Engagement</span><span class="chip alt">Energy</span><span class="chip alt">Equality</span><span class="chip alt">Effort</span></div>
+        <div class="quote">"Alone we can do so little; together we can do so much."<small>Helen Keller</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">A</span><span class="tag" style="margin-bottom:10px">Letter 3 of 8</span></div>
+        <h2 style="margin-bottom:18px">Accountability</h2>
+        <p class="sub" style="margin-bottom:30px">Everyone owns their part, and owns their mistakes.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Alignment</span><span class="chip alt">Attitude</span><span class="chip alt">Appreciation</span><span class="chip alt">Adaptability</span><span class="chip alt">Ambition</span></div>
+        <div class="quote">"Teamwork is the ability to work together toward a common vision."<small>Andrew Carnegie</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">M</span><span class="tag" style="margin-bottom:10px">Letter 4 of 8</span></div>
+        <h2 style="margin-bottom:18px">Mutual Respect</h2>
+        <p class="sub" style="margin-bottom:30px">Respect goes both ways, from the CEO to the newest hire.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Motivation</span><span class="chip alt">Mentorship</span><span class="chip alt">Morale</span><span class="chip alt">Mission</span><span class="chip alt">Mindset</span></div>
+        <div class="quote">"The strength of the team is each individual member. The strength of each member is the team."<small>Phil Jackson</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">W</span><span class="tag" style="margin-bottom:10px">Letter 5 of 8</span></div>
+        <h2 style="margin-bottom:18px">Willingness</h2>
+        <p class="sub" style="margin-bottom:30px">Ready to help, even when it's not "your job".</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Win together</span><span class="chip alt">Workload sharing</span><span class="chip alt">Wellbeing</span><span class="chip alt">Welcome</span><span class="chip alt">Wisdom</span></div>
+        <div class="quote">"Talent wins games, but teamwork and intelligence win championships."<small>Michael Jordan</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">08 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">O</span><span class="tag" style="margin-bottom:10px">Letter 6 of 8</span></div>
+        <h2 style="margin-bottom:18px">Open Communication</h2>
+        <p class="sub" style="margin-bottom:30px">Say it clearly, say it early, and listen fully.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">One goal</span><span class="chip alt">Ownership</span><span class="chip alt">Optimism</span><span class="chip alt">Openness to feedback</span><span class="chip alt">Organization</span></div>
+        <div class="quote">"None of us is as smart as all of us."<small>Ken Blanchard</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">09 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">R</span><span class="tag" style="margin-bottom:10px">Letter 7 of 8</span></div>
+        <h2 style="margin-bottom:18px">Respect</h2>
+        <p class="sub" style="margin-bottom:30px">Respect people's time, roles and ideas.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Responsibility</span><span class="chip alt">Reliability</span><span class="chip alt">Roles</span><span class="chip alt">Recognition</span><span class="chip alt">Resilience</span></div>
+        <div class="quote">"Great things in business are never done by one person. They're done by a team of people."<small>Steve Jobs</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">10 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+        <div style="display:flex;align-items:flex-end;gap:30px;margin-bottom:30px"><span class="letter">K</span><span class="tag" style="margin-bottom:10px">Letter 8 of 8</span></div>
+        <h2 style="margin-bottom:18px">Kindness</h2>
+        <p class="sub" style="margin-bottom:30px">Small acts of kindness build big teams.</p>
+        <div class="chips" style="margin-bottom:46px"><span class="chip alt">Knowledge sharing</span><span class="chip alt">Keeping promises</span><span class="chip alt">Keep going</span><span class="chip alt">Kudos</span><span class="chip alt">Knowing each other</span></div>
+        <div class="quote">"If you want to go fast, go alone. If you want to go far, go together."<small>African proverb</small></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">11 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The full word</span>
+      <h2 style="margin:40px 0 24px">This is <span class="rose">TEAMWORK</span></h2>
+      <div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">T</span><span style="font:700 34px Inter">Trust</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">E</span><span style="font:700 34px Inter">Empathy</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">A</span><span style="font:700 34px Inter">Accountability</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">M</span><span style="font:700 34px Inter">Mutual Respect</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">W</span><span style="font:700 34px Inter">Willingness</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">O</span><span style="font:700 34px Inter">Open Communication</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">R</span><span style="font:700 34px Inter">Respect</span></div><div style="display:flex;align-items:center;gap:30px;padding:12px 0;border-bottom:2px solid #e0d2c4"><span style="font:800 54px/1 'Playfair Display',serif;color:var(--rose);width:56px">K</span><span style="font:700 34px Inter">Kindness</span></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">12 / 12</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <h1 style="font-size:92px">Which letter does <span class="gold">your team</span> need most?</h1>
+      <p class="sub" style="margin:40px 0 60px">Great teams aren't born. They're built, one letter at a time.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;Comment the letter your team needs</div>
+        <div>🏷️ &nbsp;Tag your teammate</div>
+        <div>🔖 &nbsp;Save it for your next team meeting</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span></div>
+      </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>
