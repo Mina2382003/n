@@ -666,6 +666,54 @@ const carousels = {
   })(),
   '17-geography': geo(false),
   '18-geography-ar': geo(true),
+  '19-fb-margins-egypt': (() => {
+    const split = [['Food & drinks', 30], ['Staff', 28], ['Rent', 10], ['Utilities & running costs', 8], ['Marketing & apps', 7], ['Waste, repairs, licences', 9]];
+    const bars = split.map(([k, v]) => `<div class="bar"><span>${k}</span><i style="width:${v * 3}%"></i><b>${v}</b></div>`).join('') +
+      `<div class="bar p" style="border-top:3px solid var(--ink);margin-top:10px;padding-top:24px"><span>Profit</span><i style="width:24%"></i><b>8</b></div>`;
+    return [
+      { theme: 'dark', foot: 'Save this for later', body: center(`
+        <span class="tag" style="margin-bottom:44px;display:inline-block">F&B in Egypt</span>
+        <h1>A guest pays EGP 100. <span class="gold">How much does the restaurant keep?</span></h1>
+        <p class="sub" style="margin-top:44px">Spoiler: usually less than 10. Here's where the rest goes.</p>`) },
+      { theme: 'light', body: center(`
+        <span class="tag">First, the bill</span>
+        <h2 style="margin:40px 0 30px">Not everything on the bill <span class="rose">is revenue</span></h2>
+        ${li('🧾', 'Menu price', 'This is what the restaurant actually earns from')}${li('🏛️', '+14% VAT', 'Goes straight to the government')}${li('🤝', '+ Service charge (often 12%)', 'Usually shared with the team')}
+        <div class="pill" style="margin-top:36px">On a EGP 1,000 bill, only about EGP 780 is the menu price. That's what pays every cost, and the profit.</div>`) },
+      { theme: 'light', foot: 'Illustrative · typical ranges', body: center(`
+        <span class="tag">Where EGP 100 goes</span>
+        <h2 style="margin:40px 0 30px">The <span class="rose">real split</span></h2>
+        ${bars}`) },
+      { theme: 'dark', foot: 'Industry rules of thumb', body: center(`
+        <span class="tag">The benchmarks</span>
+        <h2 style="margin:40px 0 36px">Know <span class="gold">your numbers</span></h2>
+        <div class="stats">
+          <div class="stat"><b>28–35%</b><span class="lbl">Food cost, as % of sales</span></div>
+          <div class="stat"><b>25–35%</b><span class="lbl">Staff cost, as % of sales</span></div>
+          <div class="stat"><b>&lt; 65%</b><span class="lbl">Prime cost: food + staff together</span></div>
+          <div class="stat"><b>3–10%</b><span class="lbl">Net profit for most restaurants</span></div>
+        </div>`) },
+      { theme: 'light', body: center(`
+        <span class="tag">Not every item is equal</span>
+        <h2 style="margin:40px 0 36px">Your drinks <span class="rose">pay the bills</span></h2>
+        <div class="cards">
+          <div class="card d"><div class="l">☕ Coffee, juices & soft drinks</div><div class="m">Ingredient cost is often 15–25% of the price</div><div class="big">High margin</div></div>
+          <div class="card w"><div class="l">🥩 Mains, especially meat & seafood</div><div class="m">Ingredient cost is often 30–40% of the price</div><div class="big">Lower margin</div></div>
+        </div>
+        <div class="pill" style="margin-top:36px">Many restaurants make more profit on a cappuccino than on a steak.</div>`) },
+      { theme: 'dark', body: center(`
+        <span class="tag">The Egypt factor</span>
+        <h2 style="margin:40px 0 30px">What squeezes margins <span class="gold">here</span></h2>
+        ${li('💱', 'Currency swings', 'Imported ingredients and equipment get pricier overnight')}${li('🏢', 'Rent in prime areas', 'New Cairo, Zayed and the North Coast don\'t come cheap')}${li('⚡', 'Rising energy costs', 'Kitchens run on gas and electricity all day')}${li('📱', 'Delivery app commissions', 'Taken from every order')}${li('🔄', 'Staff turnover', 'Every new hire costs time and training')}`) },
+      { theme: 'light', body: center(`
+        <span class="tag">Protect your margin</span>
+        <h2 style="margin:40px 0 30px">6 moves that <span class="rose">add points</span></h2>
+        ${li('1', 'Engineer your menu', 'Push high-margin items, rethink low ones')}${li('2', 'Standard recipes & portions', 'Same plate, same cost, every time')}${li('3', 'Track waste weekly', 'What you throw away is pure lost profit')}${li('4', 'Renegotiate suppliers', 'Compare prices every quarter')}${li('5', 'Review prices regularly', 'Small, frequent changes beat one big jump')}${li('6', 'Grow repeat guests', 'Regulars cost less than new guests')}`) },
+      { theme: 'dark', last: true, body: cta('Do you know your <span class="gold">real margin?</span>',
+        'Revenue looks good on paper. Profit is what\'s left. Know both, every month.',
+        'Comment your food cost %', 'Save this for your next P&L review') },
+    ];
+  })(),
 };
 
 (async () => {
