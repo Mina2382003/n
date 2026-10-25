@@ -375,7 +375,7 @@ COVER_LINES = [
     (bC + 1.00, text_img("ركّز على اللي بيفرّق", 48, stroke=0, fnt=FONT_B, emo="2705", emo_left=False)),
 ]
 COVER_HEAD = text_img("مش كل Data مفيدة!", 96, fill=YEL, stroke=11)
-CTA = text_img("تابعني لأسرار البيزنس", 72, fill=WHITE, stroke=0, box=RED, emo="1f525", radius=60, pad=(46, 10))
+CTA = text_img("Follow for more business secrets", 64, fill=WHITE, stroke=0, box=RED, emo="1f525", radius=60, pad=(46, 10))
 MAG_Z, MAG_CX, MAG_CY = 1.12, 560, 860
 
 # ---------- captions (bottom) ----------
