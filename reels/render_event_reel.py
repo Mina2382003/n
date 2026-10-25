@@ -63,6 +63,18 @@ CONFIG = {
         cta=("Are you coming?", "Comment “EIP” below", "1f39f-fe0f", "Follow for the EIP 2026 journey"),
     ),
 }
+CONFIG["IMG_6260"] = dict(   # Q&A: where guest experience starts (question dropped, the answer stands alone)
+    cold=(10.58, 13.25),
+    body=[(4.58, 8.3), (8.86, 10.22), (10.58, 13.25)],
+    hook_quote=("“Hospitality doesn't start", "at arrival. At all.”"),
+    visual="title", hook_title=("Where does hospitality", "REALLY start?"), hook_emo="1f914",
+    chips=(4.58, 13.25, [("1f4ad", "Think"), ("1f4f1", "Book"), ("1f697", "Arrive")]),
+    chip_times=[6.2, 9.7, 11.2],
+    strike=(11.9, 2, 0),             # cross out "Arrive" on "مش بتبدأ من الـ arrival"; tag "Think" as the real start
+    phone_at=(8.86, 10.22),
+    punches=[11.9],
+    cta=("Hospitality starts before the door", "Follow for more hospitality secrets", "1f6aa", "Tag a restaurant owner"),
+)
 C = CONFIG[CLIP]
 
 # ---------- timeline ----------
@@ -231,7 +243,7 @@ def build_phone():
     d.text((PW / 2, 540), "Confirmed ✓", font=font(36), fill=WHITE, anchor="mm")
     for i in range(3): d.rounded_rectangle((34, 620 + i * 66, PW - 34, 672 + i * 66), 18, fill=(238, 236, 232))
     return ph
-PHONE = build_phone() if C["visual"] == "phone" else None
+PHONE = build_phone() if C["visual"] == "phone" or "phone_at" in C else None
 
 def build_ticket():
     TW, TH = 820, 380
@@ -261,7 +273,12 @@ def lower_third(fr, t, t0, name, role):
     ImageDraw.Draw(fr).rectangle((x, 1380, x + 10, 1380 + n_im.height + r_im.height + 20), fill=YEL)
     fr.alpha_composite(n_im, (int(x + 30), 1386)); fr.alpha_composite(r_im, (int(x + 30), 1386 + n_im.height - 6))
 
-def chip_row(fr, t, times, items):
+def build_x(w, h):
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    for col, wd in ((WHITE, 26), (RED, 16)):
+        d.line((14, 14, w - 14, h - 14), fill=col, width=wd); d.line((14, h - 14, w - 14, 14), fill=col, width=wd)
+    return im
+def chip_row(fr, t, times, items, strike=None):
     ims = [text_img(lbl, 56, fill=BLACK, box=WHITE, fnt=FONT, emo=e, pad=(22, 4), radius=34) for e, lbl in items]
     total = sum(im.width for im in ims) + 30 * (len(ims) - 1)
     if total > W - 40:
@@ -272,6 +289,12 @@ def chip_row(fr, t, times, items):
         if t >= ts:
             paste_center(fr, im, x + im.width / 2, 1580, ease_pop(t - ts))
             if i: paste_center(fr, arrow, x - 15, 1580, ease_pop(t - ts))
+            if strike and t >= strike[0]:
+                if i == strike[1]:
+                    paste_center(fr, build_x(im.width - 10, im.height + 30), x + im.width / 2, 1580, 2.0 - ease_out((t - strike[0]) / 0.1))
+                if i == strike[2]:
+                    paste_center(fr, text_img("It starts HERE", 40, fill=BLACK, box=YEL, fnt=FONT, emo="1f447", pad=(16, 0), radius=16),
+                                 x + im.width / 2 + 60, 1470, ease_pop(t - strike[0] - 0.15), -3)
         x += im.width + 30
 
 def checklist(fr, t, t0, title, items_t):
@@ -332,7 +355,10 @@ CHIPS = None
 if "chips" in C:
     s0, e0, items = C["chips"]
     a, b = out_t(s0), out_t(e0)
-    CHIPS = ([a + (b - a) * i / len(items) for i in range(len(items))], items, a, b + 0.6)
+    times = [out_t(x) for x in C["chip_times"]] if "chip_times" in C else [a + (b - a) * i / len(items) for i in range(len(items))]
+    CHIPS = (times, items, a, b + 0.6)
+STRIKE = (out_t(C["strike"][0]),) + tuple(C["strike"][1:]) if "strike" in C else None
+PH_AT = (out_t(C["phone_at"][0]), out_t(C["phone_at"][1])) if "phone_at" in C else None
 CHECK = None
 if "checklist" in C:
     title, items = C["checklist"]
@@ -377,7 +403,7 @@ for n in range(NF):
         u = (n - OSTART[k]) / FPS
         fx_, fy_ = face[si]
         if k == 0:                                     # hook: hard snap onto his face
-            z, off = 1.75 + 0.6 * (1 - ease_out(u / 0.15)) + 0.05 * u, 150
+            z, off = 1.75 + 0.6 * (1 - ease_out(u / 0.15)) + 0.05 * u, 70
             sx, sy = shake(t, 0, 20, 0.35)
         else:
             z, off = FRAMINGS[(k - 1) % len(FRAMINGS)]
@@ -386,6 +412,8 @@ for n in range(NF):
         for p in P_OUT:
             if p <= t < p + 0.7:
                 z *= 1 + 0.22 * ease_out((t - p) / 0.07) * (1 - clamp01((t - p - 0.5) / 0.2)); sx, sy = shake(t, p, 14)
+        if PH_AT and PH_AT[0] <= t < PH_AT[1] + 0.25:          # slide him left so the phone sits beside his face
+            fx_ += 200 * ease_out((t - PH_AT[0]) / 0.3) * (1 - ease_out((t - PH_AT[1]) / 0.25))
         if FB and FB[0] <= t < FB[1]:
             arr = fx_framebreak(src, si, t - FB[0])
         else:
@@ -412,7 +440,10 @@ for n in range(NF):
             flash(fr, WHITE, 0.85 * (1 - t / 0.12))
         else:
             if LT and LT[0] <= t < LT[1]: lower_third(fr, t, LT[0], LT[2], LT[3])
-            if CHIPS and CHIPS[2] <= t < CHIPS[3]: chip_row(fr, t, CHIPS[0], CHIPS[1])
+            if CHIPS and CHIPS[2] <= t < CHIPS[3]: chip_row(fr, t, CHIPS[0], CHIPS[1], STRIKE)
+            if PH_AT and PH_AT[0] <= t < PH_AT[1] + 0.25:
+                e = ease_out((t - PH_AT[0]) / 0.3) * (1 - ease_out((t - PH_AT[1]) / 0.25))
+                paste_center(fr, PHONE, 800 + 500 * (1 - e), 900, 1.0, -8 + 8 * (1 - e))
             if CHECK and not (FB and FB[0] <= t < FB[1]): checklist(fr, t, CHECK[1][0][0], CHECK[0], CHECK[1])
             for cs, ce, txt, emo in CALL:
                 if cs <= t < ce: glass_text(fr, text_img(txt, 54, fill=WHITE, emo=emo), W / 2, 1580, ease_pop(t - cs))
@@ -473,6 +504,10 @@ def pop(d=0.08):
     t = tt(d); f = 900 * np.exp(-t * 40) + 250
     return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-t * 55) * 0.5
 
+def slap():
+    t = tt(0.14); n = rng.standard_normal(len(t))
+    return (n - lp(n, 0.3)) * np.exp(-t * 45) * 0.6 + np.sin(2 * np.pi * 90 * t) * np.exp(-t * 30) * 0.6
+
 def ding(f0=1318.5, d=1.0):
     t = tt(d)
     return (np.sin(2 * np.pi * f0 * t) + 0.5 * np.sin(2 * np.pi * f0 * 1.5 * t) + 0.25 * np.sin(2 * np.pi * f0 * 2.01 * t)) * np.exp(-t * 5) * 0.3
@@ -488,6 +523,8 @@ put(whoosh(0.3, False), bH - 0.15, 0.5)
 if LT: put(whoosh(0.25), LT[0], 0.4)
 if CHIPS:
     for ts in CHIPS[0]: put(pop(), ts, 0.5)
+if STRIKE: put(boom(0.7), STRIKE[0], 0.8); put(slap(), STRIKE[0], 0.7)
+if PH_AT: put(whoosh(0.3), PH_AT[0] - 0.05, 0.6); put(ding(1568, 0.4), PH_AT[0] + 0.3, 0.4)
 if CHECK:
     for ts, _ in CHECK[1]: put(pop(), ts, 0.6); put(ding(1568, 0.35), ts + 0.02, 0.35)
 for cs, *_ in CALL: put(pop(), cs, 0.4)
