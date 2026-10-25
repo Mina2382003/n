@@ -1,0 +1,115 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat{border-radius:28px;padding:34px 36px;background:#fff;color:var(--ink)}
+.dark .stat{background:var(--ink2);color:var(--cream)}
+.stat b{display:block;font:800 64px/1.05 Inter;color:var(--rose);margin-bottom:12px}
+.dark .stat b{color:var(--gold)}
+.stat .lbl{font:600 26px/1.35 Inter;opacity:.8}
+.rtl .lbl,.rtl .li,.rtl .li small,.rtl .card .l,.rtl .card .m,.rtl .cta-list{font-family:'Cairo','Inter',sans-serif}
+.rtl .stat b,.rtl .card .big{direction:ltr;text-align:right;unicode-bidi:isolate}
+.bar{display:grid;grid-template-columns:260px 1fr 90px;align-items:center;gap:20px;padding:14px 0;font:700 28px Inter}
+.bar i{display:block;height:34px;border-radius:10px;background:var(--rose)}
+.bar.p i{background:var(--gold)}
+.bar.p{color:var(--rose);font-weight:800}
+.bar b{text-align:right}
+</style></head><body><section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag" style="margin-bottom:44px;display:inline-block">Pain point 5/5 · Food waste</span>
+    <h1>Every kilo in the bin is <span class="gold">profit in the bin.</span></h1>
+    <p class="sub" style="margin-top:44px">Food waste is one of the easiest costs to cut, because most restaurants never measure it.</p></div><div class="bot"><span>Restaurant Pain Points · 5/5</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">What it costs you</span>
+    <h2 style="margin:40px 0 36px">You pay for it <span class="rose">three times</span></h2>
+    <div class="li"><div class="ic">🛒</div><div>When you buy it<small>Ingredients you paid full price for</small></div></div><div class="li"><div class="ic">👨‍🍳</div><div>When you prep it<small>Staff time, gas and electricity</small></div></div><div class="li"><div class="ic">🗑️</div><div>When you throw it out<small>Zero revenue, plus disposal</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">Why it happens</span>
+    <h2 style="margin:40px 0 30px">Where the <span class="gold">waste</span> comes from</h2>
+    <div class="li"><div class="ic">📦</div><div>Over-ordering<small>Buying "just in case"</small></div></div><div class="li"><div class="ic">🔪</div><div>Over-prepping<small>Same prep on Monday as on Friday</small></div></div><div class="li"><div class="ic">🍽️</div><div>Plates coming back full<small>Portions too big for your guests</small></div></div><div class="li"><div class="ic">🧊</div><div>Poor storage<small>Old stock hidden behind new</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">How to fix it</span>
+    <h2 style="margin:40px 0 30px">5 ways to <span class="rose">waste less</span></h2>
+    <div class="li"><div class="ic">1</div><div>Weigh waste every day<small>What gets measured gets managed</small></div></div><div class="li"><div class="ic">2</div><div>Prep to your forecast<small>By day of the week, not by habit</small></div></div><div class="li"><div class="ic">3</div><div>First in, first out<small>Label and date everything</small></div></div><div class="li"><div class="ic">4</div><div>Watch the plates<small>Adjust portions guests don't finish</small></div></div><div class="li"><div class="ic">5</div><div>Use a daily special<small>Turn extra stock into a best-seller</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">The number to track</span>
+    <h2 style="margin:40px 0 36px">Your <span class="gold">waste %</span></h2>
+    <div class="formula" style="color:var(--cream)">Value of food wasted ÷ Food purchased × 100</div>
+    <p class="sub" style="margin-top:40px">Check it weekly. Every point you cut goes straight to profit.</p></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 06</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <h1 style="font-size:92px">Do you weigh <span class="gold">your waste?</span></h1>
+  <p class="sub" style="margin:40px 0 60px">The cheapest ingredient is the one you didn't throw away.</p>
+  <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+    <div>🔖 &nbsp;Save this for your next team meeting</div>
+    <div>💬 &nbsp;Comment your best anti-waste tip</div>
+    <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span> for more venue economics</div>
+  </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>

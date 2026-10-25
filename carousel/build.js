@@ -119,6 +119,77 @@ const geo = (ar) => {
       </div>`), { last: true }),
   ];
 };
+const pain = (n, p) => [
+  { theme: 'dark', foot: `Restaurant Pain Points · ${n}/5`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">Pain point ${n}/5 · ${p.name}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  { theme: 'light', foot: p.costFoot, body: center(`
+    <span class="tag">What it costs you</span>
+    <h2 style="margin:40px 0 36px">${p.costTitle}</h2>
+    ${p.cost}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">Why it happens</span>
+    <h2 style="margin:40px 0 30px">${p.whyTitle}</h2>
+    ${p.why.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'light', body: center(`
+    <span class="tag">How to fix it</span>
+    <h2 style="margin:40px 0 30px">${p.fixTitle}</h2>
+    ${p.fix.map(([t, s], i) => li(i + 1, t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">The number to track</span>
+    <h2 style="margin:40px 0 36px">${p.metricTitle}</h2>
+    <div class="formula" style="color:var(--cream)">${p.formula}</div>
+    <p class="sub" style="margin-top:40px">${p.metricNote}</p>`) },
+  { theme: 'dark', last: true, body: cta(p.ctaTitle, p.ctaText, p.comment, 'Save this for your next team meeting') },
+];
+const pains = [
+  { name: 'No-shows', hook: 'A table for 6 at 9 PM. <span class="gold">Nobody shows up.</span>', sub: 'No-shows are the silent profit killer. You held the table, turned guests away, and earned nothing.',
+    costTitle: 'Small numbers, <span class="rose">big losses</span>', costFoot: 'Illustrative numbers',
+    cost: `<div class="stats"><div class="stat"><b>4</b><span class="lbl">no-show tables a week</span></div><div class="stat"><b>× 1,500</b><span class="lbl">EGP average bill</span></div></div><div class="pill" style="margin-top:30px">= about EGP 24,000 a month in empty tables. And the walk-ins you turned away.</div>`,
+    whyTitle: 'Booking is easy. <span class="gold">Cancelling is awkward.</span>',
+    why: [['📵', 'No confirmation', 'Guests forget, and nobody reminds them'], ['🔀', 'Multiple bookings', 'They booked 3 places and chose one'], ['🆓', 'No commitment', 'Nothing to lose by not showing up'], ['😶', 'Cancelling feels awkward', 'So they just don\'t come']],
+    fixTitle: '5 ways to <span class="rose">cut no-shows</span>',
+    fix: [['Confirm twice', 'WhatsApp 24 hours and 2 hours before'], ['Make cancelling easy', 'One tap to cancel beats a ghost'], ['Deposits for big groups', 'And for peak nights'], ['Keep a waitlist', 'Fill the gap fast when someone cancels'], ['Set a 15-minute rule', 'Then release the table']],
+    metricTitle: 'Your <span class="gold">no-show rate</span>', formula: 'No-shows ÷ Total bookings × 100', metricNote: 'Track it every week. If it\'s climbing, your confirmation process is broken.',
+    ctaTitle: 'How many no-shows <span class="gold">did you have last week?</span>', ctaText: 'You can\'t stop every no-show. But you can stop most of them.', comment: 'Comment your no-show number' },
+  { name: 'Empty weekdays', hook: 'Packed on Thursday. <span class="gold">Empty on Monday.</span>', sub: 'Your rent, staff and electricity don\'t take Monday off. Neither should your guests.',
+    costTitle: 'Fixed costs <span class="rose">don\'t take days off</span>', costFoot: '',
+    cost: `<div class="cards"><div class="card d"><div class="l">Thursday</div><div class="m">Same rent · same staff · same bills</div><div class="big">Full house</div></div><div class="card w"><div class="l">Monday</div><div class="m">Same rent · same staff · same bills</div><div class="big">5 tables</div></div></div>`,
+    whyTitle: 'Guests have <span class="gold">no reason</span> to come',
+    why: [['📅', 'Same offer every day', 'Nothing makes Monday special'], ['📣', 'Marketing only for weekends', 'Weekdays get forgotten'], ['🏢', 'Ignoring the lunch crowd', 'Offices nearby eat every weekday'], ['🔇', 'Nothing happening', 'No events, no buzz']],
+    fixTitle: 'Give them <span class="rose">a reason</span>',
+    fix: [['Weekday-only offers', 'Set lunch, early-bird, family night'], ['Run an event', 'Quiz night, live music, game night'], ['Win the business lunch', 'Fast menu for nearby offices'], ['Double loyalty points', 'Only on your quiet days'], ['Promote quiet days, not busy ones', 'Spend ads where tables are empty']],
+    metricTitle: 'Covers <span class="gold">by day of week</span>', formula: 'Guests served per day, every week', metricNote: 'Find your weakest day. Make one change. Measure again in 4 weeks.',
+    ctaTitle: 'What\'s your <span class="gold">quietest day?</span>', ctaText: 'Every empty weekday table is a cost you\'re already paying. Fill it.', comment: 'Comment your quietest day' },
+  { name: 'Staff turnover', hook: 'You trained them for 3 months. <span class="gold">They left in 4.</span>', sub: 'Staff turnover is one of the most expensive problems in hospitality, and one of the least measured.',
+    costTitle: 'Every exit <span class="rose">costs you</span>', costFoot: '',
+    cost: [['⏳', 'Hiring time', 'Interviews, trials, paperwork'], ['📚', 'Training again', 'Weeks before they\'re fully up to speed'], ['🍽️', 'Service drops', 'Mistakes, slow tables, unhappy guests'], ['👋', 'Regulars notice', 'They miss the faces they knew']].map(([i, t, s]) => li(i, t, s)).join(''),
+    whyTitle: 'People don\'t leave jobs. <span class="gold">They leave how it feels.</span>',
+    why: [['📆', 'Chaotic schedules', 'Shifts changed at the last minute'], ['🙈', 'No recognition', 'Good work goes unnoticed'], ['🪜', 'No growth path', 'Waiter today, waiter in 5 years'], ['🚪', 'Weak onboarding', 'Thrown in on day one']],
+    fixTitle: 'Make them <span class="rose">want to stay</span>',
+    fix: [['A real first 2 weeks', 'Buddy, checklist, clear expectations'], ['Publish schedules early', 'At least a week ahead'], ['Recognise wins out loud', 'In the team briefing, every week'], ['Show the path', 'Waiter → captain → supervisor'], ['Ask before they leave', 'Monthly 1:1: "What would make you stay?"']],
+    metricTitle: 'Your <span class="gold">turnover rate</span>', formula: 'People who left ÷ Average team size × 100', metricNote: 'Measure it every quarter, per role. Where it\'s highest, start there.',
+    ctaTitle: 'How long does your team <span class="gold">usually stay?</span>', ctaText: 'Guests come back for the food. They fall in love with the people.', comment: 'Comment your best retention tip' },
+  { name: 'One-time guests', hook: 'They loved the food. <span class="gold">They never came back.</span>', sub: 'Most restaurants spend on bringing new guests in, and almost nothing on bringing them back.',
+    costTitle: 'New guests <span class="rose">cost more</span>', costFoot: '',
+    cost: `<div class="cards"><div class="card w"><div class="l">Winning a new guest</div><div class="m">Ads, promos, app commissions</div><div class="big">Expensive</div></div><div class="card d"><div class="l">Bringing a guest back</div><div class="m">A message, a reward, a warm welcome</div><div class="big">Cheap</div></div></div>`,
+    whyTitle: 'Good food <span class="gold">isn\'t enough</span>',
+    why: [['🤷', 'No reason to return', 'Nothing is waiting for them'], ['📵', 'No way to reach them', 'You don\'t have their number'], ['🧠', 'They simply forget', 'Hundreds of other places compete'], ['😐', 'Nobody remembered them', 'Treated like a stranger, again']],
+    fixTitle: 'Turn visit 1 into <span class="rose">visit 2</span>',
+    fix: [['Collect contacts, with permission', 'At booking, via loyalty or Wi-Fi'], ['Say thank you the next day', 'A short, personal message'], ['Invite them back within 30 days', 'With a reason, not just a discount'], ['Remember them', 'Their name, their table, their favourite dish'], ['Reward the 3rd visit', 'That\'s when a habit starts']],
+    metricTitle: 'Your <span class="gold">repeat rate</span>', formula: 'Guests who returned within 60 days ÷ All new guests', metricNote: 'Raise it a little and your revenue grows without spending more on ads.',
+    ctaTitle: 'Do you know your <span class="gold">repeat rate?</span>', ctaText: 'Every regular started as a one-time guest. The difference is what you did next.', comment: 'Yes or no: do you track it?' },
+  { name: 'Food waste', hook: 'Every kilo in the bin is <span class="gold">profit in the bin.</span>', sub: 'Food waste is one of the easiest costs to cut, because most restaurants never measure it.',
+    costTitle: 'You pay for it <span class="rose">three times</span>', costFoot: '',
+    cost: [['🛒', 'When you buy it', 'Ingredients you paid full price for'], ['👨‍🍳', 'When you prep it', 'Staff time, gas and electricity'], ['🗑️', 'When you throw it out', 'Zero revenue, plus disposal']].map(([i, t, s]) => li(i, t, s)).join(''),
+    whyTitle: 'Where the <span class="gold">waste</span> comes from',
+    why: [['📦', 'Over-ordering', 'Buying "just in case"'], ['🔪', 'Over-prepping', 'Same prep on Monday as on Friday'], ['🍽️', 'Plates coming back full', 'Portions too big for your guests'], ['🧊', 'Poor storage', 'Old stock hidden behind new']],
+    fixTitle: '5 ways to <span class="rose">waste less</span>',
+    fix: [['Weigh waste every day', 'What gets measured gets managed'], ['Prep to your forecast', 'By day of the week, not by habit'], ['First in, first out', 'Label and date everything'], ['Watch the plates', 'Adjust portions guests don\'t finish'], ['Use a daily special', 'Turn extra stock into a best-seller']],
+    metricTitle: 'Your <span class="gold">waste %</span>', formula: 'Value of food wasted ÷ Food purchased × 100', metricNote: 'Check it weekly. Every point you cut goes straight to profit.',
+    ctaTitle: 'Do you weigh <span class="gold">your waste?</span>', ctaText: 'The cheapest ingredient is the one you didn\'t throw away.', comment: 'Comment your best anti-waste tip' },
+];
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -714,6 +785,11 @@ const carousels = {
         'Comment your food cost %', 'Save this for your next P&L review') },
     ];
   })(),
+  '20-pain-no-shows': pain(1, pains[0]),
+  '21-pain-empty-weekdays': pain(2, pains[1]),
+  '22-pain-staff-turnover': pain(3, pains[2]),
+  '23-pain-one-time-guests': pain(4, pains[3]),
+  '24-pain-food-waste': pain(5, pains[4]),
 };
 
 (async () => {
