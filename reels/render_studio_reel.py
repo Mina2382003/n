@@ -86,6 +86,55 @@ CONFIG = {
         cta=("Remember your first sale?", "Follow the Reservya journey", "1f680", "Tell me yours in the comments"),
     ),
 }
+# selfie footage: his face fills the middle-low frame, the sunroof above is the free space for overlays
+SELFIE = dict(hook_z=1.4, framings=[(1.0, 0), (1.18, 40), (1.08, 20)], busy=(1.0, 0),
+              quote_y=590, money_y=770, counter_y=1730, card=(60, 170, 1020, 720), receipt=(W / 2 + 300, 1620, 0.5))
+CONFIG["IMG_7486_10days"] = dict(SELFIE,   # "100% sure: in 10 days every price will have gone up"
+    segs=[("hook", 12.22, 17.15),
+          ("a", 1.45, 4.55), ("a", 4.62, 7.0), ("a", 7.95, 11.6), ("a", 12.22, 17.15), ("a", 18.05, 21.15)],
+    title=("Restaurant prices are", "about to JUMP", "1f4c8"),
+    quote=("“100% sure: in 10 days, ALL", "prices will have gone up.”"),
+    money=dict(at=(0, 13.4), text="10 DAYS", emo="23f3"),
+    headlines=[((1, 1.6), (3, 11.6), "PARLIAMENT DECISION", "BREAKING", 330, 300, 6),
+               ((2, 4.7), (3, 11.6), "PRESIDENTIAL MANDATE", "NEWS", 720, 500, -5),
+               ((3, 10.4), (3, 11.6), "RESTAURANTS NEXT?", "MARKETS", 420, 700, 4)],
+    stamps=[((4, 13.4), (4, 17.15), "10 days", "23f3", 1740)],
+    punches=[(4, 12.27)],
+    cta=("Prices in 10 days?", "Follow for the price update", "1f514", "Send this to a restaurant owner"),
+    nfa=True,
+)
+CONFIG["IMG_7486_chain"] = dict(SELFIE,   # politics -> dollar -> market -> restaurant cost
+    segs=[("hook", 42.64, 44.78), ("hook", 45.88, 46.52),
+          ("a", 33.05, 34.95), ("a", 36.15, 37.15), ("a", 38.5, 41.4), ("a", 42.64, 44.78), ("a", 45.88, 46.55), ("a", 47.3, 54.05)],
+    title=("How politics hits", "YOUR menu", "1f37d-fe0f"),
+    quote=("“The prices of EVERYTHING", "are going up.”"),
+    chips=dict(items=[((2, 33.1), "1f3db-fe0f", "Politics"), ((4, 38.6), "1f4b5", "Dollar"), ((4, 39.9), "1f6d2", "Market"),
+                      ((7, 47.4), "1f37d-fe0f", "Your menu")], until=(7, 54.05)),
+    stamps=[((7, 49.2), (7, 54.05), "COST ▲", "1f4c8", 620)],
+    punches=[(5, 42.7), (7, 47.4)],
+    cta=("Restaurant owner?", "Follow before prices move", "1f4c8", "Share this with your business partner"),
+)
+CONFIG["IMG_7486_bill"] = dict(SELFIE,   # who pays the bill? the customer: +5-10%
+    segs=[("hook", 55.36, 57.18), ("hook", 57.84, 58.58),
+          ("a", 47.3, 54.05), ("a", 55.36, 57.18), ("a", 57.84, 58.58), ("a", 63.6, 65.14), ("a", 66.22, 67.3), ("a", 67.82, 69.3)],
+    title=("Who pays the bill", "when costs go up?", "1f9fe"),
+    quote=("“So who pays the bill?", "The CUSTOMER.”"),
+    receipt_on=True,
+    counter=dict(start=(7, 67.85), end=(7, 69.2), frm=5, to=10, fmt="+{}%"),
+    punches=[(3, 55.4), (4, 57.86)],
+    cta=("Would you still eat out at +10%?", "Follow for more restaurant economics", "1f37d-fe0f", "Comment yes or no"),
+)
+CONFIG["IMG_7486_dollar60"] = dict(SELFIE,   # if the dollar crosses 60, prices become a different story
+    segs=[("hook", 73.22, 75.02), ("hook", 75.72, 78.12),
+          ("a", 63.6, 65.14), ("a", 66.22, 67.3), ("a", 67.82, 69.3), ("a", 71.32, 75.02), ("a", 75.72, 78.12)],
+    title=("The dollar's", "DANGER LINE", "26a0-fe0f"),
+    quote=("“If the dollar crosses 60, prices", "become a whole different story.”"),
+    chart=dict(start=(3, 71.3), end=(4, 78.12), label="EGP per USD", threshold="60", tags=[]),
+    counter=dict(start=(2, 67.85), end=(2, 69.2), frm=5, to=10, fmt="+{}%"),
+    punches=[(4, 75.76)],
+    cta=("I'll update you if it crosses 60", "Follow for the market update", "1f514", "Save this & watch the dollar"),
+    nfa=True,
+)
 C = CONFIG[NAME]
 
 # ---------- timeline ----------
@@ -225,7 +274,7 @@ def title(fr, t):
 
 MONEY = None
 if "money" in C:
-    MONEY = text_img(C["money"]["text"], 190, fill=BLACK, box=YEL, emo="1f4b8", pad=(40, 10), radius=40)
+    MONEY = text_img(C["money"]["text"], 170, fill=BLACK, box=YEL, emo=C["money"].get("emo", "1f4b8"), pad=(40, 10), radius=40)
 
 NOTIF = None
 if "notify" in C:
@@ -268,7 +317,7 @@ def checklist(fr, t, cl, times):
             sc = ease_pop(t - ts)
             paste_center(fr, im, 90 + im.width / 2, y0 + 150 + i * 86, sc)
 
-CARD = (60, 1110, 1020, 1660)
+CARD = C.get("card", (60, 1110, 1020, 1660))
 def chart(fr, t, t0, t1, label, tags):
     e = ease_pop((t - t0) * 0.8)
     x0, y0, x1, y1 = CARD; cx, cy = (x0 + x1) / 2, (y0 + y1) / 2
@@ -279,15 +328,26 @@ def chart(fr, t, t0, t1, label, tags):
     for i in range(5):
         yy = gy0 + (gy1 - gy0) * i / 4; d.line((gx0, yy, gx1, yy), fill=(255, 255, 255, 30), width=2)
     d.text((gx0, 26), label, font=font(44), fill=WHITE)
-    up = text_img("▲ UP", 34, fill=BLACK, box=GREEN, fnt=FONT_B, pad=(16, 0), radius=12)
-    lay.alpha_composite(up, (gx1 - up.width + 12, 22))
+    thr = C["chart"].get("threshold")
     p = clamp01((t - t0 - 0.1) / max(0.5, t1 - t0 - 0.8))
     k = 3.2
     pts = [(gx0 + (gx1 - gx0) * x, gy1 - (gy1 - gy0) * (math.exp(k * x) - 1) / (math.exp(k) - 1)) for x in np.linspace(0, 1, 90) if x <= p]
+    ty = gy0 + (gy1 - gy0) * 0.35
+    crossed = thr and len(pts) > 1 and pts[-1][1] < ty
+    col = RED if crossed else GREEN
+    if thr:
+        for xx in range(gx0, gx1, 34): d.line((xx, ty, xx + 18, ty), fill=RED + (255,), width=5)
+        tl = text_img(thr, 40, fill=WHITE, box=RED, fnt=FONT, emo="26a0-fe0f", pad=(14, 0), radius=12)
+        lay.alpha_composite(tl, (gx1 - tl.width + 12, int(ty - tl.height - 4)))
+        if crossed:
+            lay.alpha_composite(text_img("PRICES: A DIFFERENT STORY", 34, fill=WHITE, box=RED, fnt=FONT_B, pad=(14, 0), radius=12), (gx0, gy0 - 6))
+    else:
+        up = text_img("▲ UP", 34, fill=BLACK, box=GREEN, fnt=FONT_B, pad=(16, 0), radius=12)
+        lay.alpha_composite(up, (gx1 - up.width + 12, 22))
     glow = Image.new("RGBA", lay.size, (0, 0, 0, 0)); gd = ImageDraw.Draw(glow)
     if len(pts) > 1:
-        d.polygon(pts + [(pts[-1][0], gy1), (gx0, gy1)], fill=GREEN + (45,))
-        gd.line(pts, fill=GREEN + (255,), width=22, joint="curve"); d.line(pts, fill=GREEN + (255,), width=9, joint="curve")
+        d.polygon(pts + [(pts[-1][0], gy1), (gx0, gy1)], fill=col + (45,))
+        gd.line(pts, fill=col + (255,), width=22, joint="curve"); d.line(pts, fill=col + (255,), width=9, joint="curve")
         ex, ey = pts[-1]; d.ellipse((ex - 11, ey - 11, ex + 11, ey + 11), fill=WHITE)
     for i, (ts, txt) in enumerate(tags):
         if t >= ts:
@@ -336,6 +396,54 @@ def qcard(fr, t, t0, t1, text):
         lines.append(cur)
         for i, ln in enumerate(lines[:2]): d.text((110, y + 110 + i * 60), ln, font=f, fill=WHITE)
 
+def headline(txt, tag):
+    f = font(54); d = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    l, t, r, b = d.textbbox((0, 0), txt, font=f)
+    w, h = r - l + 70, b - t + 104
+    im = Image.new("RGBA", (w + 30, h + 30), (0, 0, 0, 0)); dr = ImageDraw.Draw(im)
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); ImageDraw.Draw(sh).rectangle((18, 22, w + 18, h + 22), fill=(0, 0, 0, 130))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(7)))
+    dr.rectangle((10, 10, w + 10, h + 10), fill=(246, 241, 228)); dr.rectangle((10, 10, w + 10, 50), fill=RED)
+    dr.text((28, 12), tag, font=font(26, FONT_B), fill=WHITE)
+    dr.text((10 + 35 - l, 60 - t + 8), txt, font=f, fill=(15, 15, 15))
+    return im
+
+def chip_row(fr, t, times, items, y=1600):
+    ims = [text_img(lbl, 50, fill=BLACK, box=WHITE, fnt=FONT, emo=e, pad=(18, 4), radius=30) for e, lbl in items]
+    total = sum(im.width for im in ims) + 40 * (len(ims) - 1)
+    k = min(1.0, (W - 40) / total)
+    ims = [im.resize((int(im.width * k), int(im.height * k)), Image.LANCZOS) for im in ims] if k < 1 else ims
+    total = sum(im.width for im in ims) + 40 * (len(ims) - 1)
+    x = (W - total) / 2
+    arrow = text_img("›", 70, fill=YEL, fnt=FONT, stroke=6)
+    for i, (ts, im) in enumerate(zip(times, ims)):
+        if t >= ts:
+            paste_center(fr, im, x + im.width / 2, y, ease_pop(t - ts))
+            if i: paste_center(fr, arrow, x - 20, y, ease_pop(t - ts))
+        x += im.width + 40
+
+def build_receipt():
+    RW, RH = 560, 640
+    im = Image.new("RGBA", (RW + 40, RH + 40), (0, 0, 0, 0))
+    sh = Image.new("RGBA", im.size, (0, 0, 0, 0)); ImageDraw.Draw(sh).rectangle((26, 30, RW + 26, RH + 30), fill=(0, 0, 0, 120))
+    im.alpha_composite(sh.filter(ImageFilter.GaussianBlur(10)))
+    d = ImageDraw.Draw(im)
+    pts = [(20, 20), (RW + 20, 20), (RW + 20, RH)] + [(RW + 20 - i * 28 - (14 if j else 0), RH + (14 if j else 0)) for i in range(RW // 28 + 1) for j in (0, 1)] + [(20, RH)]
+    d.polygon(pts, fill=(252, 250, 244))
+    d.text((RW / 2 + 20, 80), "RESTAURANT BILL", font=font(42), fill=(20, 20, 20), anchor="mm")
+    d.line((50, 120, RW - 10, 120), fill=(180, 180, 180), width=3)
+    for i, item in enumerate(["Main course", "Drinks", "Dessert", "Service"]):
+        y = 150 + i * 70
+        d.text((50, y), item, font=font(34, FONT_B), fill=(60, 60, 60))
+        d.text((RW - 10, y), "· · ·", font=font(34, FONT_B), fill=(120, 120, 120), anchor="ra")
+    d.line((50, 440, RW - 10, 440), fill=(20, 20, 20), width=4)
+    d.text((50, 470), "TOTAL", font=font(52), fill=(20, 20, 20))
+    return im
+RECEIPT = build_receipt() if C.get("receipt_on") else None
+RX, RY, RS = C.get("receipt", (W / 2 + 190, 1060, 0.78))
+RECEIPT_UP = text_img("▲ UP", 90, fill=WHITE, box=RED, pad=(26, 6), radius=20)
+NFA = text_img("Opinion, not financial advice", 32, fill=(220, 220, 220), fnt=FONT_B)
+
 CTA1 = text_img(C["cta"][0], 80, fill=WHITE, stroke=9)
 CTA2 = text_img(C["cta"][1], 60, fill=WHITE, box=RED, emo=C["cta"][2], pad=(40, 10), radius=60)
 CTA3 = text_img(C["cta"][3], 44, fill=BLACK, box=WHITE, fnt=FONT_B, emo="1f447", pad=(24, 4), radius=24)
@@ -348,11 +456,17 @@ CL = None
 if "checklist" in C:
     cl = C["checklist"]
     CL = (cl, [T(r) for r, *_ in cl["items"]], T(cl["until"]) if "until" in cl else bC)
-STAMPS = [(T(a), T(b), text_img(txt, 70, fill=BLACK, box=YEL, emo=e, pad=(30, 6), radius=24)) for a, b, txt, e in C.get("stamps", [])]
+STAMPS = [(T(st[0]), T(st[1]), text_img(st[2], 70, fill=BLACK, box=YEL, emo=st[3], pad=(30, 6), radius=24), st[4] if len(st) > 4 else 1580)
+          for st in C.get("stamps", [])]
+HL = [(T(a), T(b), headline(txt, tag), x, y, r) for a, b, txt, tag, x, y, r in C.get("headlines", [])]
+CHIPS = ([T(r) for r, *_ in C["chips"]["items"]], [(e, l) for _, e, l in C["chips"]["items"]], T(C["chips"]["until"])) if "chips" in C else None
 QC = None
 if "question" in C:
     k = C["question"]["seg"]; QC = (OSTART[k] / FPS, OSTART[k + 1] / FPS, C["question"]["text"])
-CNT = (T(C["counter"]["start"]), T(C["counter"]["end"]), C["counter"]["to"], C["counter"]["unit"]) if "counter" in C else None
+CNT = None
+if "counter" in C:
+    c = C["counter"]
+    CNT = (T(c["start"]), T(c["end"]), c.get("frm", 0), c["to"], c.get("fmt", "{} " + c.get("unit", "")))
 BARS = (T(C["bars"]["start"]), T(C["bars"]["end"]), C["bars"]) if "bars" in C else None
 NOT = [(T(a), T(b)) for a, b in C.get("notify", [])]
 MONEY_T = T(C["money"]["at"]) if MONEY else None
@@ -360,7 +474,7 @@ MONEY_T = T(C["money"]["at"]) if MONEY else None
 # ---------- render ----------
 class Frames:
     def __init__(self):
-        self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", SRC, "-vf", f"scale={W}:{H}," + GRADE + ",format=rgb24",
+        self.p = subprocess.Popen(["ffmpeg", "-v", "error", "-i", SRC, "-vf", f"scale={W}:{H}:flags=lanczos," + GRADE + ",format=rgb24",
                                    "-f", "rawvideo", "-"], stdout=subprocess.PIPE)
         self.cache, self.next = {}, 0
     def __getitem__(self, i):
@@ -392,16 +506,17 @@ for n in range(NF):
         fx_, fy_ = face[si]
         sx = sy = 0.0
         if kind == "hook":
-            z, off = 2.15 + 0.6 * (1 - ease_out(t / 0.15)) + 0.05 * t, 120
+            z, off = C.get("hook_z", 2.15) + 0.6 * (1 - ease_out(t / 0.15)) + 0.05 * t, 120 if "hook_z" not in C else 60
             if t < 0.35: sx, sy = shake(t, 0, 20, 0.35)
         elif kind == "q":
             z, off = 1.3 + 0.15 * u / 3, 40           # face mid-frame, under the question card
         else:
             na_k = sum(1 for kk in SEGS[:k] if kk[0] == "a")
-            z, off = FRAMINGS[na_k % len(FRAMINGS)]
+            fr_list = C.get("framings", FRAMINGS)
+            z, off = fr_list[na_k % len(fr_list)]
             z *= (1 + 0.08 * (1 - ease_out(u / 0.12))) * (1 + 0.015 * u)
         bottom_busy = (CL and t >= CL[1][0] - 0.05 and t < CL[2]) or (CHART and CHART[0] <= t < CHART[1]) or (BARS and BARS[0] <= t < BARS[1])
-        if bottom_busy and kind == "a": z, off = 1.5, 200      # face high, the lower half holds the card
+        if bottom_busy and kind == "a": z, off = C.get("busy", (1.5, 200))      # face high, the lower half holds the card
         for p in P_OUT:
             if p <= t < p + 0.7:
                 z *= 1 + 0.22 * ease_out((t - p) / 0.07) * (1 - clamp01((t - p - 0.5) / 0.2)); sx, sy = shake(t, p, 14)
@@ -411,10 +526,14 @@ for n in range(NF):
 
         if t < bH:
             title(fr, t)
-            if MONEY and t >= MONEY_T: paste_center(fr, MONEY, W / 2, 1180, 2.2 - 1.2 * ease_out((t - MONEY_T) / 0.12), -4)
+            if MONEY and t >= MONEY_T: paste_center(fr, MONEY, W / 2, C.get("money_y", 1180), 2.2 - 1.2 * ease_out((t - MONEY_T) / 0.12), -4)
+            if RECEIPT is not None:
+                e = ease_out((t - 0.1) / 0.35)
+                paste_center(fr, RECEIPT, RX, RY + 500 * (1 - e), RS, -6)
+                if t >= 0.9: paste_center(fr, RECEIPT_UP, RX + 60 * RS / 0.78, RY + 250 * RS / 0.78, (2.0 - ease_out((t - 0.9) / 0.1)) * RS / 0.78, 8)
             for a, b in NOT[:1]:
                 if a <= t < b: paste_center(fr, NOTIF, W / 2, 1250 + 300 * (1 - ease_out((t - a) / 0.3)))
-            two_line_card(fr, C["quote"][0], C["quote"][1], 1580, ease_pop(t - 0.1))
+            two_line_card(fr, C["quote"][0], C["quote"][1], C.get("quote_y", 1580), ease_pop(t - 0.1))
             flash(fr, WHITE, 0.85 * (1 - t / 0.12))
         else:
             if QC and QC[0] <= t < QC[1]: qcard(fr, t, QC[0], QC[1], QC[2])
@@ -424,13 +543,16 @@ for n in range(NF):
             if PH and PH[0] <= t < PH[1] + 0.25:
                 e = ease_out((t - PH[0]) / 0.3) * (1 - ease_out((t - PH[1]) / 0.25))
                 paste_center(fr, PHONE, 820 + 500 * (1 - e), 900, 1.0, -8 + 8 * (1 - e))
-            for a, b, im in STAMPS:
-                if a <= t < b: paste_center(fr, im, W / 2, 1580, 2.0 - ease_out((t - a) / 0.1), -3)
+            for a, b, im, sy_ in STAMPS:
+                if a <= t < b: paste_center(fr, im, W / 2, sy_, 2.0 - ease_out((t - a) / 0.1), -3)
+            for a, b, im, x, y, r in HL:
+                if a <= t < b: paste_center(fr, im, x, y, 2.0 - ease_out((t - a) / 0.1), r)
+            if CHIPS and CHIPS[0][0] <= t < CHIPS[2]: chip_row(fr, t, CHIPS[0], CHIPS[1])
             for a, b in NOT[1:]:
                 if a <= t < b: paste_center(fr, NOTIF, W / 2, 300 - 260 * (1 - ease_out((t - a) / 0.3)), 1.0)
-            if CNT and CNT[0] <= t:
-                v = int(round(CNT[2] * ease_out((t - CNT[0]) / max(0.2, CNT[1] - CNT[0]))))
-                paste_center(fr, text_img(f"{v} {CNT[3]}", 170, fill=BLACK, box=YEL, emo="1f4b8", pad=(40, 10), radius=40), W / 2, 1300,
+            if CNT and CNT[0] <= t < CNT[1] + 1.5:
+                v = int(round(CNT[2] + (CNT[3] - CNT[2]) * ease_out((t - CNT[0]) / max(0.2, CNT[1] - CNT[0]))))
+                paste_center(fr, text_img(CNT[4].format(v).strip(), 170, fill=BLACK, box=YEL, emo="1f4b8", pad=(40, 10), radius=40), W / 2, C.get("counter_y", 1300),
                              ease_pop(t - CNT[0]), -3)
             if any(p <= t < p + 0.08 for p in P_OUT): flash(fr, WHITE, 0.3)
             if u < 0.08 and OSTART[k] / FPS == bH: flash(fr, WHITE, 0.6)
@@ -444,6 +566,7 @@ for n in range(NF):
             paste_center(fr, CTA2, W / 2, 900, ease_pop(u - 0.4) * (1 + 0.04 * math.sin((u - 0.4) * 12)))
             paste_center(fr, emoji("1f446", 110), W / 2 + 340, 1040 + 14 * math.sin(t * 10), ease_pop(u - 0.55))
         if u >= 0.9: paste_center(fr, CTA3, W / 2, 1160, ease_pop(u - 0.9))
+        if C.get("nfa"): paste_center(fr, NFA, W / 2, 1800, 1.0, 0, clamp01((u - 0.3) / 0.3))
         flash(fr, WHITE, 0.8 * (1 - u / 0.15))
     if t >= bH:
         dr = ImageDraw.Draw(fr)
@@ -521,7 +644,10 @@ if BARS: put(whoosh(0.3), BARS[0] - 0.1, 0.5); put(pop(), BARS[0] + 0.2, 0.5); p
 if CL:
     for ts in CL[1]: put(pop(), ts, 0.6); put(ding(1568, 0.35), ts + 0.02, 0.35)
 if PH: put(whoosh(0.3), PH[0] - 0.05, 0.6); put(ding(1568, 0.4), PH[0] + 0.3, 0.4)
-for a, _, _ in STAMPS: put(slap(), a, 0.7)
+for a, *_ in STAMPS: put(slap(), a, 0.7)
+for a, *_ in HL: put(slap(), a, 0.8)
+if CHIPS: [put(pop(), a, 0.5) for a in CHIPS[0]]
+if RECEIPT is not None: put(whoosh(0.35), 0.1, 0.6); put(boom(0.6), 0.9, 0.7)
 if CNT: [put(coin(), CNT[0] + i * 0.12, 0.35) for i in range(int((CNT[1] - CNT[0]) / 0.12) + 1)]
 for a, _ in NOT[1:]: put(ding(1568, 0.5), a + 0.1, 0.5)
 for p in P_OUT: put(boom(0.6), p, 0.6); put(whoosh(0.2), p - 0.1, 0.4)
