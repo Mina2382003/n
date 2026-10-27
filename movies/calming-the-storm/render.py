@@ -1,10 +1,11 @@
-"""Calming the Storm - turns the 9 still scenes into one continuous animated short.
+"""بابا يسوع وتهدئة العاصفة - turns the 9 stills into one continuous, spoken animated short.
 
-No titles, zooms-for-show or slide transitions: every shot is the still brought to life
-(depth-based 3D camera, moving water, rocking boat, breathing characters, rain, lightning)
-and each shot dissolves into the next while both are still moving.
+Shots come from timeline.json (voices.py): each still is brought to life (depth-based 3D camera that drifts
+toward whoever is speaking, moving water, rocking boat, breathing characters, rain, lightning), characters
+blink and gesture (rigs.py), mouths follow their own voice, and shots dissolve into each other.
 
-usage: python3 render.py [preview]   ->  calming_the_storm.mp4 (or preview.mp4 at half res)
+usage: python3 voices.py <piper voices dir>; python3 soundtrack.py; python3 render.py [preview]
+       ->  calming_the_storm.mp4 (or preview.mp4 at half res)
 """
 import os, sys, subprocess, math
 import numpy as np
@@ -43,9 +44,83 @@ SCENES = [
     dict(d=5.6, z0=1.22, z1=1.10, c0=(.50, .46), c1=(.50, .50), par=(16, 8), dz=-.06,  # calm at sunset
          sea="calm", horizon=.40, dmax=.42, boat=.5, rain=(0, 0), flashes=[]),
 ]
-STARTS = np.concatenate([[0], np.cumsum([s["d"] - XF for s in SCENES])[:-1]])
-TOTAL = STARTS[-1] + SCENES[-1]["d"]
+# the film's shots come from voices.py (one per stretch of dialogue, each on one of the 9 stills)
+import json
+_TL = json.load(open(f"{HERE}/timeline.json"))
+SHOTS = _TL["shots"]
+TOTAL = _TL["total"]
 NFRAMES = int(round(TOTAL * FPS))
+STARTS = [sh["start"] for sh in SHOTS]
+
+
+def _face_pos(image, seed):
+    for r in rigs.RIGS.get(image, []):
+        if r["kind"] == "face" and r["seed"] == int(seed):
+            ex = np.mean([e[0] for e in r["eyes"]]) / 1280
+            ey = np.mean([e[1] for e in r["eyes"]]) / 720
+            return ex, ey + .03
+    return .5, .5
+
+
+def _prepare_shots():
+    for k, sh in enumerate(SHOTS):
+        look = SCENES[sh["image"]]
+        sh["talk_np"] = {int(f): [(t0, np.array(env, np.float32)) for t0, env in v] for f, v in sh["talk"].items()}
+        wide = (look["c0"][0], look["c0"][1], look["z0"])
+        keys = []
+        for ln in sh["keys"]:
+            if ln["faces"]:
+                ps = [_face_pos(sh["image"], f) for f in ln["faces"]]
+                cx, cy = float(np.mean([p[0] for p in ps])), float(np.mean([p[1] for p in ps]))
+                z = look["z0"] + (.24 if len(ps) == 1 else .08)
+                cx, cy = .55 * cx + .45 * .5, .6 * cy + .4 * .5  # lean toward the speaker, keep the scene
+                keys.append((ln["t"], cx, cy, z))
+            else:
+                keys.append((ln["t"], *wide))
+        sh["camkeys"] = keys
+        sh["wide"] = wide
+        sh["look"] = look
+        # lightning through the storm shots (until Jesus has spoken in the rebuke)
+        fl = []
+        if look["sea"] == "storm":
+            rng = np.random.default_rng(k)
+            end = sh["d"] - .6
+            if sh.get("limb_t0") is not None:
+                end = sh["lines"][-1][0] + 1.2
+            t = .5 + rng.uniform(0, 1.5)
+            while t < end:
+                fl.append(t)
+                t += rng.uniform(3.2, 5.5)
+        sh["flashes"] = fl
+
+
+def camera(sh, t):
+    keys = sh["camkeys"]
+    state = sh["wide"]
+    for (tk, cx, cy, z) in keys:
+        a0 = tk - .5
+        if t < a0:
+            break
+        u = float(smoothstep(0, 1, (t - a0) / 1.6))
+        state = tuple(p + (q - p) * u for p, q in zip(state, (cx, cy, z)))
+    cx, cy, z = state
+    z *= 1 + .03 * t / sh["d"]  # always a slow push
+    cx += .008 * math.sin(t * .23 + sh["start"])
+    cy += .005 * math.sin(t * .19 + 1 + sh["start"])
+    m = .5 / z + .012
+    return min(max(cx, m), 1 - m), min(max(cy, m), 1 - m), z
+
+
+def rain_level(sh, t):
+    im = sh["image"]
+    u = t / sh["d"]
+    if im == 4:
+        return .15 * u
+    if im == 5:
+        return .6 + .4 * min(1, u * 3)
+    if im in (6, 7):
+        return 1.0
+    return 0.0
 
 yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
 U, V = xx / W, yy / H
@@ -55,6 +130,9 @@ K = W / 1280.0  # pixel scale vs 1280 design
 def smoothstep(e0, e1, x):
     t = np.clip((x - e0) / (e1 - e0), 0, 1)
     return t * t * (3 - 2 * t)
+
+
+_prepare_shots()
 
 
 def load_scene(i):
@@ -94,7 +172,7 @@ def ease(u):
     return .8 * u + .2 * (u * u * (3 - 2 * u))
 
 
-def flash_level(sc, t):
+def flash_level(sc, t):  # sc: a shot (has "flashes")
     e = 0.0
     for ft in sc["flashes"]:
         dt = t - ft
@@ -131,12 +209,11 @@ def rain_layers():
     return layers
 
 
-def render_scene(i, S, t):
-    sc = SCENES[i]
-    u = ease(np.clip(t / sc["d"], 0, 1))
-    z = sc["z0"] + (sc["z1"] - sc["z0"]) * u
-    cx = sc["c0"][0] + (sc["c1"][0] - sc["c0"][0]) * u
-    cy = sc["c0"][1] + (sc["c1"][1] - sc["c0"][1]) * u
+def render_scene(sh, S, t):
+    i = sh["image"]
+    sc = sh["look"]
+    u = ease(np.clip(t / sh["d"], 0, 1))
+    cx, cy, z = camera(sh, t)
     D = S["D"]
     dd = D - .5
     zeff = z * (1 + sc["dz"] * u * dd)
@@ -186,7 +263,7 @@ def render_scene(i, S, t):
         sx += M * A * persp * wx
         sy += M * A * persp * wy
 
-    sx, sy, shade, ovr = rigs.apply(i, sx, sy, t, sc["d"], K, S["img"])
+    sx, sy, shade, ovr = rigs.apply(i, sx, sy, t, sh["d"], K, S["img"], talk=sh["talk_np"], limb_t0=sh.get("limb_t0") or 0.0)
     out = sample(S["img"], sx, sy)
     if shade is not None:
         a = ovr[0][..., None]
@@ -201,8 +278,7 @@ def render_scene(i, S, t):
         out += (gl * tw * (.45 if not storm else .25))[..., None]
 
     # rain
-    r0, r1 = sc["rain"]
-    rain = r0 + (r1 - r0) * u
+    rain = rain_level(sh, t)
     if rain > .01:
         for k, lay in enumerate(RAIN):
             spd = (900 if k else 600) * K
@@ -213,7 +289,7 @@ def render_scene(i, S, t):
         out *= 1 - .10 * rain  # darker under the clouds
 
     # lightning
-    fl = flash_level(sc, t)
+    fl = flash_level(sh, t)
     if fl > 0:
         out = out * (1 + .9 * fl) + fl * .18 * np.array([.75, .85, 1.0])
     return out
@@ -231,27 +307,21 @@ VIG = None
 
 def frame(n, cache):
     T = n / FPS
-    acc, wsum = None, 0
-    active = [i for i in range(len(SCENES)) if STARTS[i] - 1e-6 <= T < STARTS[i] + SCENES[i]["d"]]
-    layers = []
-    for i in active:
-        t = T - STARTS[i]
-        a = 1.0
-        if i > 0 and t < XF:
-            a = smoothstep(0, 1, t / XF)
-        layers.append((i, t, a))
     img = None
-    for i, t, a in layers:
+    for k, sh in enumerate(SHOTS):
+        t = T - sh["start"]
+        if not (-1e-6 <= t < sh["d"]):
+            continue
+        a = float(smoothstep(0, 1, t / sh["xf"])) if k > 0 and t < sh["xf"] else 1.0
+        i = sh["image"]
         if i not in cache:
             cache[i] = load_scene(i)
-        f = render_scene(i, cache[i], t)
-        img = f if img is None else img * (1 - a) + f * a
-
-    # the storm breaking: warm light washes in over the last dissolve
-    s9 = STARTS[8]
-    if s9 <= T < s9 + XF:
-        k = math.sin(math.pi * (T - s9) / XF)
-        img = img + .22 * k * np.array([1.0, .82, .55])
+        f = render_scene(sh, cache[i], t)
+        img = f if img is None or a >= 1 else img * (1 - a) + f * a
+        if sh.get("calm") and t < sh["xf"]:  # the storm breaking: warm light washes in
+            img = img + .22 * math.sin(math.pi * t / sh["xf"]) * np.array([1.0, .82, .55])
+        if sh.get("card"):
+            img = end_card(img, t)
 
     img = bloom(img, .35)
     # grade: gentle contrast, warm highlights, vignette, fine grain
@@ -265,8 +335,47 @@ def frame(n, cache):
     return (np.clip(img, 0, 1) * 255).astype(np.uint8)
 
 
+CARD = None
+
+
+def make_card():
+    """the closing words, in Arabic, with a heart"""
+    from PIL import ImageDraw, ImageFont
+    im = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    f1 = ImageFont.truetype(f"{HERE}/fonts/Lalezar-Regular.ttf", int(66 * K))
+    f2 = ImageFont.truetype(f"{HERE}/fonts/Cairo.ttf", int(30 * K))
+    t1, t2 = "لما أخاف، هثق في بابا يسوع", "مرقس ٤: \u2066٣٥–٤١\u2069"
+    rtl = dict(direction="rtl", language="ar")  # shaped by raqm
+    hs = int(52 * K)  # heart size
+    b1 = d.textbbox((0, 0), t1, font=f1, **rtl)
+    w1 = b1[2] - b1[0] + hs + int(18 * K)
+    x0, y0 = (W - w1) // 2, int(H * .40)
+    # soft shadow then text; the heart sits at the end of the line (its left, in Arabic)
+    for dx, dy, col in ((3, 4, (0, 0, 0, 150)), (0, 0, (255, 248, 235, 255))):
+        d.text((x0 + hs + int(18 * K) + dx * K - b1[0], y0 + dy * K - b1[1]), t1, font=f1, fill=col, **rtl)
+    hx, hy = x0, y0 + (b1[3] - b1[1]) // 2 - hs // 2
+    r = hs / 4
+    d.ellipse([hx, hy, hx + 2 * r, hy + 2 * r], fill=(226, 30, 50, 255))
+    d.ellipse([hx + 2 * r, hy, hx + 4 * r, hy + 2 * r], fill=(226, 30, 50, 255))
+    d.polygon([(hx + .1 * r, hy + 1.4 * r), (hx + 3.9 * r, hy + 1.4 * r), (hx + 2 * r, hy + 4 * r)], fill=(226, 30, 50, 255))
+    b2 = d.textbbox((0, 0), t2, font=f2, **rtl)
+    d.text(((W - (b2[2] - b2[0])) // 2 - b2[0], y0 + int(105 * K) - b2[1]), t2, font=f2, fill=(255, 236, 200, 235), **rtl)
+    a = np.asarray(im).astype(np.float32) / 255
+    return a[..., :3], a[..., 3:]
+
+
+def end_card(img, t):
+    k = float(smoothstep(.6, 2.0, t))
+    band = np.exp(-((V - .47) / .13) ** 2)[..., None]  # soft dark band behind the words
+    img = img * (1 - k * (.2 + .45 * band))
+    col, al = CARD
+    return img * (1 - al * k) + col * al * k
+
+
 def init():
-    global RAIN, VIG, GLIT
+    global RAIN, VIG, GLIT, CARD
+    CARD = make_card()
     RAIN = rain_layers()
     GLIT = glitter_layers()
     r = np.sqrt(((U - .5) * 1.1) ** 2 + (V - .5) ** 2)
