@@ -10,6 +10,7 @@ import os, sys, subprocess, math
 import numpy as np
 from PIL import Image, ImageFilter
 from multiprocessing import Pool
+import rigs
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 PREVIEW = len(sys.argv) > 1 and sys.argv[1] == "preview"
@@ -31,7 +32,7 @@ SCENES = [
          sea="calm", horizon=.35, dmax=.40, boat=0, rain=(0, 0), flashes=[]),
     dict(d=3.8, z0=1.18, z1=1.12, c0=(.52, .52), c1=(.48, .50), par=(30, 0), dz=-.04,  # setting sail
          sea="calm", horizon=.36, dmax=.50, boat=.7, rain=(0, 0), flashes=[]),
-    dict(d=3.8, z0=1.11, z1=1.20, c0=(.50, .50), c1=(.38, .53), par=(-20, -4), dz=.07,  # Jesus asleep, calm sea
+    dict(d=3.8, z0=1.11, z1=1.20, c0=(.50, .50), c1=(.40, .53), par=(-20, -4), dz=.07,  # Jesus asleep, calm sea
          sea="calm", horizon=.10, dmax=.32, boat=.6, rain=(0, .15), flashes=[]),
     dict(d=7.0, z0=1.16, z1=1.24, c0=(.50, .50), c1=(.46, .50), par=(-24, -8), dz=.06,  # the storm hits
          sea="storm", horizon=0, dmax=.55, boat=2.4, rain=(.6, 1), flashes=[.15, 2.4, 4.6, 6.2]),
@@ -75,6 +76,7 @@ def load_scene(i):
     near = smoothstep(.42, .70, D) * (1 - M)  # people / boat
     boatw = smoothstep(.28, .55, D)
     glint = smoothstep(.72, .95, mx) * M  # bright crests that sparkle
+    rigs.prepare(i, img, K)
     return dict(img=img, D=D, M=M, near=near, boatw=boatw, glint=glint)
 
 
@@ -184,7 +186,11 @@ def render_scene(i, S, t):
         sx += M * A * persp * wx
         sy += M * A * persp * wy
 
+    sx, sy, shade, ovr = rigs.apply(i, sx, sy, t, sc["d"], K, S["img"])
     out = sample(S["img"], sx, sy)
+    if shade is not None:
+        a = ovr[0][..., None]
+        out = (out * (1 - a) + ovr[1]) * shade[..., None]
     gl = sample(S["glint"][..., None], sx, sy)[..., 0]
 
     # sparkle on crests
