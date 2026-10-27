@@ -12,93 +12,105 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SR = 44100
-XF = 1.0  # picture dissolve (s)
+XF = .8  # picture dissolve (s)
 
-# ---- voices: piper model, pitch factor, formants ("shifted" = smaller vocal tract, i.e. a child), slowness, gain
+# ---- voices: piper model, pitch factor, formants ("shifted" = smaller vocal tract, i.e. a child), speed, gain
+# (length_scale 1.0 = the voice's natural pace)
 VOICES = {
-    "narrator": dict(model="ar_JO-SA_miro_V2-high", pitch=1.0, formant="preserved", slow=1.30, gain=1.0),
-    "jesus":    dict(model="ar_JO-kareem-medium", pitch=.94, formant="preserved", slow=1.35, gain=1.0, warm=True),
-    "boy":      dict(model="ar_JO-SA_dii-high", pitch=1.18, formant="shifted", slow=1.30, gain=.95),
-    "kid2":     dict(model="ar_JO-SA_dii-high", pitch=1.28, formant="shifted", slow=1.30, gain=.9),
-    "girl":     dict(model="ar_JO-SA_dii-high", pitch=1.35, formant="shifted", slow=1.30, gain=.9),
-    "d1":       dict(model="ar_JO-kareem-medium", pitch=.86, formant="preserved", slow=1.20, gain=1.0),
-    "d2":       dict(model="ar_JO-kareem-medium", pitch=1.0, formant="preserved", slow=1.20, gain=1.0),
-    "d3":       dict(model="ar_JO-kareem-medium", pitch=1.12, formant="preserved", slow=1.20, gain=1.0),
-    "man":      dict(model="ar_JO-SA_miro_V2-high", pitch=.95, formant="preserved", slow=1.25, gain=.8),
-    "woman":    dict(model="ar_JO-SA_dii-high", pitch=1.04, formant="preserved", slow=1.25, gain=.8),
+    "narrator": dict(model="ar_JO-kareem-medium", pitch=.84, formant="preserved", slow=1.0, gain=1.0, warm=True),
+    "jesus":    dict(model="ar_JO-kareem-medium", pitch=.95, formant="preserved", slow=1.05, gain=1.0, warm=True),
+    "boy":      dict(model="ar_JO-kareem-medium", pitch=1.5, formant="shifted", slow=.95, gain=.95),
+    "kid2":     dict(model="ar_JO-kareem-medium", pitch=1.6, formant="shifted", slow=.95, gain=.9),
+    "girl":     dict(model="ar_JO-kareem-medium", pitch=1.7, formant="shifted", slow=.95, gain=.9),
+    "d1":       dict(model="ar_JO-kareem-medium", pitch=.9, formant="preserved", slow=.97, gain=1.0),
+    "d2":       dict(model="ar_JO-kareem-medium", pitch=1.02, formant="preserved", slow=.97, gain=1.0),
+    "d3":       dict(model="ar_JO-kareem-medium", pitch=1.12, formant="preserved", slow=.97, gain=1.0),
+    "man":      dict(model="ar_JO-kareem-medium", pitch=.86, formant="preserved", slow=1.0, gain=.8),
+    "woman":    dict(model="ar_JO-kareem-medium", pitch=1.35, formant="shifted", slow=1.0, gain=.8),
 }
 
-# ---- the film: shots in story order. Each line: (voice(s), face seed(s) whose mouth moves, text)
-# face seeds refer to rigs.RIGS of that shot's still (None = narrator, off screen)
+# ---- the film: shots in story order. Each line: (voice(s), face seed(s) whose mouth moves, text, pronunciation)
+# The only voices reachable here are trained on Levantine/standard Arabic, so every line is given as Egyptian
+# (Cairene) pronunciation in IPA and spoken by the clearest one (kareem), reshaped per character:
+# ج = ɡ, ق = ʔ, ث = s/t, ذ = z/d, colloquial vowels and stress. face seeds refer to rigs.RIGS (None = off screen).
 KIDS = (("boy", 11), ("kid2", 12), ("girl", 13))
 SHOTS = [
     dict(image=0, lines=[  # المشهد الأول: مقدمة القصة
-        ("narrator", None, "البحر جميل وهادي، وفيه سمك ومراكب."),
-        ("boy", 11, "مين يا ولاد بيحب يروح البحر؟"),
-        ("kid2", 12, "أنااا!"),
-        ("boy", 11, "والبحر فيه إيه؟"),
-        (KIDS, None, "سمك!"),
-        ("boy", 11, "وفيه حاجة بتمشي في البحر، يا ترى إيه؟"),
-        (KIDS, None, "مراكب!"),
-        ("boy", 11, "طب هحكيلكم قصة عن مركب في البحر!"),
+        ("narrator", None, "البحر جميل وهادي، وفيه سمك ومراكب.",
+         "ʔilbˈaħr ɡamˈiːl wihˈaːdi, wifˈiːh sˈamak wimarˈaːkib."),
+        ("boy", 11, "مين يا ولاد بيحب يروح البحر؟", "mˈiːn ja wlˈaːd biħˈibb jirˈuːħ ilbˈaħr?"),
+        ("kid2", 12, "أنااا!", "ʔanˈaːːː!"),
+        ("boy", 11, "والبحر فيه إيه؟", "wilbˈaħr fˈiːh ʔˈiːh?"),
+        (KIDS, None, "سمك!", "samˈaːk!"),
+        ("boy", 11, "وفيه حاجة بتمشي في البحر، يا ترى إيه؟", "wifˈiːh ħˈaːɡa bitˈimʃi filbˈaħr, ja tˈara ʔˈiːh?"),
+        (KIDS, None, "مراكب!", "maraːkˈiːb!"),
+        ("boy", 11, "طب هحكيلكم قصة عن مركب في البحر!", "tˤˈab ħaħkilˈkum ʔˈisˤsˤa ʕan mˈarkib filbˈaħr!"),
     ]),
     dict(image=1, lines=[  # المشهد الثاني: بابا يسوع بيعلم الشعب
-        ("narrator", None, "مرة زمان، أيام بابا يسوع، كان فيه ناس كتير قاعدين يسمعوا بابا يسوع طول النهار."),
-        ("jesus", 21, "ربنا بيحبكم كلكم، وعايزكم تحبوا بعض، وتساعدوا بعض."),
-        ((("man", 25), ("woman", 26), ("girl", 22), ("kid2", 24), ("d3", 23)), None, "إحنا بنحب نسمع كلامك يا يسوع!"),
-        ("narrator", None, "وبعد يوم طويل، بابا يسوع تعب."),
+        ("narrator", None, "مرة زمان، أيام بابا يسوع، كان فيه ناس كتير قاعدين يسمعوا بابا يسوع طول النهار.",
+         "mˈarra zamˈaːn, ʔajjˈaːm bˈaːba jasˈuːʕ, kˈaːn fˈiːh nˈaːs kitˈiːr ʔaʕdˈiːn jisˈmaʕu bˈaːba jasˈuːʕ tˤuːl innahˈaːr."),
+        ("jesus", 21, "ربنا بيحبكم كلكم، وعايزكم تحبوا بعض، وتساعدوا بعض.",
+         "rabbˈina biħibbˈukum kullˈukum, wiʕajzˈinkum tiħˈibbu bˈaʕd, witsaʕdu bˈaʕd."),
+        ((("man", 25), ("woman", 26), ("girl", 22), ("kid2", 24), ("d3", 23)), None, "إحنا بنحب نسمع كلامك يا يسوع!",
+         "ʔˈiħna binħˈibb nˈismaʕ kalˈaːmak ja jasˈuːʕ!"),
+        ("narrator", None, "وبعد يوم طويل، بابا يسوع تعب.", "wibˈaʕd jˈoːm tˤawˈiːl, bˈaːba jasˈuːʕ tˈiʕib."),
     ]),
     dict(image=2, lines=[
-        ("jesus", 31, "يلا بينا نعدّي الناحية التانية."),
+        ("jesus", 31, "يلا بينا نعدّي الناحية التانية.", "jˈalla bˈiːna nʕˈaddi innˈaħja ittˈanja."),
     ]),
     dict(image=3, lines=[  # المشهد الثالث: المركب والبحر الهادي
-        ("narrator", None, "بابا يسوع والتلاميذ ركبوا المركب، والبحر هادي وجميل."),
-        ("d1", 44, "ياااه! البحر جميل أوي النهارده!"),
-        ("d2", 42, "والموج هادي خالص!"),
+        ("narrator", None, "بابا يسوع والتلاميذ ركبوا المركب، والبحر هادي وجميل.",
+         "bˈaːba jasˈuːʕ wittalamˈiːz rˈikbu ilmˈarkib, wilbˈaħr hˈaːdi wiɡamˈiːl."),
+        ("d1", 44, "ياااه! البحر جميل أوي النهارده!", "jˈaːːh! ʔilbˈaħr ɡamˈiːl ʔˈawi innahˈarda!"),
+        ("d2", 42, "والموج هادي خالص!", "wilmˈoːɡ hˈaːdi xˈaːlisˤ!"),
     ]),
     dict(image=4, lines=[
-        ("narrator", None, "وبابا يسوع كان تعبان، فراح نام على مخدة صغيرة في المركب."),
+        ("narrator", None, "وبابا يسوع كان تعبان، فراح نام على مخدة صغيرة في المركب.",
+         "wibˈaːba jasˈuːʕ kˈaːn taʕbˈaːn, faraːħ nˈaːm ʕˈala maxˈadda sˤuɣajjˈara filmˈarkib."),
     ]),
     dict(image=5, lines=[  # المشهد الرابع: العاصفة
-        ("narrator", None, "فجأة السما تتغير، والهوا يزيد، والمطر ينزل، والموج يعلى."),
-        ("d1", 61, "إيه ده؟! الهوا بقى شديد!"),
-        ("d2", 63, "والموج بيعلى أوي!"),
-        ("d3", 62, "الحقوا! الميه بدأت تدخل المركب!"),
-        ("narrator", None, "التلاميذ خافوا جدا، وكانوا ماسكين في المركب جامد، ومش عارفين يوصلوا لبابا يسوع علشان يصحّوه."),
+        ("narrator", None, "فجأة السما تتغير، والهوا يزيد، والمطر ينزل، والموج يعلى.",
+         "fˈaɡʔa issˈama titɣˈajjar, wilhˈawa jizˈiːd, wilmˈatˤar jinˈzil, wilmˈoːɡ jˈiʕla."),
+        ("d1", 61, "إيه ده؟! الهوا بقى شديد!", "ʔˈiːh dˈa?! ʔilhˈawa bˈaʔa ʃadˈiːd!"),
+        ("d2", 63, "والموج بيعلى أوي!", "wilmˈoːɡ bijˈiʕla ʔˈawi!"),
+        ("d3", 62, "الحقوا! الميه بدأت تدخل المركب!", "ʔilħˈaʔu! ʔilmˈajja badˈaʔit tˈudxul ilmˈarkib!"),
+        ("narrator", None, "التلاميذ خافوا جدا، وكانوا ماسكين في المركب جامد، ومش عارفين يوصلوا لبابا يسوع علشان يصحّوه.",
+         "ʔittalamˈiːz xˈaːfu ɡˈiddan, wikˈaːnu maskˈiːn filmˈarkib ɡˈaːmid, wimˈiʃ ʕarfˈiːn jiwsˈalu libˈaːba jasˈuːʕ ʕalaʃˈaːn jisˤaħˈħuːh."),
     ]),
     dict(image=6, lines=[  # المشهد الخامس: التلاميذ بيصحّوا بابا يسوع
-        ("narrator", None, "التلاميذ بيحاولوا يتحركوا وسط الموج، لحد ما يوصلوا لبابا يسوع وهو نايم."),
-        ("d1", 71, "امسكوا كويس! لازم نصحّي بابا يسوع!"),
-        ("d2", 72, "يا بابا يسوع! اصحى!"),
-        ((("d1", 71), ("d2", 72), ("d3", 74), ("man", 73)), None, "يا بابا يسوع! الحقنا! هنغرق!"),
+        ("d1", 71, "امسكوا كويس! لازم نصحّي بابا يسوع!", "ʔimsˈiku kwˈajjis! lˈaːzim nisˤˈaħħi bˈaːba jasˈuːʕ!"),
+        ("d2", 72, "يا بابا يسوع! اصحى!", "ja bˈaːba jasˈuːʕ! ʔˈisˤħa!"),
+        ((("d1", 71), ("d2", 72), ("d3", 74), ("man", 73)), None, "يا بابا يسوع! الحقنا! هنغرق!",
+         "ja bˈaːba jasˈuːʕ! ʔilħaʔˈna! haniɣrˈaʔ!"),
     ]),
     dict(image=7, lines=[  # المشهد السادس: بابا يسوع بيهدي العاصفة
-        ("narrator", None, "بابا يسوع صحي، وقام ووقف في المركب، ورفع إيده."),
-        ("jesus", 81, "إسْكُت، إبْكَم."),  # "اسكت! ابكم!" spelled the Egyptian way so the voice says iskut, ibkam
-    ], arm_line=1),
-    dict(image=8, xf=2.2, calm=True, lines=[  # the storm dissolves into the calm sunset on this line
-        ("narrator", None, "فجأة الرياح تسكت، والموج يهدا، والمطر يقف، والبحر يرجع هادي وجميل."),
-        ("d1", 92, "ياااه! البحر هدي!"),
-        ("d2", 94, "والموج وقف خالص!"),
-        ("d3", 97, "إزاي الرياح والبحر بيسمعوا كلام بابا يسوع؟!"),
-        ("jesus", 91, "إنتوا خايفين ليه؟ إزاي ما عندكوش إيمان؟"),  # المشهد السابع
-        ("narrator", None, "التلاميذ عرفوا إن بابا يسوع له سلطان، حتى على الرياح والبحر."),
-        ("narrator", None, "والمركب ماشية بهدوء في البحر، وبابا يسوع وسط التلاميذ."),  # المشهد الثامن
+        ("jesus", 81, "اسكت! ابكم!", "ʔuskˈut! ʔibkˈam!"),
+    ], arm_line=0),
+    dict(image=8, xf=2.0, calm=True, lines=[  # the storm dissolves into the calm sunset on this line
+        ("narrator", None, "فجأة الرياح تسكت، والموج يهدا، والمطر يقف، والبحر يرجع هادي وجميل.",
+         "fˈaɡʔa irrijˈaːħ tiskˈut, wilmˈoːɡ jˈihda, wilmˈatˤar jˈuʔaf, wilbˈaħr jˈirɡaʕ hˈaːdi wiɡamˈiːl."),
+        ("d1", 92, "ياااه! البحر هدي!", "jˈaːːh! ʔilbˈaħr hˈidi!"),
+        ("d2", 94, "والموج وقف خالص!", "wilmˈoːɡ wˈiʔif xˈaːlisˤ!"),
+        ("d3", 97, "إزاي الرياح والبحر بيسمعوا كلام بابا يسوع؟!", "ʔizzˈaːj irrijˈaːħ wilbˈaħr bjisˈmaʕu kalˈaːm bˈaːba jasˈuːʕ?!"),
+        ("jesus", 91, "إنتوا خايفين ليه؟ إزاي ما عندكوش إيمان؟", "ʔˈintu xajfˈiːn lˈiːh? ʔizzˈaːj ma ʕandˈukuːʃ ʔiːmˈaːn?"),  # المشهد السابع
+        ("narrator", None, "التلاميذ عرفوا إن بابا يسوع له سلطان، حتى على الرياح والبحر.",
+         "ʔittalamˈiːz ʕˈirfu ʔinn bˈaːba jasˈuːʕ lˈiːh sultˤˈaːn, ħˈatta ʕˈala rrijˈaːħ wilbˈaħr."),
     ]),
-    dict(image=0, lines=[
-        ("boy", 11, "وأنا كمان، لما أخاف، هصلّي لبابا يسوع، وأثق إنه سامعني ومعايا."),
-        (KIDS, None, "إحنا بنحبك يا بابا يسوع!"),
+    dict(image=0, lines=[  # المشهد الثامن: نهاية القصة
+        ("boy", 11, "وأنا كمان، لما أخاف، هصلّي لبابا يسوع، وأثق إنه سامعني ومعايا.",
+         "wiʔˈana kamˈaːn, lˈamma ʔaxˈaːf, hasˤˈalli libˈaːba jasˈuːʕ, wˈasiʔ ʔˈinnu samʕˈiːni wimʕˈaːja."),
+        (KIDS, None, "إحنا بنحبك يا بابا يسوع!", "ʔˈiħna binħˈibbak ja bˈaːba jasˈuːʕ!"),
     ]),
     dict(image=8, card=True, lines=[
-        ("narrator", None, "لما أخاف، هثق في بابا يسوع."),
+        ("narrator", None, "لما أخاف، هثق في بابا يسوع.", "lˈamma ʔaxˈaːf, hˈasiʔ fi bˈaːba jasˈuːʕ."),
     ]),
 ]
 
-GAP = .55      # silence between lines
-PRE, POST = 1.3, 1.1
+GAP = .3       # breath between lines
+PRE, POST = .8, .7
 
 
-def synth(voices_dir, vname, text):
+def synth(voices_dir, vname, text, ipa=None):
     from piper import PiperVoice, SynthesisConfig
     v = VOICES[vname]
     if not hasattr(synth, "cache"):
@@ -107,7 +119,7 @@ def synth(voices_dir, vname, text):
         m = glob.glob(f"{voices_dir}/vits-piper-{v['model']}/*.onnx")[0]
         synth.cache[v["model"]] = PiperVoice.load(m)
     pv = synth.cache[v["model"]]
-    ch = list(pv.synthesize(text, syn_config=SynthesisConfig(length_scale=v["slow"], noise_scale=.6, noise_w_scale=.7)))
+    ch = list(pv.synthesize(f"[[{ipa}]]" if ipa else text, syn_config=SynthesisConfig(length_scale=v["slow"], noise_scale=.6, noise_w_scale=.7)))
     x = np.concatenate([c.audio_float_array for c in ch]).astype(np.float32)
     sr = ch[0].sample_rate
     with tempfile.TemporaryDirectory() as td:
@@ -151,13 +163,13 @@ def main(voices_dir):
     for si, sh in enumerate(SHOTS):
         if si:  # this shot fades in over the previous one
             t_global -= sh.get("xf", XF)
-        t = max(PRE, sh.get("xf", XF) + .3)
+        t = max(PRE, sh.get("xf", XF) + .2)
         talk, keys, line_times = {}, [], []
-        for li, (who, face, text) in enumerate(sh["lines"]):
+        for li, (who, face, text, ipa) in enumerate(sh["lines"]):
             parts = who if isinstance(who, tuple) else ((who, face),)
             tracks = []
             for k, (vn, fs) in enumerate(parts):
-                y = synth(voices_dir, vn, text)
+                y = synth(voices_dir, vn, text, ipa)
                 if len(parts) > 1:  # a chorus: the first voice leads, the others a little behind and softer
                     y = np.concatenate([np.zeros(int(SR * .025 * k), np.float32), y]) * (.8 if k == 0 else .45)
                 tracks.append((vn, fs, y))
@@ -205,5 +217,6 @@ if __name__ == "__main__":
         r = sherpa_onnx.OfflineRecognizer.from_whisper(encoder=w + "/small-encoder.int8.onnx", decoder=w + "/small-decoder.int8.onnx",
                                                         tokens=w + "/small-tokens.txt", language="ar", task="transcribe", num_threads=4)
         for si, li, vn, text, dur, y in rep:
+            y = np.concatenate([np.zeros(SR // 2, np.float32), y, np.zeros(SR, np.float32)])  # whisper drops clip edges
             s = r.create_stream(); s.accept_waveform(SR, y); r.decode_stream(s)
             print(f"{si}.{li} {vn:8s} {dur:4.1f}s | {text} | -> {s.result.text}")
