@@ -19,18 +19,18 @@ RIGS = {
         dict(kind="face", eyes=[(753, 508, 23, 20), (820, 501, 16, 19)], mouth=(800, 548, 20, 16), talk=[(1.8, 3.7, 4)], seed=13),
     ],
     1: [  # teaching the crowd
-        dict(kind="limb", pivot=(585, 300), phi=-31, r0=15, r1=130, hw=30, fa=14, motion=[('osc', 6, 0.7, 0)]),
-        dict(kind="limb", pivot=(350, 350), phi=0, r0=20, r1=100, hw=30, fa=14, motion=[('osc', 5, 0.6, 1.5)]),
+        dict(kind="limb", gate=21, pivot=(585, 300), phi=-31, r0=15, r1=130, hw=30, fa=14, motion=[('osc', 6, 0.7, 0)]),
+        dict(kind="limb", gate=21, pivot=(350, 350), phi=0, r0=20, r1=100, hw=30, fa=14, motion=[('osc', 5, 0.6, 1.5)]),
         dict(kind="face", eyes=[(478, 160, 8, 8), (505, 158, 7, 8)], mouth=(488, 190, 14, 20), talk=[(0.3, 3.7, 4)], seed=21),
         dict(kind="face", eyes=[(660, 375, 9, 10), (690, 368, 8, 9)], mouth=(670, 402, 10, 8), talk=[], seed=22),
-        dict(kind="face", eyes=[(735, 425, 10, 11), (758, 420, 7, 10)], mouth=None, talk=[], seed=23),
-        dict(kind="face", eyes=[(265, 370, 8, 9), (290, 368, 7, 8)], mouth=None, talk=[], seed=24),
-        dict(kind="face", eyes=[(840, 318, 7, 7), (868, 316, 7, 7)], mouth=None, talk=[], seed=25),
-        dict(kind="face", eyes=[(178, 238, 6, 7), (200, 236, 5, 6)], mouth=None, talk=[], seed=26),
+        dict(kind="face", eyes=[(735, 425, 10, 11), (758, 420, 7, 10)], mouth=(748, 453, 9, 10), talk=[], seed=23),
+        dict(kind="face", eyes=[(265, 370, 8, 9), (290, 368, 7, 8)], mouth=(285, 396, 8, 8), talk=[], seed=24),
+        dict(kind="face", eyes=[(840, 318, 7, 7), (868, 316, 7, 7)], mouth=(852, 352, 11, 12), talk=[], seed=25),
+        dict(kind="face", eyes=[(178, 238, 6, 7), (200, 236, 5, 6)], mouth=(190, 265, 8, 7), talk=[], seed=26),
     ],
     2: [  # pointing to the boat
-        dict(kind="limb", pivot=(560, 275), phi=5, r0=40, r1=230, hw=18, fa=12, motion=[('osc', 2.5, 0.5, 0)]),
-        dict(kind="limb", pivot=(330, 390), phi=-5, r0=20, r1=110, hw=30, fa=14, motion=[('osc', 6, 0.8, 1)]),
+        dict(kind="limb", gate=31, pivot=(560, 275), phi=5, r0=40, r1=230, hw=18, fa=12, motion=[('osc', 2.5, 0.5, 0)]),
+        dict(kind="limb", gate=31, pivot=(330, 390), phi=-5, r0=20, r1=110, hw=30, fa=14, motion=[('osc', 6, 0.8, 1)]),
         dict(kind="face", eyes=[(497, 157, 10, 11), (526, 157, 7, 9)], mouth=(500, 195, 16, 18), talk=[(0.2, 2.6, 4.5)], seed=31),
         dict(kind="face", eyes=[(950, 255, 9, 10), (982, 255, 8, 9)], mouth=(960, 290, 14, 10), talk=[(2.4, 3.6, 3)], seed=32),
         dict(kind="face", eyes=[(808, 258, 6, 6), (830, 255, 5, 6)], mouth=None, talk=[], seed=33),
@@ -42,9 +42,9 @@ RIGS = {
         dict(kind="limb", pivot=(1160, 420), phi=40, r0=20, r1=200, hw=20, fa=14, motion=[('osc', 7, 0.5, 1.2)]),
         dict(kind="limb", pivot=(1160, 420), phi=-140, r0=0, r1=90, hw=25, fa=14, motion=[('osc', 7, 0.5, 1.2)]),
         dict(kind="face", eyes=[(650, 205, 6, 7), (675, 205, 5, 6)], mouth=(655, 232, 10, 8), talk=[(0.8, 2.6, 3)], seed=41),
-        dict(kind="face", eyes=[(425, 335, 8, 9), (455, 333, 7, 8)], mouth=None, talk=[], seed=42),
+        dict(kind="face", eyes=[(425, 335, 8, 9), (455, 333, 7, 8)], mouth=(440, 368, 11, 10), talk=[], seed=42),
         dict(kind="face", eyes=[(213, 298, 6, 7)], mouth=None, talk=[], seed=43),
-        dict(kind="face", eyes=[(1012, 298, 8, 8), (1033, 293, 6, 7)], mouth=None, talk=[], seed=44),
+        dict(kind="face", eyes=[(1012, 298, 8, 8), (1033, 293, 6, 7)], mouth=(1015, 326, 11, 10), talk=[], seed=44),
         dict(kind="face", eyes=[(745, 255, 6, 6), (765, 253, 5, 5)], mouth=None, talk=[], seed=45),
         dict(kind="face", eyes=[(465, 228, 6, 6), (490, 228, 5, 5)], mouth=None, talk=[], seed=46),
     ],
@@ -90,15 +90,15 @@ RIGS = {
         dict(kind="face", eyes=[(1027, 525, 9, 8), (1062, 542, 7, 7)], mouth=(1020, 570, 14, 20), talk=[], seed=86),
     ],
     8: [  # calm at sunset
-        dict(kind="limb", pivot=(420, 240), phi=-140, r0=30, r1=160, hw=25, fa=14, motion=[("osc", 4, .5, 0)]),
-        dict(kind="limb", pivot=(720, 260), phi=-6, r0=50, r1=210, hw=20, fa=14, motion=[("osc", 3, .5, 1)]),
+        dict(kind="limb", gate=91, pivot=(420, 240), phi=-140, r0=30, r1=160, hw=25, fa=14, motion=[("osc", 4, .5, 0)]),
+        dict(kind="limb", gate=91, pivot=(720, 260), phi=-6, r0=50, r1=210, hw=20, fa=14, motion=[("osc", 3, .5, 1)]),
         dict(kind="face", eyes=[(600, 125, 7, 9), (628, 128, 6, 8)], mouth=(612, 158, 12, 10), talk=[(1.5, 3.0, 4)], seed=91),
         dict(kind="face", eyes=[(152, 272, 8, 9), (180, 268, 6, 7)], mouth=(175, 300, 12, 10), talk=[], seed=92),
         dict(kind="face", eyes=[(297, 280, 8, 9), (322, 278, 6, 7)], mouth=None, talk=[], seed=93),
         dict(kind="face", eyes=[(225, 398, 9, 10), (258, 402, 7, 8)], mouth=(255, 428, 12, 10), talk=[(3.2, 4.4, 3)], seed=94),
         dict(kind="face", eyes=[(762, 372, 7, 8), (790, 372, 6, 7)], mouth=None, talk=[], seed=95),
         dict(kind="face", eyes=[(945, 425, 8, 9), (975, 422, 6, 8)], mouth=None, talk=[], seed=96),
-        dict(kind="face", eyes=[(1088, 390, 8, 9), (1112, 390, 7, 8)], mouth=None, talk=[], seed=97),
+        dict(kind="face", eyes=[(1088, 390, 8, 9), (1112, 390, 7, 8)], mouth=(1080, 420, 11, 10), talk=[], seed=97),
     ],
 }
 # fmt: on
@@ -202,7 +202,24 @@ def limb_angle(motion, t):
     return math.radians(a)
 
 
-def apply(scene, sx, sy, t, dur, K, img):
+def speaking(spans, t, pad=.35):
+    """0..1: is this face talking around time t (for gestures that go with speech)"""
+    a = 0.0
+    for t0, env in spans:
+        t1 = t0 + len(env) / 100
+        a = max(a, min(1.0, max(0.0, (t - t0 + pad) / pad), max(0.0, (t1 + pad - t) / pad)))
+    return a
+
+
+def voice_amount(spans, t):
+    for t0, env in spans:
+        k = int((t - t0) * 100)
+        if 0 <= k < len(env):
+            return float(env[k])
+    return 0.0
+
+
+def apply(scene, sx, sy, t, dur, K, img, talk=None, limb_t0=0.0):
     """remap source coords (in place copies) and return (sx, sy, shade multiplier or None)"""
     rigs = RIGS.get(scene)
     if not rigs:
@@ -213,7 +230,9 @@ def apply(scene, sx, sy, t, dur, K, img):
     ovr_c = np.zeros(sx.shape + (3,), np.float32)
     for r in rigs:
         if r["kind"] == "limb":
-            th = limb_angle(r["motion"], t)
+            th = limb_angle(r["motion"], t - limb_t0)
+            if "gate" in r:  # gestures while speaking
+                th *= .2 + .8 * speaking((talk or {}).get(r["gate"], []), t)
             if abs(th) < 1e-4:
                 continue
             px, py = r["pivot"][0] * K, r["pivot"][1] * K
@@ -261,7 +280,12 @@ def apply(scene, sx, sy, t, dur, K, img):
                 sh = shade[box]
                 sh *= 1 - .8 * lash
                 shade[box] = sh
-            o = talk_amount(r["talk"], t) * K
+            if talk is None:
+                o = talk_amount(r["talk"], t) * K
+            elif r["mouth"]:
+                o = voice_amount(talk.get(r["seed"], []), t) * max(2.5, min(7.0, r["mouth"][3] * .26)) * K
+            else:
+                o = 0.0
             if r["mouth"] and o > .2:
                 mx, my, mw, md = (v * K for v in r["mouth"])
                 box = (np.abs(sx - mx) < mw * 1.3) & (sy > my - 4 * K) & (sy < my + md + o)
