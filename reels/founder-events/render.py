@@ -198,7 +198,7 @@ VERSIONS = {
     "v1": dict(  # POV: day-in-the-life with timestamps (house)
         name="POV founder day", style="house", drop=4,
         shots=[
-            V(4, "clip", "eip", .3, 1.45, hook=True),
+            V(4, "clip", "eip", .75, 1.45, hook=True),
             V(4, "clip", "gym", 1.6, 4.5, ts="06:30", cap="Gym. (networking warm-up)"),
             V(2, "clip", "coffee", 0, 2.8, ts="08:15", cap="Coffee #1"),
             V(2, "photo", "parking", ts="09:00", cap="Same parking spot. Every event."),
@@ -226,14 +226,14 @@ VERSIONS = {
             V(3, "photo", "kabab", sym="Lunch = meeting. Dinner = meeting."),
             V(3, "photo", "thanks", sym="Photographs every “Thank You” slide"),
             V(3, "clip", "spa", 0, 3.2, sym="Calls the spa “recovery”"),
-            V(6, "clip", "eip", .3, 1.45, cta=True),
+            V(6, "clip", "eip", .75, 1.45, cta=True),
         ],
         cta=("PROGNOSIS: incurable", "Follow if you have it too", "Tag a founder who's got it"),
     ),
     "v3": dict(  # cinematic "from 30 EGP to the front row" + magazine cover (cinematic hip-hop)
         name="30 EGP to the front row", style="cinematic", drop=4,
         shots=[
-            V(4, "clip", "egp", 0.0, 1.45, hook=True),
+            V(4, "clip", "egp", 0.0, 1.1, hook=True),
             V(4, "photo", "stage", line="Now I sit in rooms like this."),
             V(2, "photo", "thanks", line="Everyone sees the events."),
             V(4, "clip", "gym", 1.6, 4.5, line="Nobody sees the 6AM."),
@@ -241,7 +241,7 @@ VERSIONS = {
             V(2, "photo", "parking", line="The parking at midnight."),
             V(2, "clip", "car", .4, 2.2, line="The drive between rooms.", liney=.84),
             V(4, "clip", "eip", 2.0, 5.5, line="But every room gets me closer.", liney=.84),
-            V(6, "clip", "eip", .3, 1.45, cta=True),
+            V(6, "clip", "eip", .75, 1.45, cta=True),
         ],
         cta=("Follow the Reservya journey",),
     ),
@@ -249,13 +249,13 @@ VERSIONS = {
         name="7 events speedrun", style="phonk", drop=4,
         shots=[
             V(4, "clip", "car", 0.0, 1.9, hook=True),
-            V(2, "clip", "eip", 1.45, 2.05, n=1, lab="EIP"),
+            V(2, "clip", "eip", 1.45, 2.05, n=1, lab="EIP", laby=.70),
             V(2, "photo", "stage", n=2, lab="ORASCOM SUMMIT"),
             V(1, "clip", "gym", 2.6, 3.4, lab="NO REST"),
             V(2, "photo", "thanks", n=3, lab="ANOTHER PANEL"),
             V(2, "photo", "patisserie", n=4, lab="COFFEE MEETING"),
             V(1, "clip", "coffee", 0, 1.0, lab="REFUEL"),
-            V(2, "clip", "sonesta", 0, 1.06, n=5, lab="SONESTA", laby=.82),
+            V(2, "clip", "sonesta", 0, 1.06, n=5, lab="SONESTA", laby=.70),
             V(2, "photo", "kabab", n=6, lab="DINNER MEETING"),
             V(1, "photo", "parking", lab="PARKING 04-A. AGAIN."),
             V(2, "clip", "spa", 0, 3.2, n=7, lab="“RECOVERY”"),
@@ -330,10 +330,20 @@ def stamp():
 def symptom(fr, t, sh, idx, total):
     hdr = pill(f"SYMPTOM {idx}/{total}", MONT(36, 800), fg=WHITE, bg=(220, 40, 52))
     paste(fr, hdr, W / 2, 230, pop_in(min(1, t / .25)))
-    card = pill(sh["sym"], MONT(50, 800), fg=(25, 25, 25), bg=(250, 250, 248), pad=(34, 22), r=26, icon="check")
-    if card.width > 980:
-        card = card.resize((980, int(card.height * 980 / card.width)), Image.LANCZOS)
-    paste(fr, card, W / 2, 330, pop_in(min(1, (t - .12) / .3)))
+    words = sh["sym"].split()
+    half = (len(words) + 1) // 2
+    lines = [" ".join(words[:half]), " ".join(words[half:])] if len(sh["sym"]) > 22 else [sh["sym"]]
+    txt = text_block(lines, MONT(66, 900), fill=(25, 25, 25), spacing=4)
+    card = Image.new("RGBA", (txt.width + 130, txt.height + 40), (0, 0, 0, 0))
+    dc = ImageDraw.Draw(card)
+    dc.rounded_rectangle((0, 0, card.width - 1, card.height - 1), 30, fill=(250, 250, 248, 245))
+    s_ = 56; x0, y0 = 34, (card.height - s_) // 2
+    dc.ellipse((x0, y0, x0 + s_, y0 + s_), fill=GREEN)
+    dc.line([(x0 + s_ * .25, y0 + s_ * .52), (x0 + s_ * .43, y0 + s_ * .7), (x0 + s_ * .76, y0 + s_ * .3)], fill=WHITE, width=7)
+    card.alpha_composite(txt, (110, 20))
+    if card.width > 1000:
+        card = card.resize((1000, int(card.height * 1000 / card.width)), Image.LANCZOS)
+    paste(fr, card, W / 2, 330 + card.height / 2, pop_in(min(1, (t - .12) / .3)))
 
 
 def letterbox(fr, h=150):
@@ -456,7 +466,7 @@ def render(vk):
                     cs = pop_in(min(1, (t - .15) / .35))
                     paste(fr, med, W / 2, H * .30, cs, rot=-2)
                     if t > 1.1:
-                        paste(fr, stp, W / 2 + 230, H * .30 + 210, max(.01, 1.6 - 3 * min(1, (t - 1.1) / .2)) if t < 1.3 else 1, rot=12)
+                        paste(fr, stp, W / 2 + 200, H * .30 + 330, max(.01, 1.6 - 3 * min(1, (t - 1.1) / .2)) if t < 1.3 else 1, rot=12)
                 elif sh.get("cta"):
                     p = text_block([[("PROGNOSIS: ", WHITE), ("incurable", YEL)]], MONT(70, 900), stroke=7)
                     paste(fr, p, W / 2, H * .62, pop_in(min(1, t / .3)))
@@ -484,7 +494,7 @@ def render(vk):
                     paste(fr, pill(cfg["cta"][1], MONT(50, 800), fg=BLACK, bg=YEL), W / 2, H * .70, pop_in(min(1, (t - .5) / .25)))
                     paste(fr, text_block([cfg["cta"][2]], MONT(40, 700), stroke=4), W / 2, H * .765, 1, ease((t - .8) / .3))
                 elif sh.get("n"):
-                    counter(fr, t, sh["n"], sh["lab"], sh.get("laby", .20) if sh.get("laby", .20) < .5 else .20)
+                    counter(fr, t, sh["n"], sh["lab"], sh.get("laby", .20))
                 else:
                     label(fr, t, sh["lab"])
             # global fade in/out
