@@ -198,7 +198,7 @@ VERSIONS = {
     "v1": dict(  # POV: day-in-the-life with timestamps (house)
         name="POV founder day", style="house", drop=4,
         shots=[
-            V(4, "clip", "eip", .75, 1.45, hook=True),
+            V(4, "clip", "eip", .82, 1.32, hook=True),
             V(4, "clip", "gym", 1.6, 4.5, ts="06:30", cap="Gym. (networking warm-up)"),
             V(2, "clip", "coffee", 0, 2.8, ts="08:15", cap="Coffee #1"),
             V(2, "photo", "parking", ts="09:00", cap="Same parking spot. Every event."),
@@ -226,7 +226,7 @@ VERSIONS = {
             V(3, "photo", "kabab", sym="Lunch = meeting. Dinner = meeting."),
             V(3, "photo", "thanks", sym="Photographs every “Thank You” slide"),
             V(3, "clip", "spa", 0, 3.2, sym="Calls the spa “recovery”"),
-            V(6, "clip", "eip", .75, 1.45, cta=True),
+            V(6, "clip", "eip", .82, 1.32, cta=True),
         ],
         cta=("PROGNOSIS: incurable", "Follow if you have it too", "Tag a founder who's got it"),
     ),
@@ -241,7 +241,7 @@ VERSIONS = {
             V(2, "photo", "parking", line="The parking at midnight."),
             V(2, "clip", "car", .4, 2.2, line="The drive between rooms.", liney=.84),
             V(4, "clip", "eip", 2.0, 5.5, line="But every room gets me closer.", liney=.84),
-            V(6, "clip", "eip", .75, 1.45, cta=True),
+            V(6, "clip", "eip", .82, 1.32, cta=True),
         ],
         cta=("Follow the Reservya journey",),
     ),
@@ -249,7 +249,7 @@ VERSIONS = {
         name="7 events speedrun", style="phonk", drop=4,
         shots=[
             V(4, "clip", "car", 0.0, 1.9, hook=True),
-            V(2, "clip", "eip", 1.45, 2.05, n=1, lab="EIP", laby=.70),
+            V(2, "clip", "eip", 2.3, 3.0, n=1, lab="EIP", laby=.70),
             V(2, "photo", "stage", n=2, lab="ORASCOM SUMMIT"),
             V(1, "clip", "gym", 2.6, 3.4, lab="NO REST"),
             V(2, "photo", "thanks", n=3, lab="ANOTHER PANEL"),
@@ -363,9 +363,9 @@ def magazine(fr, t):
     paste(fr, mast, W / 2, 250, 1, a)
     bar = pill("THE EVENT ISSUE", MONT(34, 800), fg=WHITE, bg=(200, 30, 40), r=4)
     paste(fr, bar, W / 2, 380, 1, ease((t - .3) / .3))
-    l1 = text_block([[("From ", WHITE), ("30 EGP", YEL)], "to the front row"], PLAY(64, 800), shadow=6)
+    l1 = text_block([[("From ", WHITE), ("30 EGP", YEL)], "to the front row"], PLAY(64, 800), stroke=3, shadow=6)
     paste(fr, l1, 250, 1180, 1, ease((t - .6) / .4))
-    l2 = text_block(["Mina Mounir", "Founder, Reservya"], MONT(38, 700), shadow=5)
+    l2 = text_block(["Mina Mounir", "Founder, Reservya"], MONT(38, 700), stroke=2, shadow=5)
     paste(fr, l2, 820, 1220, 1, ease((t - .9) / .4))
     c = pill("Follow the Reservya journey  →", MONT(44, 800), fg=BLACK, bg=YEL)
     paste(fr, c, W / 2, 1470, pop_in(min(1, (t - 1.4) / .35)))
