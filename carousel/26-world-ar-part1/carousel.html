@@ -1,0 +1,287 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat{border-radius:28px;padding:34px 36px;background:#fff;color:var(--ink)}
+.dark .stat{background:var(--ink2);color:var(--cream)}
+.stat b{display:block;font:800 64px/1.05 Inter;color:var(--rose);margin-bottom:12px}
+.dark .stat b{color:var(--gold)}
+.stat .lbl{font:600 26px/1.35 Inter;opacity:.8}
+.rtl .lbl,.rtl .li,.rtl .li small,.rtl .card .l,.rtl .card .m,.rtl .cta-list{font-family:'Cairo','Inter',sans-serif}
+.rtl .stat b,.rtl .card .big{direction:ltr;text-align:right;unicode-bidi:isolate}
+.bar{display:grid;grid-template-columns:260px 1fr 90px;align-items:center;gap:20px;padding:14px 0;font:700 28px Inter}
+.bar i{display:block;height:34px;border-radius:10px;background:var(--rose)}
+.bar.p i{background:var(--gold)}
+.bar.p{color:var(--rose);font-weight:800}
+.bar b{text-align:right}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 18px}
+.fact{border-radius:18px;padding:16px 18px;background:#fff}
+.dark .fact{background:var(--ink2)}
+.fact small{display:block;font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
+.fact span{font:700 25px/1.25 Inter}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:0 20px;font:500 23px/1.4 Inter}
+.kv>div{padding:12px 0;border-top:2px solid #e0d2c4}
+.dark .kv>div{border-color:#5a2a2f}
+.kv .k{font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;padding-top:17px}
+.tbl{display:grid;grid-template-columns:1.5fr 1fr .8fr .8fr 1fr;font:600 26px Inter}
+.tbl>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.tbl .h{font:800 18px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;border-bottom:3px solid var(--ink)}
+.zt{display:grid;grid-template-columns:70px 150px 120px 1fr;font:600 25px Inter}
+.zt>div{padding:13px 0;border-bottom:2px solid #5a2a2f}
+.zt .l{font:800 34px 'Playfair Display',serif;color:var(--gold)}
+.rtl .fact small,.rtl .fact span,.rtl .kv,.rtl .kv .k,.rtl .tbl,.rtl .zt{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .fact small,.rtl .kv .k{font-size:19px}
+.rtl .fact span{font-size:24px}
+.rtl .kv{grid-template-columns:140px 1fr;font-size:23px}
+.t20{display:grid;grid-template-columns:60px 1.6fr 1fr .7fr 1fr;font:600 23px 'Cairo',Inter}
+.t20>div{padding:7px 0;border-bottom:1.5px solid #e0d2c4}
+.t20 .h{font-weight:800;font-size:19px;opacity:.6;border-bottom:3px solid var(--ink)}
+.t20 .eg{color:var(--rose);font-weight:800}
+.t20{font-size:21px}
+.t20>div{padding:3px 0}
+</style></head><body><section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <span class="tag" style="margin-bottom:44px;display:inline-block">العالم في ٣ أجزاء · الجزء ١</span><h1>أقوى <span class="gold">٢٠ دولة</span> في العالم</h1><p class="sub" style="margin-top:44px">حسب ترتيب Global Firepower 2025: العاصمة، السكان، اللغة، الدين، الحدود، الباسبور، معنى العلم، وأشهر شخصية وشركات.</p></div><div class="bot"><span>احفظه لبعدين</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">قبل ما نبدأ</span>
+    <h2 style="margin:40px 0 36px"><span class="rose">الأمم المتحدة</span></h2>
+    <div class="stats">
+      <div class="stat"><b>1945</b><span class="lbl">اتأسست ٢٤ أكتوبر ١٩٤٥ بعد الحرب العالمية التانية</span></div>
+      <div class="stat"><b>51</b><span class="lbl">دولة مؤسسة، ومصر واحدة منهم</span></div>
+      <div class="stat"><b>193</b><span class="lbl">دولة عضو النهارده</span></div>
+      <div class="stat"><b>6</b><span class="lbl">لغات رسمية، منها العربي</span></div>
+    </div>
+    <div class="pill" style="margin-top:30px">٥ أعضاء دايمين في مجلس الأمن: أمريكا، روسيا، الصين، بريطانيا، فرنسا. وكلهم في أول ٧ في الترتيب ده.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇺🇸</span><div><span class="tag">المركز 1 عالمياً</span><h2 style="margin-top:8px;font-size:62px">الولايات المتحدة</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>واشنطن</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 340 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الإنجليزي</span></div>
+      <div class="fact"><small>الديانة</small><span>المسيحية (الأغلبية)</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 1</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 180 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (2)</div><div>كندا · المكسيك</div>
+      <div class="k">معنى العلم</div><div>13 خط = أول 13 مستعمرة · 50 نجمة = الـ 50 ولاية</div>
+      <div class="k">أشهر شخصية</div><div><b>نيل أرمسترونج</b>: أول إنسان يمشي على القمر (1969)</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Apple · Google · Microsoft · Jeep · Coca-Cola</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇷🇺</span><div><span class="tag">المركز 2 عالمياً</span><h2 style="margin-top:8px;font-size:62px">روسيا</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>موسكو</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 144 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الروسي</span></div>
+      <div class="fact"><small>الديانة</small><span>المسيحية الأرثوذكسية، والإسلام</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 2</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 115 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (14)</div><div>النرويج · فنلندا · إستونيا · لاتفيا · ليتوانيا · بولندا · بيلاروسيا · أوكرانيا · جورجيا · أذربيجان · كازاخستان · الصين · منغوليا · كوريا الشمالية</div>
+      <div class="k">معنى العلم</div><div>أبيض وأزرق وأحمر. مالوش معنى رسمي، وبيتقال إنه الصدق والولاء والشجاعة</div>
+      <div class="k">أشهر شخصية</div><div><b>يوري جاجارين</b>: أول إنسان يطلع الفضاء (1961)</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Gazprom · Lukoil · Kaspersky · Aeroflot · Yandex</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇨🇳</span><div><span class="tag">المركز 3 عالمياً</span><h2 style="margin-top:8px;font-size:62px">الصين</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>بكين</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 1.41 مليار</span></div>
+      <div class="fact"><small>اللغة</small><span>الصيني (الماندرين)</span></div>
+      <div class="fact"><small>الديانة</small><span>أغلبهم بدون دين؛ البوذية والديانات الشعبية</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 3</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 80 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (14)</div><div>روسيا · منغوليا · كوريا الشمالية · فيتنام · لاوس · ميانمار · الهند · بوتان · نيبال · باكستان · أفغانستان · طاجيكستان · قيرغيزستان · كازاخستان</div>
+      <div class="k">معنى العلم</div><div>الأحمر = الثورة · النجمة الكبيرة = الحزب الشيوعي · 4 نجوم صغيرة = الشعب</div>
+      <div class="k">أشهر شخصية</div><div><b>كونفوشيوس</b>: فيلسوف أفكاره عن الأخلاق شكّلت آسيا 2500 سنة</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Huawei · Alibaba · BYD · Lenovo · ByteDance (TikTok)</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇮🇳</span><div><span class="tag">المركز 4 عالمياً</span><h2 style="margin-top:8px;font-size:62px">الهند</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>نيودلهي</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 1.46 مليار</span></div>
+      <div class="fact"><small>اللغة</small><span>الهندي والإنجليزي (+22 لغة رسمية)</span></div>
+      <div class="fact"><small>الديانة</small><span>الهندوسية (80%)، والإسلام (14%)</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 4</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 57 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (6)</div><div>باكستان · الصين · نيبال · بوتان · بنجلاديش · ميانمار</div>
+      <div class="k">معنى العلم</div><div>البرتقالي = الشجاعة · الأبيض = السلام · الأخضر = النمو · العجلة = القانون (24 شعاع)</div>
+      <div class="k">أشهر شخصية</div><div><b>المهاتما غاندي</b>: قاد الهند للاستقلال (1947) من غير عنف</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Tata · Reliance · Infosys · Mahindra · Wipro</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇰🇷</span><div><span class="tag">المركز 5 عالمياً</span><h2 style="margin-top:8px;font-size:62px">كوريا الجنوبية</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>سول</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 51 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الكوري</span></div>
+      <div class="fact"><small>الديانة</small><span>أغلبهم بدون دين؛ المسيحية والبوذية</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 5</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 190 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (1)</div><div>كوريا الشمالية</div>
+      <div class="k">معنى العلم</div><div>الأبيض = السلام · الدايرة = توازن الين واليانج · الـ 4 رموز = السما والأرض والمية والنار</div>
+      <div class="k">أشهر شخصية</div><div><b>الملك سيجونج</b>: اخترع الأبجدية الكورية (1443)</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Samsung · Hyundai · Kia · LG</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">08 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇬🇧</span><div><span class="tag">المركز 6 عالمياً</span><h2 style="margin-top:8px;font-size:62px">بريطانيا</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>لندن</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 69 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الإنجليزي</span></div>
+      <div class="fact"><small>الديانة</small><span>المسيحية، ونسبة كبيرة بدون دين</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 6</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 186 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (1)</div><div>أيرلندا</div>
+      <div class="k">معنى العلم</div><div>بيجمع 3 صلبان: إنجلترا واسكتلندا وأيرلندا</div>
+      <div class="k">أشهر شخصية</div><div><b>إسحاق نيوتن</b>: اكتشف قوانين الحركة والجاذبية</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Rolls-Royce · BP · HSBC · Unilever · Land Rover</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">09 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇫🇷</span><div><span class="tag">المركز 7 عالمياً</span><h2 style="margin-top:8px;font-size:62px">فرنسا</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>باريس</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 68 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الفرنسي</span></div>
+      <div class="fact"><small>الديانة</small><span>المسيحية (كاثوليك)، وبدون دين، والإسلام</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 7</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 189 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (8)</div><div>بلجيكا · لوكسمبورج · ألمانيا · سويسرا · إيطاليا · موناكو · أندورا · إسبانيا (+ البرازيل وسورينام عن طريق جويانا الفرنسية)</div>
+      <div class="k">معنى العلم</div><div>الأزرق والأحمر = ألوان باريس · الأبيض = الملكية · ارتبط بالثورة الفرنسية</div>
+      <div class="k">أشهر شخصية</div><div><b>لويس باستير</b>: عمل اللقاحات واخترع البسترة</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Louis Vuitton · Chanel · Peugeot · L'Oréal · Airbus</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">10 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇯🇵</span><div><span class="tag">المركز 8 عالمياً</span><h2 style="margin-top:8px;font-size:62px">اليابان</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>طوكيو</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 123 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الياباني</span></div>
+      <div class="fact"><small>الديانة</small><span>الشنتو والبوذية</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 8</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 190 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (0)</div><div>مفيش، جزر</div>
+      <div class="k">معنى العلم</div><div>الدايرة الحمرا = الشمس: "بلد الشمس المشرقة"</div>
+      <div class="k">أشهر شخصية</div><div><b>هاياو ميازاكي</b>: ستوديو جيبلي، وأوسكار عن Spirited Away</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Toyota · Sony · Nintendo · Honda</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">11 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇹🇷</span><div><span class="tag">المركز 9 عالمياً</span><h2 style="margin-top:8px;font-size:62px">تركيا</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>أنقرة</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 86 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>التركي</span></div>
+      <div class="fact"><small>الديانة</small><span>الإسلام (99%)</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 9</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 118 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (8)</div><div>اليونان · بلغاريا · جورجيا · أرمينيا · أذربيجان · إيران · العراق · سوريا</div>
+      <div class="k">معنى العلم</div><div>الهلال والنجمة من التراث العثماني</div>
+      <div class="k">أشهر شخصية</div><div><b>مصطفى كمال أتاتورك</b>: أسس الجمهورية التركية (1923)</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Turkish Airlines · Beko · Ülker · Koç</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">12 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇮🇹</span><div><span class="tag">المركز 10 عالمياً</span><h2 style="margin-top:8px;font-size:62px">إيطاليا</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>روما</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي 59 مليون</span></div>
+      <div class="fact"><small>اللغة</small><span>الإيطالي</span></div>
+      <div class="fact"><small>الديانة</small><span>المسيحية (كاثوليك)</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز 10</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي 189 دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (6)</div><div>فرنسا · سويسرا · النمسا · سلوفينيا · سان مارينو · الفاتيكان</div>
+      <div class="k">معنى العلم</div><div>مستوحى من علم فرنسا · الشعبي: الأخضر للأمل والأبيض للإيمان والأحمر للمحبة</div>
+      <div class="k">أشهر شخصية</div><div><b>ليوناردو دافنشي</b>: رسم الموناليزا، وفنان ومخترع</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">Ferrari · Fiat · Gucci · Barilla</div>
+    </div></div><div class="bot"><span>أرقام تقريبية · GFP 2025</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">13 / 13</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <h1 style="font-size:88px">كمّل <span class="gold">الجزء ٢</span></h1>
+  <p class="sub" style="margin:40px 0 60px">من المركز ١١ لـ ٢٠، ومصر فيهم. وفي الجزء ٣: توقيت زولو، والشمال الحقيقي والمغناطيسي.</p>
+  <div class="ar" style="display:flex;flex-direction:column;gap:22px;font-weight:600;font-size:34px"><div>🔖 &nbsp;احفظ الكاروسيل</div><div>💬 &nbsp;توقّع مركز مصر في الكومنتات</div><div>➕ &nbsp;تابع <span class="gold" dir="ltr">@mina_monir8</span></div></div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>

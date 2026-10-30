@@ -223,6 +223,128 @@ const compass = `<svg width="330" height="345" viewBox="0 0 330 345" style="flex
   <path d="M165 95 A80 80 0 0 1 192 100" fill="none" stroke="var(--gold)" stroke-width="3"/>
   <circle cx="165" cy="175" r="8" fill="var(--cream)"/>
   <text x="165" y="330" text-anchor="middle" fill="var(--cream)" opacity=".7" font-family="Inter" font-weight="600" font-size="20">angle exaggerated</text></svg>`;
+const C20 = [
+  ['🇺🇸', 'الولايات المتحدة', 'واشنطن', '340 مليون', 'الإنجليزي', 'المسيحية (الأغلبية)', '180', 2, 'كندا · المكسيك', '13 خط = أول 13 مستعمرة · 50 نجمة = الـ 50 ولاية', 'نيل أرمسترونج: أول إنسان يمشي على القمر (1969)', 'Apple · Google · Microsoft · Jeep · Coca-Cola'],
+  ['🇷🇺', 'روسيا', 'موسكو', '144 مليون', 'الروسي', 'المسيحية الأرثوذكسية، والإسلام', '115', 14, 'النرويج · فنلندا · إستونيا · لاتفيا · ليتوانيا · بولندا · بيلاروسيا · أوكرانيا · جورجيا · أذربيجان · كازاخستان · الصين · منغوليا · كوريا الشمالية', 'أبيض وأزرق وأحمر. مالوش معنى رسمي، وبيتقال إنه الصدق والولاء والشجاعة', 'يوري جاجارين: أول إنسان يطلع الفضاء (1961)', 'Gazprom · Lukoil · Kaspersky · Aeroflot · Yandex'],
+  ['🇨🇳', 'الصين', 'بكين', '1.41 مليار', 'الصيني (الماندرين)', 'أغلبهم بدون دين؛ البوذية والديانات الشعبية', '80', 14, 'روسيا · منغوليا · كوريا الشمالية · فيتنام · لاوس · ميانمار · الهند · بوتان · نيبال · باكستان · أفغانستان · طاجيكستان · قيرغيزستان · كازاخستان', 'الأحمر = الثورة · النجمة الكبيرة = الحزب الشيوعي · 4 نجوم صغيرة = الشعب', 'كونفوشيوس: فيلسوف أفكاره عن الأخلاق شكّلت آسيا 2500 سنة', 'Huawei · Alibaba · BYD · Lenovo · ByteDance (TikTok)'],
+  ['🇮🇳', 'الهند', 'نيودلهي', '1.46 مليار', 'الهندي والإنجليزي (+22 لغة رسمية)', 'الهندوسية (80%)، والإسلام (14%)', '57', 6, 'باكستان · الصين · نيبال · بوتان · بنجلاديش · ميانمار', 'البرتقالي = الشجاعة · الأبيض = السلام · الأخضر = النمو · العجلة = القانون (24 شعاع)', 'المهاتما غاندي: قاد الهند للاستقلال (1947) من غير عنف', 'Tata · Reliance · Infosys · Mahindra · Wipro'],
+  ['🇰🇷', 'كوريا الجنوبية', 'سول', '51 مليون', 'الكوري', 'أغلبهم بدون دين؛ المسيحية والبوذية', '190', 1, 'كوريا الشمالية', 'الأبيض = السلام · الدايرة = توازن الين واليانج · الـ 4 رموز = السما والأرض والمية والنار', 'الملك سيجونج: اخترع الأبجدية الكورية (1443)', 'Samsung · Hyundai · Kia · LG'],
+  ['🇬🇧', 'بريطانيا', 'لندن', '69 مليون', 'الإنجليزي', 'المسيحية، ونسبة كبيرة بدون دين', '186', 1, 'أيرلندا', 'بيجمع 3 صلبان: إنجلترا واسكتلندا وأيرلندا', 'إسحاق نيوتن: اكتشف قوانين الحركة والجاذبية', 'Rolls-Royce · BP · HSBC · Unilever · Land Rover'],
+  ['🇫🇷', 'فرنسا', 'باريس', '68 مليون', 'الفرنسي', 'المسيحية (كاثوليك)، وبدون دين، والإسلام', '189', 8, 'بلجيكا · لوكسمبورج · ألمانيا · سويسرا · إيطاليا · موناكو · أندورا · إسبانيا (+ البرازيل وسورينام عن طريق جويانا الفرنسية)', 'الأزرق والأحمر = ألوان باريس · الأبيض = الملكية · ارتبط بالثورة الفرنسية', 'لويس باستير: عمل اللقاحات واخترع البسترة', 'Louis Vuitton · Chanel · Peugeot · L\'Oréal · Airbus'],
+  ['🇯🇵', 'اليابان', 'طوكيو', '123 مليون', 'الياباني', 'الشنتو والبوذية', '190', 0, 'مفيش، جزر', 'الدايرة الحمرا = الشمس: "بلد الشمس المشرقة"', 'هاياو ميازاكي: ستوديو جيبلي، وأوسكار عن Spirited Away', 'Toyota · Sony · Nintendo · Honda'],
+  ['🇹🇷', 'تركيا', 'أنقرة', '86 مليون', 'التركي', 'الإسلام (99%)', '118', 8, 'اليونان · بلغاريا · جورجيا · أرمينيا · أذربيجان · إيران · العراق · سوريا', 'الهلال والنجمة من التراث العثماني', 'مصطفى كمال أتاتورك: أسس الجمهورية التركية (1923)', 'Turkish Airlines · Beko · Ülker · Koç'],
+  ['🇮🇹', 'إيطاليا', 'روما', '59 مليون', 'الإيطالي', 'المسيحية (كاثوليك)', '189', 6, 'فرنسا · سويسرا · النمسا · سلوفينيا · سان مارينو · الفاتيكان', 'مستوحى من علم فرنسا · الشعبي: الأخضر للأمل والأبيض للإيمان والأحمر للمحبة', 'ليوناردو دافنشي: رسم الموناليزا، وفنان ومخترع', 'Ferrari · Fiat · Gucci · Barilla'],
+  ['🇧🇷', 'البرازيل', 'برازيليا', '212 مليون', 'البرتغالي', 'المسيحية (كاثوليك وإنجيليين)', '170', 10, 'الأرجنتين · بوليفيا · كولومبيا · جويانا · باراجواي · بيرو · سورينام · أوروجواي · فنزويلا · جويانا الفرنسية', 'الأخضر والأصفر = الغابات والدهب · الكرة الزرقا = سما ريو ليلة 15 نوفمبر 1889', 'بيليه: كسب كاس العالم 3 مرات (1958، 1962، 1970)', 'Embraer · Petrobras · Havaianas · Natura'],
+  ['🇵🇰', 'باكستان', 'إسلام آباد', '250 مليون', 'الأردو والإنجليزي', 'الإسلام (96%)', '31', 4, 'الهند · الصين · أفغانستان · إيران', 'الأخضر = المسلمين · الأبيض = الأقليات · الهلال = التقدم · النجمة = النور والعلم', 'ملالا يوسفزاي: أصغر حد ياخد نوبل للسلام (2014)', 'PIA · Shan Foods · HBL'],
+  ['🇮🇩', 'إندونيسيا', 'جاكرتا', '285 مليون', 'الإندونيسي', 'الإسلام (87%)، أكبر عدد مسلمين في العالم', '73', 3, 'ماليزيا · بابوا غينيا الجديدة · تيمور الشرقية', 'الأحمر = الشجاعة · الأبيض = النقاء', 'سوكارنو: أول رئيس، وأعلن الاستقلال (1945)', 'Indomie · Garuda Indonesia · Gojek'],
+  ['🇩🇪', 'ألمانيا', 'برلين', '84 مليون', 'الألماني', 'المسيحية، ونسبة كبيرة بدون دين', '190', 9, 'الدنمارك · بولندا · التشيك · النمسا · سويسرا · فرنسا · لوكسمبورج · بلجيكا · هولندا', 'أسود وأحمر ودهبي = ألوان حركة الوحدة والديمقراطية في القرن الـ 19', 'ألبرت أينشتاين: صاحب النظرية النسبية', 'Mercedes-Benz · BMW · Volkswagen · Adidas · Siemens'],
+  ['🇮🇱', 'إسرائيل', 'القدس (متنازع عليها دولياً)', '10 مليون', 'العبري (والعربي ليه وضع خاص)', 'اليهودية (73%)، والإسلام (18%)', '165', 4, 'مصر · الأردن · سوريا · لبنان (+ الضفة الغربية وغزة)', 'الخطين الأزرق من شال الصلاة اليهودي · ونجمة داوود', 'إسحاق رابين: وقّع اتفاقية أوسلو (1993) وخد نوبل للسلام', 'Teva · Check Point · Mobileye'],
+  ['🇮🇷', 'إيران', 'طهران', '92 مليون', 'الفارسي', 'الإسلام (أغلبية شيعية)', '41', 7, 'العراق · تركيا · أرمينيا · أذربيجان · تركمانستان · أفغانستان · باكستان', 'الأخضر = الإسلام · الأبيض = السلام · الأحمر = الشجاعة · "الله أكبر" مكتوبة 22 مرة', 'عمر الخيام: شاعر الرباعيات وعالم رياضيات وفلك', 'Iran Khodro · Saipa · Digikala'],
+  ['🇪🇸', 'إسبانيا', 'مدريد', '49 مليون', 'الإسباني (+ لغات إقليمية)', 'المسيحية (كاثوليك)', '190', 5, 'فرنسا · البرتغال · أندورا · المغرب (سبتة ومليلية) · بريطانيا (جبل طارق)', 'الأحمر والدهبي من مملكة أراجون · الشعار فيه أعمدة هرقل و"Plus Ultra"', 'بابلو بيكاسو: من مؤسسين المدرسة التكعيبية', 'Zara · Santander · Telefónica · SEAT'],
+  ['🇦🇺', 'أستراليا', 'كانبرا', '27 مليون', 'الإنجليزي', 'المسيحية، ونسبة كبيرة بدون دين', '185', 0, 'مفيش، قارة لوحدها', 'علم بريطانيا = التاريخ · النجمة الكبيرة = الولايات · الصليب الجنوبي = نجوم سماها', 'هوارد فلوري: حوّل البنسلين لدوا، وخد نوبل (1945)', 'Qantas · BHP · Atlassian · Canva'],
+  ['🇪🇬', 'مصر', 'القاهرة', '108 مليون', 'العربي', 'الإسلام (90%)، والمسيحية (10%)', '52', 4, 'ليبيا · السودان · فلسطين (غزة) · إسرائيل', 'الأحمر = النضال قبل 1952 · الأبيض = ثورة 1952 السلمية · الأسود = نهاية الظلم · نسر صلاح الدين', 'نجيب محفوظ: أول عربي ياخد نوبل في الأدب (1988)', 'EgyptAir · Orascom · Elsewedy Electric · CIB · Juhayna'],
+  ['🇺🇦', 'أوكرانيا', 'كييف', '37 مليون (تقديري)', 'الأوكراني', 'المسيحية الأرثوذكسية', '147', 7, 'روسيا · بيلاروسيا · بولندا · سلوفاكيا · المجر · رومانيا · مولدوفا', 'الأزرق = السما · الأصفر = حقول القمح', 'إيجور سيكورسكي: اتولد في كييف، وعمل أول هليكوبتر بتتصنع بالكمية', 'Antonov · Nova Poshta · Grammarly (أسسها أوكرانيين)'],
+];
+const ar = (s) => ({ cls: 'rtl', swipe: 'اسحب →', ...s });
+const countryAr = (c, i) => {
+  const [flag, name, capital, pop, lang, rel, pass, nb, borders, meaning, famous, brands] = c;
+  const [who, what] = famous.split(': ');
+  return ar({ theme: i % 2 ? 'light' : 'dark', foot: 'أرقام تقريبية · GFP 2025', body: center(`
+    <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">${flag}</span><div><span class="tag">المركز ${i + 1} عالمياً</span><h2 style="margin-top:8px;font-size:62px">${name}</h2></div></div>
+    <div class="facts">
+      <div class="fact"><small>العاصمة</small><span>${capital}</span></div>
+      <div class="fact"><small>السكان</small><span>حوالي ${pop}</span></div>
+      <div class="fact"><small>اللغة</small><span>${lang}</span></div>
+      <div class="fact"><small>الديانة</small><span>${rel}</span></div>
+      <div class="fact"><small>قوة الجيش (GFP)</small><span>المركز ${i + 1}</span></div>
+      <div class="fact"><small>الباسبور</small><span>حوالي ${pass} دولة من غير فيزا</span></div>
+    </div>
+    <div class="kv">
+      <div class="k">الحدود (${nb})</div><div>${borders}</div>
+      <div class="k">معنى العلم</div><div>${meaning}</div>
+      <div class="k">أشهر شخصية</div><div><b>${who}</b>: ${what}</div>
+      <div class="k">شركات</div><div dir="ltr" style="text-align:right">${brands}</div>
+    </div>`) });
+};
+const ctaAr = (title, text, items) => ar({ theme: 'dark', last: true, body: center(`
+  <h1 style="font-size:88px">${title}</h1>
+  <p class="sub" style="margin:40px 0 60px">${text}</p>
+  <div class="ar" style="display:flex;flex-direction:column;gap:22px;font-weight:600;font-size:34px">${items.map(x => `<div>${x}</div>`).join('')}<div>➕ &nbsp;تابع <span class="gold" dir="ltr">@mina_monir8</span></div></div>`) });
+const hookAr = (tag, h1, sub) => ar({ theme: 'dark', foot: 'احفظه لبعدين', body: center(`
+  <span class="tag" style="margin-bottom:44px;display:inline-block">${tag}</span><h1>${h1}</h1><p class="sub" style="margin-top:44px">${sub}</p>`) });
+const worldAr1 = [
+  hookAr('العالم في ٣ أجزاء · الجزء ١', 'أقوى <span class="gold">٢٠ دولة</span> في العالم', 'حسب ترتيب Global Firepower 2025: العاصمة، السكان، اللغة، الدين، الحدود، الباسبور، معنى العلم، وأشهر شخصية وشركات.'),
+  ar({ theme: 'light', body: center(`
+    <span class="tag">قبل ما نبدأ</span>
+    <h2 style="margin:40px 0 36px"><span class="rose">الأمم المتحدة</span></h2>
+    <div class="stats">
+      <div class="stat"><b>1945</b><span class="lbl">اتأسست ٢٤ أكتوبر ١٩٤٥ بعد الحرب العالمية التانية</span></div>
+      <div class="stat"><b>51</b><span class="lbl">دولة مؤسسة، ومصر واحدة منهم</span></div>
+      <div class="stat"><b>193</b><span class="lbl">دولة عضو النهارده</span></div>
+      <div class="stat"><b>6</b><span class="lbl">لغات رسمية، منها العربي</span></div>
+    </div>
+    <div class="pill" style="margin-top:30px">٥ أعضاء دايمين في مجلس الأمن: أمريكا، روسيا، الصين، بريطانيا، فرنسا. وكلهم في أول ٧ في الترتيب ده.</div>`) }),
+  ...C20.slice(0, 10).map((c, i) => countryAr(c, i)),
+  ctaAr('كمّل <span class="gold">الجزء ٢</span>', 'من المركز ١١ لـ ٢٠، ومصر فيهم. وفي الجزء ٣: توقيت زولو، والشمال الحقيقي والمغناطيسي.', ['🔖 &nbsp;احفظ الكاروسيل', '💬 &nbsp;توقّع مركز مصر في الكومنتات']),
+];
+const worldAr2 = [
+  hookAr('العالم في ٣ أجزاء · الجزء ٢', 'من المركز <span class="gold">١١ لـ ٢٠</span> 🌍', 'البرازيل، ألمانيا، اليابان… ومصر. كل دولة في صفحة: العاصمة، السكان، الحدود، الباسبور، العلم، وأشهر شخصية وشركات.'),
+  ...C20.slice(10).map((c, i) => countryAr(c, i + 10)),
+  ar({ theme: 'light', foot: 'أرقام تقريبية · GFP 2025', body: center(`
+    <span class="tag">الـ ٢٠ في صفحة واحدة</span>
+    <h2 style="margin:16px 0 12px;font-size:60px">الترتيب <span class="rose">كامل</span></h2>
+    <div class="t20"><div class="h">#</div><div class="h">الدولة</div><div class="h">السكان</div><div class="h">الحدود</div><div class="h">من غير فيزا</div>
+    ${C20.map((c, i) => { const e = c[1] === 'مصر' ? ' class="eg"' : ''; return `<div${e}>${i + 1}</div><div${e}>${c[0]} ${c[1]}</div><div${e}>${c[3].replace(' (تقديري)', '')}</div><div${e}>${c[7]}</div><div${e}>${c[6]}</div>`; }).join('')}</div>`) }),
+  ctaAr('أنهي دولة <span class="gold">فاجئتك؟</span>', 'وفي الجزء ٣: إزاي العالم كله بيظبط ساعته، وليه البوصلة مش بتشاور على الشمال الحقيقي.', ['💬 &nbsp;اكتب اسم الدولة في الكومنتات', '🏷️ &nbsp;اعمل تاج لصاحبك اللي بيحب الجغرافيا']),
+];
+const worldAr3 = [
+  hookAr('العالم في ٣ أجزاء · الجزء ٣', 'ساعة واحدة. <span class="gold">شمالين.</span>', 'جرينتش، توقيت زولو، وإزاي تحسب فرق التوقيت بنفسك، وليه البوصلة مش بتشاور على القطب الشمالي الحقيقي.'),
+  ar({ theme: 'dark', body: center(`
+    <span class="tag">الساعة · ١/٣</span>
+    <div style="display:flex;align-items:center;gap:40px;margin:30px 0 20px">${globe}<h2>منين ساعة العالم <span class="gold">بتبدأ؟</span></h2></div>
+    ${li('📍', 'جرينتش في لندن: خط طول صفر', 'خط جرينتش، اللي كل التوقيتات بتتحسب منه')}${li('🤝', 'اتفقوا عليه سنة 1884', 'في مؤتمر دولي في واشنطن')}${li('⚛️', 'من GMT لـ UTC', 'النهارده العالم ماشي بـ UTC، بساعات ذرية')}${li('🌐', 'الناحية التانية: خط 180', 'تقريباً مكان خط التاريخ الدولي')}`) }),
+  ar({ theme: 'light', body: center(`
+    <span class="tag">الساعة · ٢/٣</span>
+    <h2 style="margin:40px 0 30px">احسب توقيتك <span class="rose">بنفسك</span></h2>
+    <div class="formula" style="direction:rtl">خط الطول ÷ 15 = الفرق عن UTC بالساعات</div>
+    <p class="sub" style="margin:24px 0 30px">الأرض بتلف 360 درجة في 24 ساعة، يعني كل 15 درجة = ساعة. الشرق قدّام (+)، والغرب ورا (−).</p>
+    <div class="stats">
+      <div class="stat"><b>UTC+2</b><span class="lbl">القاهرة: 31 شرق ÷ 15 ≈ 2</span></div>
+      <div class="stat"><b>UTC−5</b><span class="lbl">نيويورك: 74 غرب ÷ 15 ≈ 5</span></div>
+    </div>
+    <div class="pill" style="margin-top:30px">بس الحدود سياسية: الصين عرضها حوالي ٥ توقيتات وبتستخدم توقيت واحد (UTC+8)، والهند بتستخدم UTC+5:30.</div>`) }),
+  ar({ theme: 'dark', body: center(`
+    <span class="tag">الساعة · ٣/٣</span>
+    <h2 style="margin:40px 0 20px">يعني إيه <span class="gold">توقيت زولو؟</span></h2>
+    <p class="sub" style="margin-bottom:24px">Z = UTC+0. الطيارين والبحارة والجيوش بيستخدموا ساعة واحدة للكوكب كله، وكل توقيت ليه حرف:</p>
+    <div class="zt">
+      <div class="l">Z</div><div dir="ltr" style="text-align:right">Zulu</div><div dir="ltr" style="text-align:right">UTC±0</div><div>لندن (شتا)</div>
+      <div class="l">B</div><div dir="ltr" style="text-align:right">Bravo</div><div dir="ltr" style="text-align:right">UTC+2</div><div>القاهرة</div>
+      <div class="l">C</div><div dir="ltr" style="text-align:right">Charlie</div><div dir="ltr" style="text-align:right">UTC+3</div><div>موسكو · القاهرة (صيف)</div>
+      <div class="l">H</div><div dir="ltr" style="text-align:right">Hotel</div><div dir="ltr" style="text-align:right">UTC+8</div><div>بكين</div>
+      <div class="l">R</div><div dir="ltr" style="text-align:right">Romeo</div><div dir="ltr" style="text-align:right">UTC−5</div><div>نيويورك (شتا)</div>
+      <div class="l">J</div><div dir="ltr" style="text-align:right">Juliet</div><div>—</div><div>"التوقيت المحلي" في أي مكان</div>
+    </div>
+    <div class="pill" style="margin-top:28px">الساعة 12:00Z = 14:00 في القاهرة (15:00 صيفي) · 15:00 موسكو · 20:00 بكين · 07:00 نيويورك</div>`) }),
+  ar({ theme: 'light', body: center(`
+    <span class="tag">الشمالين · ١/٣</span>
+    <h2 style="margin:40px 0 36px">البوصلة <span class="rose">بتكدب عليك</span> (شوية)</h2>
+    <div class="cards">
+      <div class="card d"><div class="l">★ الشمال الحقيقي</div><div class="m">القطب الشمالي الجغرافي، مكان ما محور الأرض بيقابل السطح. ثابت، والخرايط مترسومة عليه.</div></div>
+      <div class="card w"><div class="l">🧭 الشمال المغناطيسي</div><div class="m">المكان اللي إبرة البوصلة بتشاور عليه. بيتحرك، لأن الحديد السايل جوه قلب الأرض بيتحرك.</div></div>
+    </div>
+    <div class="pill" style="margin-top:30px">الشمال المغناطيسي اتحرك من شمال كندا ناحية سيبيريا، بسرعة وصلت لحوالي ٥٠ كيلو في السنة.</div>`) }),
+  ar({ theme: 'dark', body: center(`
+    <span class="tag">الشمالين · ٢/٣</span>
+    <div style="display:flex;align-items:center;gap:40px;margin:30px 0 26px">${compass.replace('TRUE N ★', 'الحقيقي ★').replace('x="248" y="60"', 'x="330" y="34" text-anchor="start"').replace('>MAG N<', '>المغناطيسي<').replace('angle exaggerated', 'الزاوية مكبّرة للتوضيح').replaceAll('font-family="Inter"', 'font-family="Cairo"')}<h2>الفرق بينهم اسمه <span class="gold">الانحراف المغناطيسي</span></h2></div>
+    <div class="formula" style="color:var(--cream);font-size:32px;direction:rtl">الحقيقي = المغناطيسي + الانحراف لو شرق<br>الحقيقي = المغناطيسي − الانحراف لو غرب</div>
+    <div class="pill" style="margin-top:28px">القاهرة حوالي ٥ درجات شرق: البوصلة بتقول 100 درجة ← الاتجاه الحقيقي 105 درجة.</div>`) }),
+  ar({ theme: 'light', body: center(`
+    <span class="tag">الشمالين · ٣/٣</span>
+    <h2 style="margin:40px 0 30px">إمتى <span class="rose">بيتغير؟</span></h2>
+    ${li('🔄', 'طول الوقت', 'شوية كل سنة، ومختلف في كل مكان')}${li('🗺️', 'الخرايط بتكتبه', 'الانحراف، وبيتغير قد إيه كل سنة')}${li('🛰️', 'نموذج المغناطيسية العالمي', 'بيتحدث كل ٥ سنين، وآخر نسخة سنة 2025')}${li('📱', 'موبايلك بيحسبها لوحده', 'شغّل "الشمال الحقيقي" في تطبيق البوصلة')}${li('🔎', 'اعرف رقمك', 'دوّر على "NOAA magnetic declination calculator"')}`) }),
+  ctaAr('عرفت <span class="gold">الفرق؟</span>', 'ساعة واحدة للعالم كله، وشمالين مش واحد. الجغرافيا أسهل لما تشوفها في صفحة.', ['💬 &nbsp;اكتب في الكومنتات أكتر معلومة فاجئتك', '🔖 &nbsp;احفظ الأجزاء الـ ٣']),
+];
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -914,6 +1036,9 @@ const carousels = {
         <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span></div>
       </div>`) },
   ],
+  '26-world-ar-part1': worldAr1,
+  '27-world-ar-part2': worldAr2,
+  '28-world-ar-part3': worldAr3,
 };
 
 (async () => {
