@@ -190,6 +190,39 @@ const pains = [
     metricTitle: 'Your <span class="gold">waste %</span>', formula: 'Value of food wasted ÷ Food purchased × 100', metricNote: 'Check it weekly. Every point you cut goes straight to profit.',
     ctaTitle: 'Do you weigh <span class="gold">your waste?</span>', ctaText: 'The cheapest ingredient is the one you didn\'t throw away.', comment: 'Comment your best anti-waste tip' },
 ];
+const countries = [
+  { flag: '🇺🇸', name: 'United States', capital: 'Washington, D.C.', pop: '~340 million', lang: 'English', rel: 'Christianity (majority)', gfp: '#1', pass: '~180 visa-free', nb: '2',
+    borders: 'Canada · Mexico', meaning: `13 stripes = the 13 original colonies · 50 stars = the 50 states`,
+    famous: `<b>Neil Armstrong</b>: first human to walk on the Moon (1969)`, brands: 'Apple · Google · Microsoft · Jeep · Coca-Cola' },
+  { flag: '🇷🇺', name: 'Russia', capital: 'Moscow', pop: '~144 million', lang: 'Russian', rel: 'Orthodox Christianity, Islam', gfp: '#2', pass: '~115 visa-free', nb: '14',
+    borders: 'Norway · Finland · Estonia · Latvia · Lithuania · Poland · Belarus · Ukraine · Georgia · Azerbaijan · Kazakhstan · China · Mongolia · North Korea',
+    meaning: `White, blue, red. No official meaning, often read as honesty, loyalty and courage`,
+    famous: `<b>Yuri Gagarin</b>: first human in space (1961)`, brands: 'Gazprom · Lukoil · Kaspersky · Aeroflot · Yandex' },
+  { flag: '🇨🇳', name: 'China', capital: 'Beijing', pop: '~1.41 billion', lang: 'Mandarin Chinese', rel: 'Mostly non-religious; Buddhism, folk religion', gfp: '#3', pass: '~80 visa-free', nb: '14',
+    borders: 'Russia · Mongolia · North Korea · Vietnam · Laos · Myanmar · India · Bhutan · Nepal · Pakistan · Afghanistan · Tajikistan · Kyrgyzstan · Kazakhstan',
+    meaning: `Red = the revolution · big star = the Communist Party · 4 small stars = the people`,
+    famous: `<b>Confucius</b>: philosopher whose ideas on ethics shaped Asia for 2,500 years`, brands: 'Huawei · Alibaba · BYD · Lenovo · ByteDance (TikTok)' },
+  { flag: '🇮🇳', name: 'India', capital: 'New Delhi', pop: '~1.46 billion', lang: 'Hindi & English (+22 official)', rel: 'Hinduism (~80%), Islam (~14%)', gfp: '#4', pass: '~57 visa-free', nb: '6',
+    borders: 'Pakistan · China · Nepal · Bhutan · Bangladesh · Myanmar',
+    meaning: `Saffron = courage · white = peace & truth · green = growth · wheel = dharma (24 spokes)`,
+    famous: `<b>Mahatma Gandhi</b>: led India to independence (1947) through non-violence`, brands: 'Tata · Reliance · Infosys · Mahindra · Wipro' },
+  { flag: '🇪🇬', name: 'Egypt', capital: 'Cairo', pop: '~108 million', lang: 'Arabic', rel: 'Islam (~90%), Christianity (~10%)', gfp: '#19', pass: '~52 visa-free', nb: '4',
+    borders: 'Libya · Sudan · Israel · Palestine (Gaza)',
+    meaning: `Red = the struggle before 1952 · white = the peaceful 1952 revolution · black = the end of oppression · gold eagle of Saladin`,
+    famous: `<b>Naguib Mahfouz</b>: first Arab writer to win the Nobel Prize in Literature (1988)`, brands: 'EgyptAir · Orascom · Elsewedy Electric · CIB · Juhayna' },
+];
+const globe = `<svg width="300" height="300" viewBox="0 0 300 300" style="flex:none"><circle cx="150" cy="150" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  ${[40, 80, 115].map(rx => `<ellipse cx="150" cy="150" rx="${rx}" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/>`).join('')}
+  ${[-80, -40, 0, 40, 80].map(y => `<line x1="${150 - Math.sqrt(130 * 130 - y * y)}" y1="${150 + y}" x2="${150 + Math.sqrt(130 * 130 - y * y)}" y2="${150 + y}" stroke="rgba(243,235,225,.35)" stroke-width="2"/>`).join('')}
+  <line x1="150" y1="10" x2="150" y2="290" stroke="var(--gold)" stroke-width="6"/><text x="162" y="40" fill="var(--gold)" font-family="Inter" font-weight="800" font-size="26">0°</text></svg>`;
+const compass = `<svg width="330" height="345" viewBox="0 0 330 345" style="flex:none"><circle cx="165" cy="175" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  <line x1="165" y1="175" x2="165" y2="35" stroke="var(--cream)" stroke-width="6"/><path d="M155 45 L165 22 L175 45Z" fill="var(--cream)"/>
+  <text x="165" y="14" text-anchor="middle" fill="var(--cream)" font-family="Inter" font-weight="800" font-size="22">TRUE N ★</text>
+  <g transform="rotate(20 165 175)"><line x1="165" y1="175" x2="165" y2="45" stroke="var(--gold)" stroke-width="6"/><path d="M155 55 L165 32 L175 55Z" fill="var(--gold)"/></g>
+  <text x="248" y="60" fill="var(--gold)" font-family="Inter" font-weight="800" font-size="22">MAG N</text>
+  <path d="M165 95 A80 80 0 0 1 192 100" fill="none" stroke="var(--gold)" stroke-width="3"/>
+  <circle cx="165" cy="175" r="8" fill="var(--cream)"/>
+  <text x="165" y="330" text-anchor="middle" fill="var(--cream)" opacity=".7" font-family="Inter" font-weight="600" font-size="20">angle exaggerated</text></svg>`;
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -790,6 +823,97 @@ const carousels = {
   '22-pain-staff-turnover': pain(3, pains[2]),
   '23-pain-one-time-guests': pain(4, pains[3]),
   '24-pain-food-waste': pain(5, pains[4]),
+  '25-the-world': [
+    { theme: 'dark', foot: 'Save this for later', body: center(`
+      <span class="tag" style="margin-bottom:44px;display:inline-block">The World Explained</span>
+      <h1>5 countries. 1 clock. <span class="gold">2 norths.</span></h1>
+      <p class="sub" style="margin-top:44px">The UN, five of the world's biggest powers, Zulu time, and why your compass doesn't point to the North Pole.</p>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">Where it all meets</span>
+      <h2 style="margin:40px 0 36px">The <span class="rose">United Nations</span></h2>
+      <div class="stats">
+        <div class="stat"><b>1945</b><span class="lbl">Founded 24 October 1945, after World War II</span></div>
+        <div class="stat"><b>51</b><span class="lbl">Founding members, Egypt among them</span></div>
+        <div class="stat"><b>193</b><span class="lbl">Member states today</span></div>
+        <div class="stat"><b>6</b><span class="lbl">Official languages, Arabic one of them</span></div>
+      </div>
+      <div class="pill" style="margin-top:30px">5 permanent Security Council members: USA, Russia, China, UK and France. Three of them are in this carousel.</div>`) },
+    ...countries.map((c, i) => ({ theme: i % 2 ? 'light' : 'dark', foot: 'Rounded figures · GFP 2025 · passport approx.', body: center(`
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">${c.flag}</span><div><span class="tag">Country ${i + 1} of 5</span><h2 style="margin-top:10px;font-size:64px">${c.name}</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>${c.capital}</span></div>
+        <div class="fact"><small>Population</small><span>${c.pop}</span></div>
+        <div class="fact"><small>Language</small><span>${c.lang}</span></div>
+        <div class="fact"><small>Religion</small><span>${c.rel}</span></div>
+        <div class="fact"><small>Global Firepower</small><span>${c.gfp} in the world</span></div>
+        <div class="fact"><small>Passport</small><span>${c.pass}</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (${c.nb})</div><div>${c.borders}</div>
+        <div class="k">The flag</div><div>${c.meaning}</div>
+        <div class="k">Famous</div><div>${c.famous}</div>
+        <div class="k">Brands</div><div>${c.brands}</div>
+      </div>`) })),
+    { theme: 'light', foot: 'Rounded figures · GFP 2025 · passport approx.', body: center(`
+      <span class="tag">Side by side</span>
+      <h2 style="margin:40px 0 36px">How they <span class="rose">compare</span></h2>
+      <div class="tbl"><div class="h">Country</div><div class="h">Population</div><div class="h">Military</div><div class="h">Borders</div><div class="h">Visa-free</div>
+      ${countries.map(c => `<div>${c.flag} ${c.name}</div><div>${c.pop.replace('~', '').replace(' million', 'M').replace(' billion', 'B')}</div><div class="rose">${c.gfp}</div><div>${c.nb}</div><div>${c.pass.replace(' visa-free', '')}</div>`).join('')}</div>
+      <div class="pill" style="margin-top:36px">Russia and China have the most neighbours in the world: 14 each.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">The clock · 1/3</span>
+      <div style="display:flex;align-items:center;gap:40px;margin:30px 0 20px">${globe}<h2>Where the world's clock <span class="gold">starts</span></h2></div>
+      ${li('📍', 'Greenwich, London: 0° longitude', 'The Prime Meridian, the line every time zone counts from')}${li('🤝', 'Chosen in 1884', 'By an international conference in Washington, D.C.')}${li('⚛️', 'GMT → UTC', 'Today the world runs on UTC, kept by atomic clocks')}${li('🌐', 'The other side: 180°', 'Roughly where the International Date Line runs')}`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The clock · 2/3</span>
+      <h2 style="margin:40px 0 30px">Work out your time zone <span class="rose">yourself</span></h2>
+      <div class="formula">Longitude ÷ 15 = hours from UTC</div>
+      <p class="sub" style="margin:24px 0 30px">The Earth turns 360° in 24 hours, so every 15° is one hour. East is ahead (+), west is behind (−).</p>
+      <div class="stats">
+        <div class="stat"><b>UTC+2</b><span class="lbl">Cairo: 31°E ÷ 15 ≈ 2</span></div>
+        <div class="stat"><b>UTC−5</b><span class="lbl">New York: 74°W ÷ 15 ≈ 5</span></div>
+      </div>
+      <div class="pill" style="margin-top:30px">But borders are political: China spans about 5 zones and uses just one (UTC+8). India uses UTC+5:30.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">The clock · 3/3</span>
+      <h2 style="margin:40px 0 20px">What is <span class="gold">Zulu time?</span></h2>
+      <p class="sub" style="margin-bottom:24px">Z = UTC+0. Pilots, sailors and armies use one clock for the whole planet. Every zone gets a letter:</p>
+      <div class="zt">
+        <div class="l">Z</div><div>Zulu</div><div>UTC±0</div><div>London (winter)</div>
+        <div class="l">B</div><div>Bravo</div><div>UTC+2</div><div>Cairo</div>
+        <div class="l">C</div><div>Charlie</div><div>UTC+3</div><div>Moscow · Cairo (summer)</div>
+        <div class="l">H</div><div>Hotel</div><div>UTC+8</div><div>Beijing</div>
+        <div class="l">R</div><div>Romeo</div><div>UTC−5</div><div>New York (winter)</div>
+        <div class="l">J</div><div>Juliet</div><div>—</div><div>"Local time", wherever you are</div>
+      </div>
+      <div class="pill" style="margin-top:28px">12:00Z = 14:00 Cairo (15:00 in summer) · 15:00 Moscow · 20:00 Beijing · 07:00 New York</div>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The 2 norths · 1/3</span>
+      <h2 style="margin:40px 0 36px">Your compass <span class="rose">is lying</span> (a little)</h2>
+      <div class="cards">
+        <div class="card d"><div class="l">★ True North</div><div class="m">The geographic North Pole, where Earth's axis meets the surface. It doesn't move. Maps are drawn to it.</div></div>
+        <div class="card w"><div class="l">🧭 Magnetic North</div><div class="m">Where your compass needle points. It moves, because the liquid iron in Earth's outer core keeps shifting.</div></div>
+      </div>
+      <div class="pill" style="margin-top:30px">Magnetic north has drifted from northern Canada towards Siberia, at up to about 50 km a year.</div>`) },
+    { theme: 'dark', body: center(`
+      <span class="tag">The 2 norths · 2/3</span>
+      <div style="display:flex;align-items:center;gap:40px;margin:30px 0 26px">${compass}<h2>The gap is called <span class="gold">declination</span></h2></div>
+      <div class="formula" style="color:var(--cream);font-size:34px">True = Magnetic + East declination<br>True = Magnetic − West declination</div>
+      <div class="pill" style="margin-top:28px">Cairo is about 5° East. Compass reads 100° → true bearing is 105°.</div>`) },
+    { theme: 'light', body: center(`
+      <span class="tag">The 2 norths · 3/3</span>
+      <h2 style="margin:40px 0 30px">When does <span class="rose">it change?</span></h2>
+      ${li('🔄', 'All the time', 'A small amount every year, different in every place')}${li('🗺️', 'Maps print it', 'The declination, plus how much it changes per year')}${li('🛰️', 'The World Magnetic Model', 'Updated every 5 years. The latest is from 2025')}${li('📱', 'Your phone does the maths', 'Switch on "true north" in the compass app')}${li('🔎', 'Find yours', 'Search "NOAA magnetic declination calculator"')}`) },
+    { theme: 'dark', last: true, body: center(`
+      <h1 style="font-size:92px">Which country <span class="gold">should be next?</span></h1>
+      <p class="sub" style="margin:40px 0 60px">Five countries, one clock, two norths. The world is easier to understand when you see it on one page.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;Comment the next country you want</div>
+        <div>🔖 &nbsp;Save this for later</div>
+        <div>🏷️ &nbsp;Tag a friend who loves geography</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span></div>
+      </div>`) },
+  ],
 };
 
 (async () => {
