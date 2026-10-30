@@ -1,0 +1,171 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat{border-radius:28px;padding:34px 36px;background:#fff;color:var(--ink)}
+.dark .stat{background:var(--ink2);color:var(--cream)}
+.stat b{display:block;font:800 64px/1.05 Inter;color:var(--rose);margin-bottom:12px}
+.dark .stat b{color:var(--gold)}
+.stat .lbl{font:600 26px/1.35 Inter;opacity:.8}
+.rtl .lbl,.rtl .li,.rtl .li small,.rtl .card .l,.rtl .card .m,.rtl .cta-list{font-family:'Cairo','Inter',sans-serif}
+.rtl .stat b,.rtl .card .big{direction:ltr;text-align:right;unicode-bidi:isolate}
+.bar{display:grid;grid-template-columns:260px 1fr 90px;align-items:center;gap:20px;padding:14px 0;font:700 28px Inter}
+.bar i{display:block;height:34px;border-radius:10px;background:var(--rose)}
+.bar.p i{background:var(--gold)}
+.bar.p{color:var(--rose);font-weight:800}
+.bar b{text-align:right}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 18px}
+.fact{border-radius:18px;padding:16px 18px;background:#fff}
+.dark .fact{background:var(--ink2)}
+.fact small{display:block;font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
+.fact span{font:700 25px/1.25 Inter}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:0 20px;font:500 23px/1.4 Inter}
+.kv>div{padding:12px 0;border-top:2px solid #e0d2c4}
+.dark .kv>div{border-color:#5a2a2f}
+.kv .k{font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;padding-top:17px}
+.tbl{display:grid;grid-template-columns:1.5fr 1fr .8fr .8fr 1fr;font:600 26px Inter}
+.tbl>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.tbl .h{font:800 18px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;border-bottom:3px solid var(--ink)}
+.zt{display:grid;grid-template-columns:70px 150px 120px 1fr;font:600 25px Inter}
+.zt>div{padding:13px 0;border-bottom:2px solid #5a2a2f}
+.zt .l{font:800 34px 'Playfair Display',serif;color:var(--gold)}
+.rtl .fact small,.rtl .fact span,.rtl .kv,.rtl .kv .k,.rtl .tbl,.rtl .zt{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .fact small,.rtl .kv .k{font-size:19px}
+.rtl .fact span{font-size:24px}
+.rtl .kv{grid-template-columns:140px 1fr;font-size:23px}
+.t20{display:grid;grid-template-columns:60px 1.6fr 1fr .7fr 1fr;font:600 23px 'Cairo',Inter}
+.t20>div{padding:7px 0;border-bottom:1.5px solid #e0d2c4}
+.t20 .h{font-weight:800;font-size:19px;opacity:.6;border-bottom:3px solid var(--ink)}
+.t20 .eg{color:var(--rose);font-weight:800}
+.t20{font-size:21px}
+.t20>div{padding:3px 0}
+</style></head><body><section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <span class="tag" style="margin-bottom:44px;display:inline-block">العالم في ٣ أجزاء · الجزء ٣</span><h1>ساعة واحدة. <span class="gold">شمالين.</span></h1><p class="sub" style="margin-top:44px">جرينتش، توقيت زولو، وإزاي تحسب فرق التوقيت بنفسك، وليه البوصلة مش بتشاور على القطب الشمالي الحقيقي.</p></div><div class="bot"><span>احفظه لبعدين</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الساعة · ١/٣</span>
+    <div style="display:flex;align-items:center;gap:40px;margin:30px 0 20px"><svg width="300" height="300" viewBox="0 0 300 300" style="flex:none"><circle cx="150" cy="150" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  <ellipse cx="150" cy="150" rx="40" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/><ellipse cx="150" cy="150" rx="80" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/><ellipse cx="150" cy="150" rx="115" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/>
+  <line x1="47.53049234040401" y1="70" x2="252.469507659596" y2="70" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="26.306831231470184" y1="110" x2="273.6931687685298" y2="110" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="20" y1="150" x2="280" y2="150" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="26.306831231470184" y1="190" x2="273.6931687685298" y2="190" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="47.53049234040401" y1="230" x2="252.469507659596" y2="230" stroke="rgba(243,235,225,.35)" stroke-width="2"/>
+  <line x1="150" y1="10" x2="150" y2="290" stroke="var(--gold)" stroke-width="6"/><text x="162" y="40" fill="var(--gold)" font-family="Inter" font-weight="800" font-size="26">0°</text></svg><h2>منين ساعة العالم <span class="gold">بتبدأ؟</span></h2></div>
+    <div class="li"><div class="ic">📍</div><div>جرينتش في لندن: خط طول صفر<small>خط جرينتش، اللي كل التوقيتات بتتحسب منه</small></div></div><div class="li"><div class="ic">🤝</div><div>اتفقوا عليه سنة 1884<small>في مؤتمر دولي في واشنطن</small></div></div><div class="li"><div class="ic">⚛️</div><div>من GMT لـ UTC<small>النهارده العالم ماشي بـ UTC، بساعات ذرية</small></div></div><div class="li"><div class="ic">🌐</div><div>الناحية التانية: خط 180<small>تقريباً مكان خط التاريخ الدولي</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الساعة · ٢/٣</span>
+    <h2 style="margin:40px 0 30px">احسب توقيتك <span class="rose">بنفسك</span></h2>
+    <div class="formula" style="direction:rtl">خط الطول ÷ 15 = الفرق عن UTC بالساعات</div>
+    <p class="sub" style="margin:24px 0 30px">الأرض بتلف 360 درجة في 24 ساعة، يعني كل 15 درجة = ساعة. الشرق قدّام (+)، والغرب ورا (−).</p>
+    <div class="stats">
+      <div class="stat"><b>UTC+2</b><span class="lbl">القاهرة: 31 شرق ÷ 15 ≈ 2</span></div>
+      <div class="stat"><b>UTC−5</b><span class="lbl">نيويورك: 74 غرب ÷ 15 ≈ 5</span></div>
+    </div>
+    <div class="pill" style="margin-top:30px">بس الحدود سياسية: الصين عرضها حوالي ٥ توقيتات وبتستخدم توقيت واحد (UTC+8)، والهند بتستخدم UTC+5:30.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الساعة · ٣/٣</span>
+    <h2 style="margin:40px 0 20px">يعني إيه <span class="gold">توقيت زولو؟</span></h2>
+    <p class="sub" style="margin-bottom:24px">Z = UTC+0. الطيارين والبحارة والجيوش بيستخدموا ساعة واحدة للكوكب كله، وكل توقيت ليه حرف:</p>
+    <div class="zt">
+      <div class="l">Z</div><div dir="ltr" style="text-align:right">Zulu</div><div dir="ltr" style="text-align:right">UTC±0</div><div>لندن (شتا)</div>
+      <div class="l">B</div><div dir="ltr" style="text-align:right">Bravo</div><div dir="ltr" style="text-align:right">UTC+2</div><div>القاهرة</div>
+      <div class="l">C</div><div dir="ltr" style="text-align:right">Charlie</div><div dir="ltr" style="text-align:right">UTC+3</div><div>موسكو · القاهرة (صيف)</div>
+      <div class="l">H</div><div dir="ltr" style="text-align:right">Hotel</div><div dir="ltr" style="text-align:right">UTC+8</div><div>بكين</div>
+      <div class="l">R</div><div dir="ltr" style="text-align:right">Romeo</div><div dir="ltr" style="text-align:right">UTC−5</div><div>نيويورك (شتا)</div>
+      <div class="l">J</div><div dir="ltr" style="text-align:right">Juliet</div><div>—</div><div>"التوقيت المحلي" في أي مكان</div>
+    </div>
+    <div class="pill" style="margin-top:28px">الساعة 12:00Z = 14:00 في القاهرة (15:00 صيفي) · 15:00 موسكو · 20:00 بكين · 07:00 نيويورك</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الشمالين · ١/٣</span>
+    <h2 style="margin:40px 0 36px">البوصلة <span class="rose">بتكدب عليك</span> (شوية)</h2>
+    <div class="cards">
+      <div class="card d"><div class="l">★ الشمال الحقيقي</div><div class="m">القطب الشمالي الجغرافي، مكان ما محور الأرض بيقابل السطح. ثابت، والخرايط مترسومة عليه.</div></div>
+      <div class="card w"><div class="l">🧭 الشمال المغناطيسي</div><div class="m">المكان اللي إبرة البوصلة بتشاور عليه. بيتحرك، لأن الحديد السايل جوه قلب الأرض بيتحرك.</div></div>
+    </div>
+    <div class="pill" style="margin-top:30px">الشمال المغناطيسي اتحرك من شمال كندا ناحية سيبيريا، بسرعة وصلت لحوالي ٥٠ كيلو في السنة.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الشمالين · ٢/٣</span>
+    <div style="display:flex;align-items:center;gap:40px;margin:30px 0 26px"><svg width="330" height="345" viewBox="0 0 330 345" style="flex:none"><circle cx="165" cy="175" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  <line x1="165" y1="175" x2="165" y2="35" stroke="var(--cream)" stroke-width="6"/><path d="M155 45 L165 22 L175 45Z" fill="var(--cream)"/>
+  <text x="165" y="14" text-anchor="middle" fill="var(--cream)" font-family="Cairo" font-weight="800" font-size="22">الحقيقي ★</text>
+  <g transform="rotate(20 165 175)"><line x1="165" y1="175" x2="165" y2="45" stroke="var(--gold)" stroke-width="6"/><path d="M155 55 L165 32 L175 55Z" fill="var(--gold)"/></g>
+  <text x="330" y="34" text-anchor="start" fill="var(--gold)" font-family="Cairo" font-weight="800" font-size="22">المغناطيسي</text>
+  <path d="M165 95 A80 80 0 0 1 192 100" fill="none" stroke="var(--gold)" stroke-width="3"/>
+  <circle cx="165" cy="175" r="8" fill="var(--cream)"/>
+  <text x="165" y="330" text-anchor="middle" fill="var(--cream)" opacity=".7" font-family="Cairo" font-weight="600" font-size="20">الزاوية مكبّرة للتوضيح</text></svg><h2>الفرق بينهم اسمه <span class="gold">الانحراف المغناطيسي</span></h2></div>
+    <div class="formula" style="color:var(--cream);font-size:32px;direction:rtl">الحقيقي = المغناطيسي + الانحراف لو شرق<br>الحقيقي = المغناطيسي − الانحراف لو غرب</div>
+    <div class="pill" style="margin-top:28px">القاهرة حوالي ٥ درجات شرق: البوصلة بتقول 100 درجة ← الاتجاه الحقيقي 105 درجة.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide light rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+    <span class="tag">الشمالين · ٣/٣</span>
+    <h2 style="margin:40px 0 30px">إمتى <span class="rose">بيتغير؟</span></h2>
+    <div class="li"><div class="ic">🔄</div><div>طول الوقت<small>شوية كل سنة، ومختلف في كل مكان</small></div></div><div class="li"><div class="ic">🗺️</div><div>الخرايط بتكتبه<small>الانحراف، وبيتغير قد إيه كل سنة</small></div></div><div class="li"><div class="ic">🛰️</div><div>نموذج المغناطيسية العالمي<small>بيتحدث كل ٥ سنين، وآخر نسخة سنة 2025</small></div></div><div class="li"><div class="ic">📱</div><div>موبايلك بيحسبها لوحده<small>شغّل "الشمال الحقيقي" في تطبيق البوصلة</small></div></div><div class="li"><div class="ic">🔎</div><div>اعرف رقمك<small>دوّر على "NOAA magnetic declination calculator"</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">اسحب →</span></div></section>
+<section class="slide dark rtl"><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">08 / 08</div></div><div style="margin-top:auto;margin-bottom:auto">
+  <h1 style="font-size:88px">عرفت <span class="gold">الفرق؟</span></h1>
+  <p class="sub" style="margin:40px 0 60px">ساعة واحدة للعالم كله، وشمالين مش واحد. الجغرافيا أسهل لما تشوفها في صفحة.</p>
+  <div class="ar" style="display:flex;flex-direction:column;gap:22px;font-weight:600;font-size:34px"><div>💬 &nbsp;اكتب في الكومنتات أكتر معلومة فاجئتك</div><div>🔖 &nbsp;احفظ الأجزاء الـ ٣</div><div>➕ &nbsp;تابع <span class="gold" dir="ltr">@mina_monir8</span></div></div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>

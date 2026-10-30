@@ -1,0 +1,274 @@
+<!doctype html><html><head><meta charset="utf-8"><link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;0,800;1,600&family=Inter:wght@400;500;600;700;800&family=Cairo:wght@400;500;600;700;800&family=El+Messiri:wght@500;600;700&display=swap" rel="stylesheet"><style>:root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33;--muted:#8a6f6a;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#111;font-family:Inter,sans-serif}
+.slide{width:1080px;height:1350px;position:relative;overflow:hidden;padding:110px 90px 120px;display:flex;flex-direction:column}
+.dark{background:var(--ink);color:var(--cream)}
+.light{background:var(--cream);color:var(--ink)}
+.top{position:absolute;top:48px;left:90px;right:90px;display:flex;justify-content:space-between;align-items:center}
+.who{display:flex;align-items:center;gap:16px}
+.av{width:58px;height:58px;border-radius:50%;background:var(--gold);color:var(--ink);font:800 22px Inter;display:grid;place-items:center}
+.name{font:700 22px Inter}.handle{font:500 18px Inter;opacity:.6}
+.num{font:600 20px Inter;opacity:.5;letter-spacing:2px}
+.bot{position:absolute;bottom:48px;left:90px;right:90px;display:flex;justify-content:space-between;font:600 20px Inter;opacity:.55}
+.tag{display:inline-block;align-self:flex-start;padding:12px 24px;border-radius:40px;font:800 18px Inter;letter-spacing:2px;text-transform:uppercase}
+.light .tag{background:var(--pink);color:var(--ink)}
+.dark .tag{background:var(--rose);color:var(--pink)}
+h1{font-family:'Playfair Display',serif;font-weight:800;font-size:104px;line-height:1.02;letter-spacing:-1px}
+h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-height:1.08}
+.gold{color:var(--gold)} .rose{color:var(--rose)}
+.sub{font:500 34px/1.45 Inter;opacity:.8}
+.formula{font:700 40px/1.4 Inter;padding:40px 44px;border-radius:24px;border:3px solid var(--gold)}
+.light .formula{background:#fff;border-color:var(--ink)}
+.cards{display:flex;flex-direction:column;gap:28px}
+.card{border-radius:28px;padding:44px 50px}
+.card.w{background:#fff;color:var(--ink)}
+.card.d{background:var(--ink);color:var(--cream)}
+.card .l{font:700 30px Inter;margin-bottom:14px}
+.card.w .l{color:var(--rose)} .card.d .l{color:var(--gold)}
+.card .m{font:500 26px/1.5 Inter;opacity:.75}
+.card .big{font:800 76px Inter;margin-top:18px}
+.card.w .big{color:var(--rose)} .card.d .big{color:var(--gold)}
+.pill{background:var(--pink);color:var(--ink);border-radius:22px;padding:30px 40px;font:700 30px/1.4 Inter}
+.row{display:flex;justify-content:space-between;align-items:flex-end;padding:30px 0;border-bottom:2px solid #5a2a2f;font:500 32px Inter}
+.row .blank{width:300px;border-bottom:3px dashed var(--gold);height:40px}
+.row.total{border-bottom:4px solid var(--gold);font-weight:800;color:var(--gold)}
+.huge{font:800 300px/0.9 'Playfair Display',serif;color:var(--rose);opacity:.35;position:absolute;right:60px;top:120px}
+.ratio{display:flex;gap:28px}
+.ratio>div{flex:1;border-radius:28px;padding:44px 40px}
+.ratio .v{font:800 120px/1 Inter;margin:18px 0}
+.sw{opacity:1;color:var(--gold)} .light .sw{color:var(--rose)}
+.li{display:flex;gap:28px;align-items:center;padding:22px 0;border-bottom:2px solid #e0d2c4;font:700 34px Inter}
+.dark .li{border-color:#5a2a2f}
+.li .ic{width:76px;height:76px;border-radius:20px;background:#fff;display:grid;place-items:center;font:800 34px Inter;color:var(--rose);flex:none}
+.dark .li .ic{background:var(--ink2);color:var(--gold)}
+.li small{display:block;font:500 25px Inter;opacity:.65;margin-top:6px}
+.chips{display:flex;flex-wrap:wrap;gap:16px}
+.chip{padding:16px 30px;border-radius:40px;font:700 28px Inter;background:var(--ink);color:var(--gold)}
+.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,.75) 0%,rgba(42,16,19,0) 22%,rgba(42,16,19,0) 38%,rgba(42,16,19,.92) 66%,var(--ink) 100%)}
+.top,.bot{z-index:2}
+.pic{border-radius:28px;overflow:hidden}
+.pic img{width:100%;height:100%;object-fit:cover;display:block}
+.cap{font:700 26px Inter;margin-top:16px;text-align:center}
+.vs{display:grid;grid-template-columns:200px 1fr 1fr;column-gap:24px;font:500 26px/1.35 Inter}
+.vs>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.dark .vs>div{border-color:#5a2a2f}
+.vs .h{font:800 24px Inter;letter-spacing:2px;text-transform:uppercase;border-bottom:3px solid currentColor;padding-top:0}
+.vs .k{font-weight:800;opacity:.6;font-size:22px;letter-spacing:1px;text-transform:uppercase;padding-top:26px}
+.letter{font:800 260px/0.8 'Playfair Display',serif;color:var(--gold)}
+.light .letter{color:var(--rose)}
+.quote{border-left:6px solid var(--gold);padding:6px 0 6px 32px;font:italic 600 34px/1.35 'Playfair Display',serif}
+.light .quote{border-color:var(--rose)}
+.quote small{display:block;font:700 22px Inter;font-style:normal;letter-spacing:2px;text-transform:uppercase;opacity:.6;margin-top:14px}
+.dark .chip.alt{background:var(--ink2);color:var(--cream)}
+.light .chip.alt{background:#fff;color:var(--ink)}
+.tiles{display:flex;gap:12px}
+.tiles span{flex:1;aspect-ratio:3/4;display:grid;place-items:center;border-radius:18px;font:800 64px 'Playfair Display',serif;background:var(--ink);color:var(--gold)}
+.rtl{direction:rtl}
+.rtl .top,.rtl .bot,.rtl .tiles{direction:ltr}
+.rtl h1,.rtl h2,.rtl .quote{font-family:'El Messiri','Playfair Display',serif;font-style:normal;line-height:1.35}
+.rtl .sub,.rtl .tag,.rtl .chip,.rtl .pill,.rtl .ar,.rtl .quote small,.rtl .bot{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .quote{border-left:0;border-right:6px solid var(--gold);padding:6px 32px 6px 0;font-weight:600}
+.rtl.light .quote{border-color:var(--rose)}
+.rtl .en{direction:ltr;text-align:right;font-family:'Playfair Display',serif}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.stat{border-radius:28px;padding:34px 36px;background:#fff;color:var(--ink)}
+.dark .stat{background:var(--ink2);color:var(--cream)}
+.stat b{display:block;font:800 64px/1.05 Inter;color:var(--rose);margin-bottom:12px}
+.dark .stat b{color:var(--gold)}
+.stat .lbl{font:600 26px/1.35 Inter;opacity:.8}
+.rtl .lbl,.rtl .li,.rtl .li small,.rtl .card .l,.rtl .card .m,.rtl .cta-list{font-family:'Cairo','Inter',sans-serif}
+.rtl .stat b,.rtl .card .big{direction:ltr;text-align:right;unicode-bidi:isolate}
+.bar{display:grid;grid-template-columns:260px 1fr 90px;align-items:center;gap:20px;padding:14px 0;font:700 28px Inter}
+.bar i{display:block;height:34px;border-radius:10px;background:var(--rose)}
+.bar.p i{background:var(--gold)}
+.bar.p{color:var(--rose);font-weight:800}
+.bar b{text-align:right}
+.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:26px 0 18px}
+.fact{border-radius:18px;padding:16px 18px;background:#fff}
+.dark .fact{background:var(--ink2)}
+.fact small{display:block;font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;margin-bottom:6px}
+.fact span{font:700 25px/1.25 Inter}
+.kv{display:grid;grid-template-columns:150px 1fr;gap:0 20px;font:500 23px/1.4 Inter}
+.kv>div{padding:12px 0;border-top:2px solid #e0d2c4}
+.dark .kv>div{border-color:#5a2a2f}
+.kv .k{font:800 16px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.55;padding-top:17px}
+.tbl{display:grid;grid-template-columns:1.5fr 1fr .8fr .8fr 1fr;font:600 26px Inter}
+.tbl>div{padding:22px 0;border-bottom:2px solid #e0d2c4}
+.tbl .h{font:800 18px Inter;letter-spacing:1.5px;text-transform:uppercase;opacity:.6;border-bottom:3px solid var(--ink)}
+.zt{display:grid;grid-template-columns:70px 150px 120px 1fr;font:600 25px Inter}
+.zt>div{padding:13px 0;border-bottom:2px solid #5a2a2f}
+.zt .l{font:800 34px 'Playfair Display',serif;color:var(--gold)}
+.rtl .fact small,.rtl .fact span,.rtl .kv,.rtl .kv .k,.rtl .tbl,.rtl .zt{font-family:'Cairo','Inter',sans-serif;letter-spacing:0}
+.rtl .fact small,.rtl .kv .k{font-size:19px}
+.rtl .fact span{font-size:24px}
+.rtl .kv{grid-template-columns:140px 1fr;font-size:23px}
+.t20{display:grid;grid-template-columns:60px 1.6fr 1fr .7fr 1fr;font:600 23px 'Cairo',Inter}
+.t20>div{padding:7px 0;border-bottom:1.5px solid #e0d2c4}
+.t20 .h{font-weight:800;font-size:19px;opacity:.6;border-bottom:3px solid var(--ink)}
+.t20 .eg{color:var(--rose);font-weight:800}
+.t20{font-size:21px}
+.t20>div{padding:3px 0}
+</style></head><body><section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">01 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag" style="margin-bottom:44px;display:inline-block">The World Explained</span>
+      <h1>5 countries. 1 clock. <span class="gold">2 norths.</span></h1>
+      <p class="sub" style="margin-top:44px">The UN, five of the world's biggest powers, Zulu time, and why your compass doesn't point to the North Pole.</p></div><div class="bot"><span>Save this for later</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">02 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">Where it all meets</span>
+      <h2 style="margin:40px 0 36px">The <span class="rose">United Nations</span></h2>
+      <div class="stats">
+        <div class="stat"><b>1945</b><span class="lbl">Founded 24 October 1945, after World War II</span></div>
+        <div class="stat"><b>51</b><span class="lbl">Founding members, Egypt among them</span></div>
+        <div class="stat"><b>193</b><span class="lbl">Member states today</span></div>
+        <div class="stat"><b>6</b><span class="lbl">Official languages, Arabic one of them</span></div>
+      </div>
+      <div class="pill" style="margin-top:30px">5 permanent Security Council members: USA, Russia, China, UK and France. Three of them are in this carousel.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">03 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇺🇸</span><div><span class="tag">Country 1 of 5</span><h2 style="margin-top:10px;font-size:64px">United States</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>Washington, D.C.</span></div>
+        <div class="fact"><small>Population</small><span>~340 million</span></div>
+        <div class="fact"><small>Language</small><span>English</span></div>
+        <div class="fact"><small>Religion</small><span>Christianity (majority)</span></div>
+        <div class="fact"><small>Global Firepower</small><span>#1 in the world</span></div>
+        <div class="fact"><small>Passport</small><span>~180 visa-free</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (2)</div><div>Canada · Mexico</div>
+        <div class="k">The flag</div><div>13 stripes = the 13 original colonies · 50 stars = the 50 states</div>
+        <div class="k">Famous</div><div><b>Neil Armstrong</b>: first human to walk on the Moon (1969)</div>
+        <div class="k">Brands</div><div>Apple · Google · Microsoft · Jeep · Coca-Cola</div>
+      </div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">04 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇷🇺</span><div><span class="tag">Country 2 of 5</span><h2 style="margin-top:10px;font-size:64px">Russia</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>Moscow</span></div>
+        <div class="fact"><small>Population</small><span>~144 million</span></div>
+        <div class="fact"><small>Language</small><span>Russian</span></div>
+        <div class="fact"><small>Religion</small><span>Orthodox Christianity, Islam</span></div>
+        <div class="fact"><small>Global Firepower</small><span>#2 in the world</span></div>
+        <div class="fact"><small>Passport</small><span>~115 visa-free</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (14)</div><div>Norway · Finland · Estonia · Latvia · Lithuania · Poland · Belarus · Ukraine · Georgia · Azerbaijan · Kazakhstan · China · Mongolia · North Korea</div>
+        <div class="k">The flag</div><div>White, blue, red. No official meaning, often read as honesty, loyalty and courage</div>
+        <div class="k">Famous</div><div><b>Yuri Gagarin</b>: first human in space (1961)</div>
+        <div class="k">Brands</div><div>Gazprom · Lukoil · Kaspersky · Aeroflot · Yandex</div>
+      </div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">05 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇨🇳</span><div><span class="tag">Country 3 of 5</span><h2 style="margin-top:10px;font-size:64px">China</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>Beijing</span></div>
+        <div class="fact"><small>Population</small><span>~1.41 billion</span></div>
+        <div class="fact"><small>Language</small><span>Mandarin Chinese</span></div>
+        <div class="fact"><small>Religion</small><span>Mostly non-religious; Buddhism, folk religion</span></div>
+        <div class="fact"><small>Global Firepower</small><span>#3 in the world</span></div>
+        <div class="fact"><small>Passport</small><span>~80 visa-free</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (14)</div><div>Russia · Mongolia · North Korea · Vietnam · Laos · Myanmar · India · Bhutan · Nepal · Pakistan · Afghanistan · Tajikistan · Kyrgyzstan · Kazakhstan</div>
+        <div class="k">The flag</div><div>Red = the revolution · big star = the Communist Party · 4 small stars = the people</div>
+        <div class="k">Famous</div><div><b>Confucius</b>: philosopher whose ideas on ethics shaped Asia for 2,500 years</div>
+        <div class="k">Brands</div><div>Huawei · Alibaba · BYD · Lenovo · ByteDance (TikTok)</div>
+      </div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">06 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇮🇳</span><div><span class="tag">Country 4 of 5</span><h2 style="margin-top:10px;font-size:64px">India</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>New Delhi</span></div>
+        <div class="fact"><small>Population</small><span>~1.46 billion</span></div>
+        <div class="fact"><small>Language</small><span>Hindi & English (+22 official)</span></div>
+        <div class="fact"><small>Religion</small><span>Hinduism (~80%), Islam (~14%)</span></div>
+        <div class="fact"><small>Global Firepower</small><span>#4 in the world</span></div>
+        <div class="fact"><small>Passport</small><span>~57 visa-free</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (6)</div><div>Pakistan · China · Nepal · Bhutan · Bangladesh · Myanmar</div>
+        <div class="k">The flag</div><div>Saffron = courage · white = peace & truth · green = growth · wheel = dharma (24 spokes)</div>
+        <div class="k">Famous</div><div><b>Mahatma Gandhi</b>: led India to independence (1947) through non-violence</div>
+        <div class="k">Brands</div><div>Tata · Reliance · Infosys · Mahindra · Wipro</div>
+      </div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">07 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <div style="display:flex;align-items:center;gap:26px"><span style="font-size:120px;line-height:1">🇪🇬</span><div><span class="tag">Country 5 of 5</span><h2 style="margin-top:10px;font-size:64px">Egypt</h2></div></div>
+      <div class="facts">
+        <div class="fact"><small>Capital</small><span>Cairo</span></div>
+        <div class="fact"><small>Population</small><span>~108 million</span></div>
+        <div class="fact"><small>Language</small><span>Arabic</span></div>
+        <div class="fact"><small>Religion</small><span>Islam (~90%), Christianity (~10%)</span></div>
+        <div class="fact"><small>Global Firepower</small><span>#19 in the world</span></div>
+        <div class="fact"><small>Passport</small><span>~52 visa-free</span></div>
+      </div>
+      <div class="kv">
+        <div class="k">Borders (4)</div><div>Libya · Sudan · Israel · Palestine (Gaza)</div>
+        <div class="k">The flag</div><div>Red = the struggle before 1952 · white = the peaceful 1952 revolution · black = the end of oppression · gold eagle of Saladin</div>
+        <div class="k">Famous</div><div><b>Naguib Mahfouz</b>: first Arab writer to win the Nobel Prize in Literature (1988)</div>
+        <div class="k">Brands</div><div>EgyptAir · Orascom · Elsewedy Electric · CIB · Juhayna</div>
+      </div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">08 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">Side by side</span>
+      <h2 style="margin:40px 0 36px">How they <span class="rose">compare</span></h2>
+      <div class="tbl"><div class="h">Country</div><div class="h">Population</div><div class="h">Military</div><div class="h">Borders</div><div class="h">Visa-free</div>
+      <div>🇺🇸 United States</div><div>340M</div><div class="rose">#1</div><div>2</div><div>~180</div><div>🇷🇺 Russia</div><div>144M</div><div class="rose">#2</div><div>14</div><div>~115</div><div>🇨🇳 China</div><div>1.41B</div><div class="rose">#3</div><div>14</div><div>~80</div><div>🇮🇳 India</div><div>1.46B</div><div class="rose">#4</div><div>6</div><div>~57</div><div>🇪🇬 Egypt</div><div>108M</div><div class="rose">#19</div><div>4</div><div>~52</div></div>
+      <div class="pill" style="margin-top:36px">Russia and China have the most neighbours in the world: 14 each.</div></div><div class="bot"><span>Rounded figures · GFP 2025 · passport approx.</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">09 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The clock · 1/3</span>
+      <div style="display:flex;align-items:center;gap:40px;margin:30px 0 20px"><svg width="300" height="300" viewBox="0 0 300 300" style="flex:none"><circle cx="150" cy="150" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  <ellipse cx="150" cy="150" rx="40" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/><ellipse cx="150" cy="150" rx="80" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/><ellipse cx="150" cy="150" rx="115" ry="130" fill="none" stroke="rgba(243,235,225,.35)" stroke-width="2"/>
+  <line x1="47.53049234040401" y1="70" x2="252.469507659596" y2="70" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="26.306831231470184" y1="110" x2="273.6931687685298" y2="110" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="20" y1="150" x2="280" y2="150" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="26.306831231470184" y1="190" x2="273.6931687685298" y2="190" stroke="rgba(243,235,225,.35)" stroke-width="2"/><line x1="47.53049234040401" y1="230" x2="252.469507659596" y2="230" stroke="rgba(243,235,225,.35)" stroke-width="2"/>
+  <line x1="150" y1="10" x2="150" y2="290" stroke="var(--gold)" stroke-width="6"/><text x="162" y="40" fill="var(--gold)" font-family="Inter" font-weight="800" font-size="26">0°</text></svg><h2>Where the world's clock <span class="gold">starts</span></h2></div>
+      <div class="li"><div class="ic">📍</div><div>Greenwich, London: 0° longitude<small>The Prime Meridian, the line every time zone counts from</small></div></div><div class="li"><div class="ic">🤝</div><div>Chosen in 1884<small>By an international conference in Washington, D.C.</small></div></div><div class="li"><div class="ic">⚛️</div><div>GMT → UTC<small>Today the world runs on UTC, kept by atomic clocks</small></div></div><div class="li"><div class="ic">🌐</div><div>The other side: 180°<small>Roughly where the International Date Line runs</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">10 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The clock · 2/3</span>
+      <h2 style="margin:40px 0 30px">Work out your time zone <span class="rose">yourself</span></h2>
+      <div class="formula">Longitude ÷ 15 = hours from UTC</div>
+      <p class="sub" style="margin:24px 0 30px">The Earth turns 360° in 24 hours, so every 15° is one hour. East is ahead (+), west is behind (−).</p>
+      <div class="stats">
+        <div class="stat"><b>UTC+2</b><span class="lbl">Cairo: 31°E ÷ 15 ≈ 2</span></div>
+        <div class="stat"><b>UTC−5</b><span class="lbl">New York: 74°W ÷ 15 ≈ 5</span></div>
+      </div>
+      <div class="pill" style="margin-top:30px">But borders are political: China spans about 5 zones and uses just one (UTC+8). India uses UTC+5:30.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">11 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The clock · 3/3</span>
+      <h2 style="margin:40px 0 20px">What is <span class="gold">Zulu time?</span></h2>
+      <p class="sub" style="margin-bottom:24px">Z = UTC+0. Pilots, sailors and armies use one clock for the whole planet. Every zone gets a letter:</p>
+      <div class="zt">
+        <div class="l">Z</div><div>Zulu</div><div>UTC±0</div><div>London (winter)</div>
+        <div class="l">B</div><div>Bravo</div><div>UTC+2</div><div>Cairo</div>
+        <div class="l">C</div><div>Charlie</div><div>UTC+3</div><div>Moscow · Cairo (summer)</div>
+        <div class="l">H</div><div>Hotel</div><div>UTC+8</div><div>Beijing</div>
+        <div class="l">R</div><div>Romeo</div><div>UTC−5</div><div>New York (winter)</div>
+        <div class="l">J</div><div>Juliet</div><div>—</div><div>"Local time", wherever you are</div>
+      </div>
+      <div class="pill" style="margin-top:28px">12:00Z = 14:00 Cairo (15:00 in summer) · 15:00 Moscow · 20:00 Beijing · 07:00 New York</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">12 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The 2 norths · 1/3</span>
+      <h2 style="margin:40px 0 36px">Your compass <span class="rose">is lying</span> (a little)</h2>
+      <div class="cards">
+        <div class="card d"><div class="l">★ True North</div><div class="m">The geographic North Pole, where Earth's axis meets the surface. It doesn't move. Maps are drawn to it.</div></div>
+        <div class="card w"><div class="l">🧭 Magnetic North</div><div class="m">Where your compass needle points. It moves, because the liquid iron in Earth's outer core keeps shifting.</div></div>
+      </div>
+      <div class="pill" style="margin-top:30px">Magnetic north has drifted from northern Canada towards Siberia, at up to about 50 km a year.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">13 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The 2 norths · 2/3</span>
+      <div style="display:flex;align-items:center;gap:40px;margin:30px 0 26px"><svg width="330" height="345" viewBox="0 0 330 345" style="flex:none"><circle cx="165" cy="175" r="130" fill="none" stroke="var(--cream)" stroke-width="3"/>
+  <line x1="165" y1="175" x2="165" y2="35" stroke="var(--cream)" stroke-width="6"/><path d="M155 45 L165 22 L175 45Z" fill="var(--cream)"/>
+  <text x="165" y="14" text-anchor="middle" fill="var(--cream)" font-family="Inter" font-weight="800" font-size="22">TRUE N ★</text>
+  <g transform="rotate(20 165 175)"><line x1="165" y1="175" x2="165" y2="45" stroke="var(--gold)" stroke-width="6"/><path d="M155 55 L165 32 L175 55Z" fill="var(--gold)"/></g>
+  <text x="248" y="60" fill="var(--gold)" font-family="Inter" font-weight="800" font-size="22">MAG N</text>
+  <path d="M165 95 A80 80 0 0 1 192 100" fill="none" stroke="var(--gold)" stroke-width="3"/>
+  <circle cx="165" cy="175" r="8" fill="var(--cream)"/>
+  <text x="165" y="330" text-anchor="middle" fill="var(--cream)" opacity=".7" font-family="Inter" font-weight="600" font-size="20">angle exaggerated</text></svg><h2>The gap is called <span class="gold">declination</span></h2></div>
+      <div class="formula" style="color:var(--cream);font-size:34px">True = Magnetic + East declination<br>True = Magnetic − West declination</div>
+      <div class="pill" style="margin-top:28px">Cairo is about 5° East. Compass reads 100° → true bearing is 105°.</div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide light "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">14 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <span class="tag">The 2 norths · 3/3</span>
+      <h2 style="margin:40px 0 30px">When does <span class="rose">it change?</span></h2>
+      <div class="li"><div class="ic">🔄</div><div>All the time<small>A small amount every year, different in every place</small></div></div><div class="li"><div class="ic">🗺️</div><div>Maps print it<small>The declination, plus how much it changes per year</small></div></div><div class="li"><div class="ic">🛰️</div><div>The World Magnetic Model<small>Updated every 5 years. The latest is from 2025</small></div></div><div class="li"><div class="ic">📱</div><div>Your phone does the maths<small>Switch on "true north" in the compass app</small></div></div><div class="li"><div class="ic">🔎</div><div>Find yours<small>Search "NOAA magnetic declination calculator"</small></div></div></div><div class="bot"><span>@mina_monir8</span><span class="sw">Swipe →</span></div></section>
+<section class="slide dark "><div class="top"><div class="who"><div class="av">MM</div><div><div class="name">Mina Monir</div><div class="handle">@mina_monir8</div></div></div><div class="num">15 / 15</div></div><div style="margin-top:auto;margin-bottom:auto">
+      <h1 style="font-size:92px">Which country <span class="gold">should be next?</span></h1>
+      <p class="sub" style="margin:40px 0 60px">Five countries, one clock, two norths. The world is easier to understand when you see it on one page.</p>
+      <div style="display:flex;flex-direction:column;gap:22px;font:600 34px Inter">
+        <div>💬 &nbsp;Comment the next country you want</div>
+        <div>🔖 &nbsp;Save this for later</div>
+        <div>🏷️ &nbsp;Tag a friend who loves geography</div>
+        <div>➕ &nbsp;Follow <span class="gold">@mina_monir8</span></div>
+      </div></div><div class="bot"><span>Mina Monir</span><span>@mina_monir8</span></div></section></body></html>

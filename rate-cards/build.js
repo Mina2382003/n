@@ -30,7 +30,7 @@ const signature = () => `
 <style>
 :root{--ink:#2a1013;--ink2:#3a181c;--cream:#f3ebe1;--gold:#d9a64e;--pink:#e2bcbd;--rose:#7a2e33}
 .card{background:var(--ink);color:var(--cream)}
-.ph{position:absolute;right:0;top:0;width:430px;height:100%;object-fit:cover;object-position:52% 30%}
+.ph{position:absolute;right:0;top:0;width:430px;height:100%;object-fit:cover;object-position:55% 50%}
 .ph-fade{position:absolute;right:0;top:0;width:430px;height:100%;background:linear-gradient(90deg,var(--ink) 0%,rgba(42,16,19,.15) 35%,rgba(42,16,19,0) 60%)}
 .in{position:absolute;left:80px;top:80px;width:620px;bottom:80px;display:flex;flex-direction:column}
 .kick{font:800 18px Inter;letter-spacing:5px;color:var(--gold);text-transform:uppercase}
@@ -51,7 +51,7 @@ h1 i{font-weight:600;color:var(--gold)}
 .foot .c{color:var(--gold)}.foot .s{opacity:.55;font-weight:500}
 </style>
 <div class="card">
-<img class="ph" src="img/mina-black.jpg"><div class="ph-fade"></div>
+<img class="ph" src="img/mina-dinner.jpg"><div class="ph-fade"></div>
 <div class="in">
   <div class="kick">UGC Rate Card · 2026</div>
   <h1>${me.first}<br><i>${me.last}</i></h1>
@@ -73,7 +73,7 @@ const editorial = () => `
 :root{--ink:#2a1013;--cream:#f3ebe1;--gold:#b8862f;--rose:#7a2e33;--line:rgba(42,16,19,.18)}
 .card{background:var(--cream);color:var(--ink)}
 .top{position:absolute;left:0;right:0;top:0;height:470px;overflow:hidden}
-.top img{width:100%;height:100%;object-fit:cover;object-position:50% 8%}
+.top img{width:100%;height:100%;object-fit:cover;object-position:50% 40%}
 .top:after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(42,16,19,0) 70%,rgba(42,16,19,.35) 100%)}
 .mast{position:absolute;left:70px;right:70px;top:505px;z-index:2;color:var(--ink);display:flex;justify-content:space-between;align-items:flex-end}
 .mast .k{font:700 17px Inter;letter-spacing:5px;text-transform:uppercase;color:var(--gold)}
@@ -95,7 +95,7 @@ const editorial = () => `
 .foot .c{background:var(--ink);color:var(--cream);padding:14px 26px;border-radius:40px}
 </style>
 <div class="card">
-<div class="top"><img src="img/mina-white.jpg"></div>
+<div class="top"><img src="img/mina-dinner.jpg"></div>
 <div class="mast"><div><div class="k">Collaboration Rates</div><h1>${me.name}</h1></div><div class="h">${me.handle}<span>${me.platforms}</span></div></div>
 <div class="body">
   <div class="intro">Founder-led content for brands in hospitality, food & business.</div>
@@ -117,7 +117,7 @@ const noir = () => `
 .frame{position:absolute;inset:36px;border:1px solid rgba(217,166,78,.45)}
 .in{position:absolute;inset:90px 96px;display:flex;flex-direction:column;align-items:center;text-align:center}
 .av{width:170px;height:170px;border-radius:50%;overflow:hidden;border:3px solid var(--gold)}
-.av img{width:100%;height:100%;object-fit:cover;object-position:50% 20%;transform:scale(1.9);transform-origin:50% 14%}
+.av img{width:100%;height:100%;object-fit:cover;object-position:50% 42%;transform:scale(3);transform-origin:54% 41%}
 .k{font:600 16px Inter;letter-spacing:8px;color:var(--gold);margin-top:34px;text-transform:uppercase}
 h1{font:700 76px/1 'Playfair Display',serif;margin-top:16px;letter-spacing:1px}
 .sub{font:500 21px Inter;color:var(--mut);margin-top:14px;letter-spacing:1px}
@@ -135,7 +135,7 @@ h1{font:700 76px/1 'Playfair Display',serif;margin-top:16px;letter-spacing:1px}
 </style>
 <div class="card"><div class="frame"></div>
 <div class="in">
-  <div class="av"><img src="img/mina-white.jpg"></div>
+  <div class="av"><img src="img/mina-dinner.jpg"></div>
   <div class="k">UGC · Rate Card</div>
   <h1>${me.name}</h1>
   <div class="sub">${me.role}</div>
@@ -154,7 +154,7 @@ const bold = () => `
 <style>
 :root{--y:#f2b73a;--ink:#1a0b0d;--rose:#7a2e33;--cream:#fff8ec}
 .card{background:var(--y);color:var(--ink)}
-.ph{position:absolute;right:-40px;top:0;width:520px;height:690px;object-fit:cover;object-position:50% 20%;
+.ph{position:absolute;right:-40px;top:0;width:520px;height:690px;object-fit:cover;object-position:50% 30%;
   -webkit-mask-image:linear-gradient(180deg,#000 75%,transparent 100%)}
 .in{position:absolute;inset:70px 70px 60px;display:flex;flex-direction:column}
 .chip{align-self:flex-start;background:var(--ink);color:var(--y);font:800 17px Inter;letter-spacing:3px;padding:10px 18px;border-radius:6px}
@@ -173,7 +173,7 @@ h1{font:400 128px/0.88 'Archivo Black',Inter,sans-serif;margin-top:30px;letter-s
 .foot{display:flex;justify-content:space-between;font:800 20px Inter;margin-top:22px}
 </style>
 <div class="card">
-<img class="ph" src="img/mina-black.jpg">
+<img class="ph" src="img/mina-dinner.jpg">
 <div class="in">
   <div class="chip">UGC RATES · EGP</div>
   <h1>Work<br>with<br>Mina</h1>
