@@ -1,0 +1,40 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#000}
+#poster{width:1174px;height:1494px;position:relative;overflow:hidden;background:url(assets/reference-speaker.jpg) 0 0/1174px 1494px;font-family:Montserrat;color:#fff}
+/* cover the original speaker area, feathered into the reference at top and bottom */
+.cover{position:absolute;left:0;right:0;top:236px;height:919px;
+  background:radial-gradient(ellipse 45% 40% at 50% 38%,#6a0d0a55,#0000),linear-gradient(rgb(64,6,4) 0,rgb(57,6,3) 64px,rgb(49,4,1) 264px,rgb(37,2,1) 564px,rgb(44,3,1) 864px,rgb(44,3,1));
+  -webkit-mask-image:linear-gradient(#0000 0,#000 14px,#000 874px,#0000 919px)}
+.patch{position:absolute;top:220px;height:35px;background:rgb(64,6,4);-webkit-mask-image:linear-gradient(#0000,#000 10px)}
+.wm{position:absolute;left:-10px;right:-10px;text-align:center;font:900 168px/1 Montserrat;letter-spacing:-5px;color:#6e0c09;opacity:.6;filter:blur(1.5px)}
+.glow{position:absolute;left:337px;top:300px;width:500px;height:620px;border-radius:50%;background:radial-gradient(#a0201a66,#0000 70%);filter:blur(30px)}
+.me{position:absolute;left:127px;top:285px;width:920px;
+  -webkit-mask-image:linear-gradient(#000 0,#000 620px,#0000 850px)}
+.shade{position:absolute;left:0;right:0;top:820px;height:340px;background:linear-gradient(rgba(42,3,1,0),rgba(42,3,1,.85) 60%,rgb(44,3,1))}
+.name{position:absolute;left:175px;top:900px;font:800 37px/1.2 Montserrat;letter-spacing:.5px}
+.role{font:400 27px/1.32 Montserrat;margin-top:6px}
+.icon{position:absolute;left:172px;top:818px;display:flex;gap:10px;align-items:center}
+.theme{position:absolute;right:194px;top:903px;text-align:right}
+.tag{display:inline-block;background:#c8281f;font:800 21px Montserrat;padding:5px 14px}
+.tt{font:800 43px/1.05 Montserrat;margin-top:18px}
+</style></head><body>
+<section id="poster">
+  <div class="cover"></div>
+  <div class="patch" style="left:0;width:280px"></div>
+  <div class="patch" style="left:462px;right:0"></div>
+  <div class="wm" style="top:300px">Entrepreneur</div>
+  <div class="wm" style="top:478px">Entrepreneur</div>
+  <div class="glow"></div>
+  <img class="me" src="assets/mina-torso.png">
+  <div class="shade"></div>
+  <div class="icon">
+    <svg width="46" height="58" viewBox="0 0 46 58"><circle cx="23" cy="13" r="12" fill="#fff"/><path d="M1 58c0-16 10-26 22-26s22 10 22 26z" fill="#fff"/></svg>
+    <svg width="76" height="50" viewBox="0 0 3 2"><rect width="3" height="2" fill="#000"/><rect width="3" height="1.333" fill="#fff"/><rect width="3" height=".667" fill="#ce1126"/><circle cx="1.5" cy="1" r=".16" fill="#c09300"/></svg>
+  </div>
+  <div class="name">MINA<br>MONIR<div class="role">Founder &amp; CEO,<br>Reservya.</div></div>
+  <div class="theme"><span class="tag">THEME:</span><div class="tt">THE WORLD<br>WE HELP<br>TO CREATE</div></div>
+</section>
+</body></html>
