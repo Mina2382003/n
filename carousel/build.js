@@ -443,6 +443,48 @@ const day02 = tipPost(2, {
   rsvLine: 'With Reservya, your host sees each guest\'s name, booking and occasion before they arrive.',
   comment: 'Comment the best welcome you ever had',
 });
+// Generic series post: hook, any middle slides, light CTA with a light Reservya line.
+const seriesPost = (d, type, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, type)}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  ...p.slides.map((s, i) => ({ theme: i % 2 ? 'dark' : 'light', body: center(`
+    <span class="tag">${s.tag}</span>
+    <h2 style="margin:40px 0 30px">${s.title}</h2>
+    ${s.html}`) })),
+  { theme: 'light', last: true, body: center(`
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="pill" style="margin-bottom:40px">💡 ${p.rsvLine}</div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>🔖 &nbsp;${p.save || 'Save this for later'}</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
+];
+const lis = (rows) => rows.map(([i, t, s]) => li(i, t, s)).join('');
+const day03 = seriesPost(3, 'How Guests Rate You', {
+  hook: 'Guests don\'t rate your food. <span class="gold">They rate the whole night.</span>',
+  sub: 'Google and TripAdvisor both ask guests to score more than the food. Here\'s what\'s really on the scorecard.',
+  slides: [
+    { tag: 'The scorecard', title: 'The <span class="rose">4 things</span> guests score',
+      html: `<div class="grid4"><div><b>🍽️ Food</b><span>Taste, temperature, consistency, portion</span></div><div><b>🤝 Service</b><span>Speed, attitude, attention, fixing mistakes</span></div><div><b>✨ Atmosphere</b><span>Cleanliness, music, noise, comfort</span></div><div><b>💰 Value</b><span>Did the experience match the price?</span></div></div>
+      <div class="pill" style="margin-top:30px">Google asks diners to rate food, service and atmosphere. TripAdvisor adds value.</div>` },
+    { tag: 'The hidden factors', title: 'What they judge <span class="gold">but don\'t mention</span>',
+      html: lis([['🚻', 'The bathroom', 'They judge your kitchen by it'], ['⏳', 'The wait', 'For a table, the food and the bill'], ['🛠️', 'How you fixed a problem', 'Often remembered more than the problem itself'], ['🧾', 'The bill', 'Mistakes or surprise charges sour a great meal'], ['📱', 'Booking and finding you', 'If it was hard, the night started badly']]) },
+    { tag: 'Value is relative', title: 'Expensive is fine. <span class="rose">Disappointing isn\'t.</span>',
+      html: `<div class="cards"><div class="card w"><div class="l">EGP 300 meal · great experience</div><div class="m">"Worth every pound"</div><div class="big">⭐⭐⭐⭐⭐</div></div><div class="card d"><div class="l">EGP 300 meal · cold food, slow service</div><div class="m">"Overpriced"</div><div class="big">⭐⭐</div></div></div>
+      <div class="pill" style="margin-top:30px">Same price, different score. Guests rate value by the whole experience, not the number on the menu.</div>` },
+    { tag: 'What to do', title: 'Score yourself <span class="gold">before they do</span>',
+      html: lis([['1', 'Rate the 4 pillars every week', 'Food, service, atmosphere, value, out of 5'], ['2', 'Sort your reviews by pillar', 'Which one keeps coming up?'], ['3', 'Fix the lowest one first', 'One pillar at a time, not everything at once'], ['4', 'Ask one question at the end', '"What would make tonight a 5?"']]) },
+  ],
+  ctaTitle: 'Which pillar is <span class="rose">your weakest?</span>',
+  ctaText: 'Your rating is the average of every moment, from the booking to the goodbye.',
+  rsvLine: 'Reservya shows you which guests come back. That\'s the most honest rating there is.',
+  comment: 'Comment your weakest pillar',
+  save: 'Save this for your next team briefing',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1139,6 +1181,7 @@ const carousels = {
   '28-world-ar-part3': worldAr3,
   'day-01-booking-chaos': day01,
   'day-02-first-60-seconds': day02,
+  'day-03-what-guests-judge': day03,
 };
 
 (async () => {

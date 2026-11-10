@@ -109,3 +109,9 @@ h2{font-family:'Playfair Display',serif;font-weight:700;font-size:78px;line-heig
 .t20 .eg{color:var(--rose);font-weight:800}
 .t20{font-size:21px}
 .t20>div{padding:3px 0}
+.grid4{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.grid4>div{border-radius:24px;padding:28px 30px;background:var(--ink2)}
+.light .grid4>div{background:#fff}
+.grid4 b{display:block;font:800 34px Inter;color:var(--gold);margin-bottom:12px}
+.light .grid4 b{color:var(--rose)}
+.grid4 span{display:block;font:500 24px/1.5 Inter;opacity:.85}
