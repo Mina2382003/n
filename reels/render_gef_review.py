@@ -222,7 +222,7 @@ def stamp70(fr, t):
 
 def chat(fr, t, msgs):
     """r3: group-chat takeover bubbles"""
-    y = 210
+    y = 240
     for i, (t0, who, txt, mine) in enumerate(msgs):
         if t < t0:
             break
@@ -288,7 +288,7 @@ def quote_card(fr, t, txt):
     card = Image.new("RGBA", (im.width + 60, im.height + 40), (0, 0, 0, 0))
     ImageDraw.Draw(card).rounded_rectangle((0, 0, card.width - 1, card.height - 1), 28, fill=(0, 0, 0, 150))
     card.alpha_composite(im, (30, 20))
-    paste(fr, card, W / 2, 1390, pop(min(1, t / .25)))
+    paste(fr, card, W / 2, 1430, pop(min(1, t / .25)))
 
 
 # ---------------------------------------------------------------- sound
@@ -419,7 +419,7 @@ def render(rk):
         page_i = sum(1 for c in caps if c[0] <= T_)
         z = 1.0 + (.12 if page_i % 2 else 0)
         if T_ < cold_end:
-            z = 1.18 + .06 * T_ / cold_end
+            z = 1.0 + .06 * T_ / cold_end  # slow push; keeps his face clear of the hook text
         if T_ < body_end and lt < .2:
             z *= 1 + .1 * (1 - lt / .2) ** 2
         dx = dy = rot = 0
@@ -441,8 +441,8 @@ def render(rk):
                 if rk == "r1": breaking(fr, T_)
                 if rk == "r2": stamp70(fr, T_)
                 if rk == "r3":
-                    pov = lines_img([[("POV: ", YEL), ("the volunteers when", WHITE)], "the speakers walk in"], MONT(54, 900), stroke=6)
-                    paste(fr, pov, W / 2, 1150, pop(min(1, T_ / .25)))
+                    pov = lines_img([[("POV: ", YEL), ("volunteers when the speakers walk in", WHITE)]], MONT(46, 900), stroke=6)
+                    paste(fr, pov, W / 2, 150, pop(min(1, T_ / .25)))
                     chat(fr, T_, msgs)
             else:
                 for cs, ce, im in caps:
