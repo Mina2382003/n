@@ -365,10 +365,20 @@ const problemPost = (d, p) => [
     <h2 style="margin:40px 0 30px">${p.fixTitle}</h2>
     ${p.fix.map(([t, s], i) => li(i + 1, t, s)).join('')}`) },
   { theme: 'dark', body: center(`
-    <span class="tag">How Reservya helps</span>
-    <h2 style="margin:40px 0 30px">${p.rsvTitle}</h2>
-    ${p.rsv.map(([i, t, s]) => li(i, t, s)).join('')}`) },
-  { theme: 'dark', last: true, body: cta(p.ctaTitle, p.ctaText, p.comment, 'Save this for your next team meeting') },
+    <span class="tag">The solution I recommend</span>
+    <h2 style="margin:40px 0 30px">That's exactly why <span class="gold">we built Reservya</span></h2>
+    ${p.rsv.map(([i, t, s]) => li(i, t, s)).join('')}
+    <div class="pill" style="margin-top:30px">${p.rsvPill}</div>`) },
+  { theme: 'light', last: true, body: center(`
+    <span class="tag" style="margin-bottom:36px;display:inline-block">Try Reservya</span>
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="card d" style="margin-bottom:40px"><div class="l">✅ Recommended: Reservya</div><div class="m">Online bookings, guest history and loyalty across a network of restaurants. Now coming to Cairo and Alexandria.</div></div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>📩 &nbsp;DM me <span class="rose">"RESERVYA"</span> to get started</div>
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
 ];
 const day01 = problemPost(1, {
   hook: 'Your bookings live in 4 places. <span class="gold">None of them talk to each other.</span>',
@@ -379,10 +389,10 @@ const day01 = problemPost(1, {
   why: [['➕', 'Channels added one by one', 'First the phone, then WhatsApp, then Instagram'], ['🙋', 'Whoever\'s free takes the booking', 'And writes it wherever is closest'], ['📍', 'No single source of truth', 'Nobody sees the full picture of the night'], ['⏰', 'Peak hours leave no time', 'The busiest moments get the least care']],
   fixTitle: '5 fixes that cost <span class="rose">nothing</span>',
   fix: [['One place for every booking', 'One book or one sheet. No exceptions'], ['One owner per shift', 'One person is responsible for bookings'], ['Same details, every time', 'Name, number, time, party size'], ['Write down the occasion', 'Birthday, anniversary, allergy'], ['Send DMs to one link or number', 'Stop taking bookings in comments']],
-  rsvTitle: 'One booking system. <span class="gold">One guest list.</span>',
+  rsvPill: 'If you take bookings in more than one place, Reservya is the simplest way to bring them together.',
   rsv: [['📅', 'Guests book online, 24/7', 'No missed calls, no lost DMs'], ['📋', 'Every booking in one place', 'The whole night on one screen'], ['👤', 'Guest history', 'See who\'s new and who\'s a regular'], ['🔁', 'Loyalty across the network', 'A reason for guests to come back']],
-  ctaTitle: 'Where do <span class="gold">your bookings</span> live?',
-  ctaText: 'Every booking you lose is a guest you paid to attract. Put them all in one place.',
+  ctaTitle: 'Put every booking <span class="rose">in one place.</span>',
+  ctaText: 'Every booking you lose is a guest you paid to attract. Stop losing them.',
   comment: 'Comment your number of booking channels',
 });
 const carousels = {
