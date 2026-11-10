@@ -395,6 +395,54 @@ const day01 = problemPost(1, {
   ctaText: 'Every booking you lose is a guest you paid to attract. Stop losing them.',
   comment: 'Comment your number of booking channels',
 });
+const tipPost = (d, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, 'Tips & Tricks')}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Why it matters</span>
+    <h2 style="margin:40px 0 30px">${p.whyTitle}</h2>
+    ${p.why}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">The playbook</span>
+    <h2 style="margin:40px 0 30px">${p.stepsTitle}</h2>
+    ${p.steps.map(([t, s], i) => li(p.stepIcons ? p.stepIcons[i] : i + 1, t, s)).join('')}`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Avoid these</span>
+    <h2 style="margin:40px 0 30px">${p.mistakesTitle}</h2>
+    ${p.mistakes.map(([t, s]) => li('✕', t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">Make it stick</span>
+    <h2 style="margin:40px 0 30px">${p.systemTitle}</h2>
+    ${p.system.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'light', last: true, body: center(`
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="pill" style="margin-bottom:40px">💡 ${p.rsvLine}</div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>🔖 &nbsp;Save this for your next team briefing</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
+];
+const day02 = tipPost(2, {
+  hook: 'Guests decide how the night will go <span class="gold">before they sit down.</span>',
+  sub: 'The first 60 seconds at the door set the tone for everything that follows. Here\'s how to win them.',
+  whyTitle: 'The welcome <span class="rose">colours everything</span>',
+  why: [['🚪', 'It\'s the first thing they feel', 'Before the menu, before the food'], ['🔍', 'It changes how they judge the rest', 'A warm start forgives a slow kitchen. A cold one doesn\'t'], ['💬', 'It\'s what they tell friends', '"They made us feel welcome" is a review in itself']].map(([i, t, s]) => li(i, t, s)).join(''),
+  stepsTitle: 'The <span class="gold">60-second</span> welcome',
+  stepIcons: ['0s', '10s', '20s', '40s'],
+  steps: [['Eye contact and a smile', 'Even if you\'re busy, acknowledge them right away'], ['Greet by name if they booked', '"Welcome, Mr Ahmed, your table is ready"'], ['Walk them to the table', 'Never point. Pull out a chair, help with coats'], ['Water, menu, and a name', '"I\'m Sara, I\'ll be looking after you tonight"']],
+  mistakesTitle: 'What kills the <span class="rose">first impression</span>',
+  mistakes: [['Nobody at the door', 'Guests standing, unsure where to go'], ['Eyes on the phone or screen', 'They feel like an interruption'], ['"Do you have a booking?" first', 'Say hello before you ask for anything'], ['A messy entrance', 'Dirty glass, clutter, delivery bags']],
+  systemTitle: 'Make it <span class="gold">every shift</span>, not luck',
+  system: [['🧑‍💼', 'Never leave the door empty', 'One person owns the welcome at peak'], ['📋', 'Read tonight\'s bookings first', 'Names, occasions, regulars, allergies'], ['🎭', 'Role-play it in briefings', '2 minutes before every service'], ['✨', 'Check the entrance before opening', 'Lights, music, smell, cleanliness']],
+  ctaTitle: 'First impressions <span class="rose">don\'t get a second chance.</span>',
+  ctaText: 'The food brings them in once. The welcome makes them feel they belong.',
+  rsvLine: 'With Reservya, your host sees each guest\'s name, booking and occasion before they arrive.',
+  comment: 'Comment the best welcome you ever had',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1090,6 +1138,7 @@ const carousels = {
   '27-world-ar-part2': worldAr2,
   '28-world-ar-part3': worldAr3,
   'day-01-booking-chaos': day01,
+  'day-02-first-60-seconds': day02,
 };
 
 (async () => {
