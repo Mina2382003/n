@@ -4,625 +4,530 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,300;0,400;0,700;0,900;1,300;1,400&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{
-  --cream:#F5F0E8;--dark:#1A0A0E;--copper:#C47A3E;
-  --bg:#0D090B;--surf:#1C1418;--surf2:#261E21;
-  --brd:rgba(255,255,255,.08);--brd2:rgba(255,255,255,.14);
-  --tx:rgba(255,255,255,.88);--tx2:rgba(255,255,255,.5);--tx3:rgba(255,255,255,.3);
-  --cp:#C47A3E;--ct:#5D9E6B;--cr:#6B8FC0;--co:#B85C7A;
-  color-scheme:dark;
+/* ── Brand carousel tokens ── */
+:root {
+  --cream:#F5F0E8; --dark:#1A0A0E; --copper:#C47A3E;
+  --cop-dim:rgba(196,122,62,.12); --cop-mid:rgba(196,122,62,.35);
+  --cr-dim:rgba(245,240,232,.08); --cr-fade:rgba(245,240,232,.5);
+  --cr-ghost:rgba(245,240,232,.12);
+  /* UI shell */
+  --bg:#0D090B; --surf:#1C1418; --surf2:#261E21;
+  --brd:rgba(255,255,255,.08); --brd2:rgba(255,255,255,.16);
+  --tx:rgba(255,255,255,.88); --tx2:rgba(255,255,255,.5); --tx3:rgba(255,255,255,.3);
+  --cat-p:#C47A3E; --cat-t:#5D9E6B; --cat-r:#6B8FC0; --cat-o:#B85C7A;
+  color-scheme: dark;
 }
-*{box-sizing:border-box;margin:0;padding:0}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
 body{background:var(--bg);color:var(--tx);font-family:'Inter',system-ui,sans-serif;display:flex;flex-direction:column;overflow:hidden}
-/* Header */
+
+/* ── Shell ── */
 .hd{padding:14px max(16px,env(safe-area-inset-left,0px));display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--brd);flex-shrink:0;background:var(--surf)}
-.hd-title{font-size:14px;font-weight:700;letter-spacing:.02em}
-.hd-sub{font-size:11px;color:var(--tx2);margin-top:2px}
+.hd-t{font-size:14px;font-weight:700}.hd-s{font-size:11px;color:var(--tx2);margin-top:1px}
 .prog{font-size:11px;color:var(--copper);font-weight:600}
-/* Tabs */
-.tabs{display:flex;gap:6px;padding:12px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;background:var(--surf)}
+.tabs{display:flex;gap:6px;padding:10px max(16px,env(safe-area-inset-left,0px));border-bottom:1px solid var(--brd);flex-shrink:0;overflow-x:auto;background:var(--surf);scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
 .tab{padding:5px 13px;border-radius:20px;border:1.5px solid var(--brd2);font-size:11px;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .15s;color:var(--tx2);background:none;font-family:'Inter',sans-serif}
-.tab.on{color:#fff;border-color:var(--copper);background:rgba(196,122,62,.18)}
-.tab[data-cat="p"].on{border-color:var(--cp);background:rgba(196,122,62,.18);color:var(--cp)}
-.tab[data-cat="t"].on{border-color:var(--ct);background:rgba(93,158,107,.18);color:var(--ct)}
-.tab[data-cat="r"].on{border-color:var(--cr);background:rgba(107,143,192,.18);color:var(--cr)}
-.tab[data-cat="o"].on{border-color:var(--co);background:rgba(184,92,122,.18);color:var(--co)}
-/* Grid */
-.grid-wrap{flex:1;overflow-y:auto;padding:14px max(16px,env(safe-area-inset-left,0px))}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.tab[data-c="all"].on{border-color:var(--copper);background:rgba(196,122,62,.18);color:var(--copper)}
+.tab[data-c="p"].on{border-color:var(--cat-p);background:rgba(196,122,62,.18);color:var(--cat-p)}
+.tab[data-c="t"].on{border-color:var(--cat-t);background:rgba(93,158,107,.18);color:var(--cat-t)}
+.tab[data-c="r"].on{border-color:var(--cat-r);background:rgba(107,143,192,.18);color:var(--cat-r)}
+.tab[data-c="o"].on{border-color:var(--cat-o);background:rgba(184,92,122,.18);color:var(--cat-o)}
+.gw{flex:1;overflow-y:auto;padding:14px max(16px,env(safe-area-inset-left,0px))}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:10px}
 /* Card */
-.card{background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;padding:14px 15px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:8px}
+.card{background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;padding:14px 15px;cursor:pointer;transition:border-color .15s,background .15s;display:flex;flex-direction:column;gap:7px}
 .card:hover{border-color:var(--brd2);background:var(--surf2)}
-.card.posted{opacity:.5}
-.card-top{display:flex;align-items:center;gap:8px}
-.day-num{font-size:11px;font-weight:700;color:var(--tx3);min-width:36px}
-.cat-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
-.cat-dot[data-c="p"]{background:var(--cp)}
-.cat-dot[data-c="t"]{background:var(--ct)}
-.cat-dot[data-c="r"]{background:var(--cr)}
-.cat-dot[data-c="o"]{background:var(--co)}
-.cat-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
-.cat-label[data-c="p"]{color:var(--cp)}
-.cat-label[data-c="t"]{color:var(--ct)}
-.cat-label[data-c="r"]{color:var(--cr)}
-.cat-label[data-c="o"]{color:var(--co)}
-.card-title{font-size:13px;font-weight:600;line-height:1.3;color:var(--tx)}
-.card-time{font-size:10px;color:var(--tx3)}
-.card-actions{display:flex;align-items:center;gap:8px;margin-top:2px}
-.view-btn{flex:1;padding:6px 0;border-radius:5px;border:1px solid var(--brd2);background:none;color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
-.view-btn:hover{color:#fff;border-color:rgba(255,255,255,.35)}
-.post-chk{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3);cursor:pointer;user-select:none}
-.post-chk input{accent-color:var(--copper)}
-/* Modal */
-.modal{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:200;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:20px max(16px,env(safe-area-inset-left,0px));gap:16px}
+.card.posted{opacity:.45}
+.card-top{display:flex;align-items:center;gap:7px}
+.dn{font-size:11px;font-weight:700;color:var(--tx3);min-width:36px}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cdot[data-c="p"]{background:var(--cat-p)} .cdot[data-c="t"]{background:var(--cat-t)}
+.cdot[data-c="r"]{background:var(--cat-r)} .cdot[data-c="o"]{background:var(--cat-o)}
+.clabel{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.clabel[data-c="p"]{color:var(--cat-p)} .clabel[data-c="t"]{color:var(--cat-t)}
+.clabel[data-c="r"]{color:var(--cat-r)} .clabel[data-c="o"]{color:var(--cat-o)}
+.ctitle{font-size:13px;font-weight:600;line-height:1.3}
+.ctime{font-size:10px;color:var(--tx3)}
+.cacts{display:flex;align-items:center;gap:8px;margin-top:3px}
+.vbtn{flex:1;padding:6px 0;border-radius:5px;border:1px solid var(--brd2);background:none;color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.vbtn:hover{color:#fff;border-color:rgba(255,255,255,.35)}
+.pchk{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--tx3);cursor:pointer;user-select:none}
+.pchk input{accent-color:var(--copper)}
+
+/* ── Modal ── */
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.93);z-index:200;display:flex;flex-direction:column;align-items:center;overflow-y:auto;padding:18px max(16px,env(safe-area-inset-left,0px)) 32px;gap:14px}
 .modal[hidden]{display:none!important}
-.modal-close{align-self:flex-end;background:none;border:1.5px solid var(--brd2);color:var(--tx2);padding:6px 16px;border-radius:4px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;letter-spacing:.08em;cursor:pointer}
-.modal-close:hover{color:#fff;border-color:rgba(255,255,255,.4)}
-.m-title{font-size:15px;font-weight:700;align-self:flex-start}
-.m-meta{font-size:11px;color:var(--tx2);align-self:flex-start}
-/* Slide stage */
-.stage{position:relative;width:360px;height:450px;max-width:calc(100vw - 32px);flex-shrink:0}
-.sld{position:absolute;inset:0;overflow:hidden;border-radius:6px;opacity:0;pointer-events:none;transition:opacity .3s}
+.mclose{align-self:flex-end;background:none;border:1.5px solid var(--brd2);color:var(--tx2);padding:6px 16px;border-radius:4px;font-family:'Inter',sans-serif;font-size:11px;font-weight:600;cursor:pointer}
+.mclose:hover{color:#fff;border-color:rgba(255,255,255,.4)}
+.mtitle{font-size:15px;font-weight:700;align-self:flex-start}
+.mmeta{font-size:11px;color:var(--tx2);align-self:flex-start}
+
+/* ── Carousel stage — exact same as standalone files ── */
+.stage{position:relative;width:400px;height:500px;max-width:min(400px,calc(100vw - 32px));aspect-ratio:4/5;flex-shrink:0}
+.sld{position:absolute;inset:0;overflow:hidden;border-radius:5px;opacity:0;pointer-events:none;transition:opacity .32s ease}
 .sld.on{opacity:1;pointer-events:auto}
-/* Slide nav */
+
+/* Slide backgrounds */
+.sl-c{background:var(--cream);color:var(--dark)}
+.sl-d{background:var(--dark);color:var(--cream)}
+.sl-k{background:var(--copper);color:var(--cream)}
+
+/* Pills — exact from standalone */
+.pill{display:inline-flex;align-items:center;padding:5px 13px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;flex-shrink:0;font-family:'Barlow',system-ui,sans-serif}
+.pill-cu{background:var(--copper);color:var(--cream)}
+.pill-dk{background:var(--dark);color:var(--cream);border:1px solid var(--cop-mid)}
+.pill-ou{border:1px solid var(--copper);color:var(--copper);background:transparent}
+.pill-cr{background:var(--cream);color:var(--dark)}
+
+/* Halo — exact from standalone */
+.halo{position:absolute;border-radius:50%;background-image:radial-gradient(circle,currentColor var(--hd,1.4px),transparent var(--hd,1.4px));background-size:var(--hs,9px) var(--hs,9px);-webkit-mask-image:radial-gradient(ellipse var(--hmx,85%) var(--hmy,85%) at center,black 0%,rgba(0,0,0,.75) 35%,rgba(0,0,0,.38) 60%,transparent 78%);mask-image:radial-gradient(ellipse var(--hmx,85%) var(--hmy,85%) at center,black 0%,rgba(0,0,0,.75) 35%,rgba(0,0,0,.38) 60%,transparent 78%)}
+/* Halo positions */
+.ha-br{right:-60px;bottom:-60px;width:230px;height:230px}
+.ha-bl{left:-60px;bottom:-60px;width:230px;height:230px}
+.ha-tr{right:-30px;top:-30px;width:180px;height:180px}
+.ha-tl{left:-30px;top:-30px;width:180px;height:180px}
+
+/* Ring */
+.ring{position:absolute;width:48px;height:48px;border-radius:50%;border:2px solid var(--copper);display:flex;align-items:center;justify-content:center;color:var(--copper);font-size:18px;opacity:.65}
+.ri-tr{top:38px;right:32px} .ri-bl{bottom:38px;left:32px}
+
+/* Slide inner */
+.si{position:absolute;inset:0;display:flex;flex-direction:column;z-index:1;padding:30px 32px 34px;font-family:'Barlow',system-ui,sans-serif}
+.si-bot{justify-content:flex-end}
+.si-top{justify-content:flex-start}
+
+/* Typography */
+.sh1{font-size:28px;font-weight:300;font-style:italic;line-height:1;margin-bottom:4px}
+.sh2-lg{font-weight:900;text-transform:uppercase;letter-spacing:-.02em;line-height:.91;margin-bottom:20px}
+.sh2-sm{font-weight:900;text-transform:uppercase;letter-spacing:-.01em;line-height:1.03;margin-bottom:11px}
+.ssub{font-size:10px;opacity:.62;font-style:italic;line-height:1.45;margin-bottom:16px}
+.sbody{font-size:11px;line-height:1.65;opacity:.85}
+.sbody-list{display:flex;flex-direction:column;gap:7px;font-size:11px;line-height:1.6;opacity:.85}
+.spm{margin-bottom:13px} /* pill margin */
+
+/* ── Slide nav ── */
 .snav{display:flex;align-items:center;gap:12px}
 .sbtn{width:34px;height:34px;border-radius:50%;border:1.5px solid rgba(255,255,255,.18);background:rgba(255,255,255,.07);color:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:14px;transition:background .15s}
 .sbtn:disabled{opacity:.2;cursor:default}
 .sdots{display:flex;gap:5px}
-.sdot{width:5px;height:5px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:background .15s,transform .15s}
-.sdot.on{background:var(--copper);transform:scale(1.4)}
-.scount{font-size:11px;color:var(--tx3);min-width:30px;text-align:center}
-/* Caption panel */
-.cap-panel{width:360px;max-width:calc(100vw - 32px);background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;padding:16px}
-.cap-label{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--copper);margin-bottom:8px}
-.cap-text{font-size:12px;line-height:1.65;color:var(--tx);white-space:pre-wrap}
-.copy-btn{margin-top:12px;width:100%;padding:8px;border-radius:5px;border:1px solid var(--brd2);background:none;color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
-.copy-btn:hover{color:#fff;border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}
+.sdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.2);cursor:pointer;transition:background .15s,transform .15s}
+.sdot.on{background:var(--copper);transform:scale(1.35)}
+.scnt{font-size:11px;color:var(--tx3);min-width:30px;text-align:center}
+
+/* ── Caption panel ── */
+.cap-panel{width:min(400px,calc(100vw - 32px));background:var(--surf);border:1.5px solid var(--brd);border-radius:8px;padding:16px}
+.cap-lbl{font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--copper);margin-bottom:8px}
+.cap-txt{font-size:12px;line-height:1.65;color:var(--tx);white-space:pre-wrap}
+.copybtn{margin-top:12px;width:100%;padding:8px;border-radius:5px;border:1px solid var(--brd2);background:none;color:var(--tx2);font-size:11px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .15s}
+.copybtn:hover{color:#fff;border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}
 </style>
 
 <div class="hd">
-  <div>
-    <div class="hd-title">30-Day Personal Brand Plan</div>
-    <div class="hd-sub">Reservya · Hospitality Authority</div>
-  </div>
-  <div class="prog" id="progTxt">0 / 30 posted</div>
+  <div><div class="hd-t">30-Day Personal Brand Plan</div><div class="hd-s">Reservya · Hospitality Authority</div></div>
+  <div class="prog" id="prog">0 / 30 posted</div>
 </div>
-
 <div class="tabs">
-  <button class="tab on" data-cat="all">All 30</button>
-  <button class="tab" data-cat="p">Problems (10)</button>
-  <button class="tab" data-cat="t">Tips (10)</button>
-  <button class="tab" data-cat="r">How Guests Rate (5)</button>
-  <button class="tab" data-cat="o">Opening Guide (5)</button>
+  <button class="tab on" data-c="all">All 30</button>
+  <button class="tab" data-c="p">Problems (10)</button>
+  <button class="tab" data-c="t">Tips (10)</button>
+  <button class="tab" data-c="r">How Guests Rate (5)</button>
+  <button class="tab" data-c="o">Opening Guide (5)</button>
 </div>
+<div class="gw"><div class="grid" id="grid"></div></div>
 
-<div class="grid-wrap">
-  <div class="grid" id="grid"></div>
-</div>
-
-<!-- Modal -->
 <div class="modal" id="modal" hidden>
-  <button class="modal-close" id="mClose">✕ Close</button>
-  <div class="m-title" id="mTitle"></div>
-  <div class="m-meta" id="mMeta"></div>
-  <div class="stage" id="mStage"></div>
+  <button class="mclose" id="mclose">✕ Close</button>
+  <div class="mtitle" id="mtitle"></div>
+  <div class="mmeta" id="mmeta"></div>
+  <div class="stage" id="stage"></div>
   <div class="snav">
-    <button class="sbtn" id="sPrev">←</button>
-    <div class="sdots" id="sDots"></div>
-    <button class="sbtn" id="sNext">→</button>
-    <span class="scount" id="sCnt">1/5</span>
+    <button class="sbtn" id="sprev">←</button>
+    <div class="sdots" id="sdots"></div>
+    <button class="sbtn" id="snext">→</button>
+    <span class="scnt" id="scnt">1/5</span>
   </div>
   <div class="cap-panel">
-    <div class="cap-label">Caption + Hashtags</div>
-    <div class="cap-text" id="capText"></div>
-    <button class="copy-btn" id="copyBtn">Copy Caption</button>
+    <div class="cap-lbl">Caption + Hashtags</div>
+    <div class="cap-txt" id="captxt"></div>
+    <button class="copybtn" id="copybtn">Copy Caption</button>
   </div>
 </div>
 
 <script>
-// ── Slide renderer ──────────────────────────────────────────────────────────
-const BG = {c:'#F5F0E8', d:'#1A0A0E', k:'#C47A3E'};
-const FG = {c:'#1A0A0E', d:'#F5F0E8', k:'#F5F0E8'};
-const PILL_STYLE = {
-  cu:'background:#C47A3E;color:#F5F0E8',
-  dk:'background:#1A0A0E;color:#F5F0E8;border:1px solid rgba(196,122,62,.35)',
-  ou:'border:1px solid #C47A3E;color:#C47A3E;background:transparent',
-  cr:'background:#F5F0E8;color:#1A0A0E'
-};
+// ── Renderer — uses same CSS classes as standalone carousels ────────────────
 function pill(text, pc) {
-  return `<div style="display:inline-flex;align-items:center;padding:5px 13px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;${PILL_STYLE[pc||'cu']}">${text}</div>`;
-}
-function halo(pos, col) {
-  const P={br:'right:-55px;bottom:-55px',bl:'left:-55px;bottom:-55px',tr:'right:-30px;top:-30px',tl:'left:-30px;top:-30px'};
-  return `<div style="position:absolute;${P[pos]};width:200px;height:200px;border-radius:50%;background-image:radial-gradient(circle,${col} 1.4px,transparent 1.4px);background-size:9px 9px;-webkit-mask-image:radial-gradient(ellipse 85% 85% at center,black 0%,rgba(0,0,0,.7) 35%,rgba(0,0,0,.35) 60%,transparent 78%);mask-image:radial-gradient(ellipse 85% 85% at center,black 0%,rgba(0,0,0,.7) 35%,rgba(0,0,0,.35) 60%,transparent 78%)"></div>`;
-}
-function ring(pos) {
-  const P={tr:'top:38px;right:32px',bl:'bottom:38px;left:32px'};
-  return `<div style="position:absolute;${P[pos]};width:46px;height:46px;border-radius:50%;border:2px solid #C47A3E;display:flex;align-items:center;justify-content:center;color:#C47A3E;font-size:18px;opacity:.65">↗</div>`;
+  const cls = {cu:'pill-cu', dk:'pill-dk', ou:'pill-ou', cr:'pill-cr'}[pc||'cu'];
+  return `<span class="pill ${cls}">${text}</span>`;
 }
 function renderSlide(s) {
-  const bg=BG[s.b], fg=FG[s.b];
-  const isMid=s.b==='d'; const isCopper=s.b==='k';
-  const ghostCol=isCopper?'rgba(26,10,14,.18)':'rgba(196,122,62,.1)';
-  let g=s.g?`<div style="position:absolute;top:8px;right:16px;font-size:${s.gs||100}px;font-weight:900;line-height:1;color:${ghostCol};user-select:none;letter-spacing:-.03em;pointer-events:none;z-index:0">${s.g}</div>`:'';
-  let h=s.ha?halo(s.ha, isMid?'rgba(196,122,62,.22)':isCopper?'rgba(26,10,14,.2)':'#C47A3E'):'';
-  let ri=s.ri?ring(s.ri):'';
-  // headline
-  let head='';
-  if(s.h1&&s.h2){
-    head=`<div style="font-size:${s.hs1||28}px;font-weight:300;font-style:italic;line-height:1;margin-bottom:4px;color:${fg}">${s.h1}</div><div style="font-size:${s.hs2||60}px;font-weight:900;line-height:.91;text-transform:uppercase;letter-spacing:-.02em;margin-bottom:${s.sub?10:20}px;color:${fg}">${s.h2}</div>`;
-  }else if(s.h2){
-    head=`<div style="font-size:${s.hs2||24}px;font-weight:900;text-transform:uppercase;line-height:1.03;letter-spacing:-.01em;margin-bottom:11px;color:${fg}">${s.h2}</div>`;
+  const bgCls = {c:'sl-c', d:'sl-d', k:'sl-k'}[s.b];
+  const isCover = !!s.h1;
+  const isMid = s.b === 'd';
+  const isCopper = s.b === 'k';
+
+  // Ghost
+  const gColor = isMid ? 'rgba(196,122,62,.13)' : isCopper ? 'rgba(26,10,14,.18)' : 'rgba(196,122,62,.1)';
+  const ghost = s.g ? `<div style="position:absolute;top:8px;right:16px;font-size:${s.gs||98}px;font-weight:900;line-height:1;color:${gColor};user-select:none;letter-spacing:-.03em;pointer-events:none;font-family:'Barlow',sans-serif">${s.g}</div>` : '';
+
+  // Halo
+  const haloCols = {c:'var(--copper)', d:'rgba(196,122,62,.22)', k:'rgba(26,10,14,.2)'};
+  const halo = s.ha ? `<div class="halo ha-${s.ha}" style="color:${haloCols[s.b]};--hs:10px;--hd:1.5px"></div>` : '';
+
+  // Ring
+  const ring = s.ri ? `<div class="ring ri-${s.ri}">↗</div>` : '';
+
+  // Pill
+  const pc = s.pc || (isCopper ? 'dk' : 'cu');
+  const pillHtml = s.p ? `<div class="spm">${pill(s.p, pc)}</div>` : '';
+
+  // Headlines
+  let heads = '';
+  if (s.h1 && s.h2) {
+    const sz = s.hs2 || 60;
+    const mb = s.sub ? 10 : 20;
+    heads = `<div class="sh1">${s.h1}</div><div class="sh2-lg" style="font-size:${sz}px;margin-bottom:${mb}px">${s.h2.replace(/\n/g,'<br>')}</div>`;
+  } else if (s.h2) {
+    const sz = s.hs2 || 24;
+    heads = `<div class="sh2-sm" style="font-size:${sz}px">${s.h2.replace(/\n/g,'<br>')}</div>`;
   }
-  let subh=s.sub?`<div style="font-size:10px;opacity:.62;font-style:italic;margin-bottom:16px;line-height:1.45;color:${fg}">${s.sub}</div>`:'';
-  // body
-  let body='';
-  if(Array.isArray(s.bd)){
-    body=`<div style="display:flex;flex-direction:column;gap:7px">${s.bd.map(b=>`<div style="font-size:11px;line-height:1.6;opacity:.85;color:${fg}">${b}</div>`).join('')}</div>`;
-  }else if(s.bd){
-    body=`<div style="font-size:11px;line-height:1.65;opacity:.85;color:${fg}">${s.bd}</div>`;
+
+  // Sub + Body
+  const subHtml = s.sub ? `<div class="ssub">${s.sub}</div>` : '';
+  let bodyHtml = '';
+  if (Array.isArray(s.bd)) {
+    bodyHtml = `<div class="sbody-list">${s.bd.map(b=>`<div>${b}</div>`).join('')}</div>`;
+  } else if (s.bd) {
+    bodyHtml = `<div class="sbody">${s.bd}</div>`;
   }
-  // footnote
-  let fn=s.fn?`<div style="font-size:9px;font-style:italic;padding:9px 11px;border-radius:3px;border-left:2px solid #C47A3E;background:rgba(196,122,62,.12);color:rgba(245,240,232,.65);line-height:1.55;margin-top:4px">${s.fn}</div>`:'';
-  // layout
-  const justify=s.h1?'flex-end':'flex-start';
-  const pt=s.h1?36:30, pb=s.h1?36:28, px=32;
-  return `<div style="position:absolute;inset:0;overflow:hidden;border-radius:6px;background:${bg};display:flex;flex-direction:column;justify-content:${justify};padding:${pt}px ${px}px ${pb}px;font-family:'Barlow',system-ui,sans-serif;position:relative">${g}${h}${ri}<div style="position:relative;z-index:1;display:flex;flex-direction:column">${s.p?`<div style="margin-bottom:13px">${pill(s.p,s.pc||(s.b==='k'?'dk':'cu'))}</div>`:''}${head}${subh}${body}${fn}</div></div>`;
+
+  const innerCls = isCover ? 'si si-bot' : 'si si-top';
+  const pt = isCover ? 36 : 28;
+  return `<div class="${bgCls}" style="position:absolute;inset:0;overflow:hidden;border-radius:5px">${ghost}${halo}${ring}<div class="${innerCls}" style="padding-top:${pt}px">${pillHtml}${heads}${subHtml}${bodyHtml}</div></div>`;
 }
 
 // ── 30-Day Plan Data ────────────────────────────────────────────────────────
 const PLAN=[
-// ── PROBLEMS ──
-{day:1,cat:'p',title:"You Don't Own Your Guest Data",time:'Sun · 7:00 PM',goal:'Build problem awareness + introduce Reservya data ownership',
- slides:[
-  {b:'c',p:'PROBLEM 01',h1:'Who Actually',h2:'OWNS YOUR\nGUESTS?',sub:"Most restaurant owners don't know the answer.",g:'01',ha:'br',ri:'tr'},
-  {b:'d',p:'THE REALITY',h2:'EVERY BOOKING THROUGH AN APP',bd:"They collect the name, the number, the visit history. You collect the order. When they leave, they take the guest with them.",g:'01'},
-  {b:'k',p:'THE COST',pc:'dk',h2:'TOMORROW, IF THEY RAISED FEES—',bd:"Could you email your 50 best customers and say 'book direct'? Be honest. Most restaurant owners can't."},
-  {b:'d',p:'THE RESERVYA FIX',h2:'EVERY RESERVATION BUILDS YOUR DATABASE.',bd:'Names, visit frequency, preferences, occasions — all staying in YOUR system. Not the platform\'s.'},
-  {b:'c',p:'TAKEAWAY',h1:'Own the data.',h2:'OWN THE\nRELATIONSHIP.',sub:'Your guests are your biggest asset. Start owning them today.',ha:'bl'}
- ],
- caption:`Quick question: if your 3 biggest platforms disappeared tomorrow, could you reach your regulars? 🤔\n\nMost restaurant owners can't — and that's the scariest thing in hospitality right now.\n\nGuest data ownership is the difference between building a business and building someone else's customer base.\n\nSave this if it hit home. 👇\n\n#RestaurantBusiness #HospitalityIndustry #GuestExperience #RestaurantMarketing #Reservya #GuestData`
-},
-{day:3,cat:'p',title:"Aggregator Commission Is Eating You Alive",time:'Tue · 7:00 PM',goal:'Highlight margin problem + direct channel solution',
- slides:[
-  {b:'c',p:'PROBLEM 02',h1:'30% to them.',h2:'WHAT\'S LEFT\nFOR YOU?',sub:'Let\'s do the math nobody wants to do.',g:'30%',gs:72,ha:'br',ri:'tr'},
-  {b:'d',p:'THE MATH',h2:'EGP 300 ORDER × 30% = EGP 90 GONE.',bd:'500 orders a month. That\'s EGP 45,000 going to a middleman that doesn\'t care about your margins, your team, or your survival.'},
-  {b:'k',p:'THE TRAP',pc:'dk',h2:'THEY OWN THE CUSTOMER.',bd:"If you stop paying commission, the guest disappears — because they were never really yours. You've been renting your own audience."},
-  {b:'d',p:'THE WAY OUT',h2:'BUILD YOUR DIRECT CHANNEL.',bd:'A smart booking system captures guests directly. Commission paid once to build the asset — not monthly rent with no equity.'},
-  {b:'c',p:'BOTTOM LINE',h1:'Stop renting.',h2:'START\nOWNING.',sub:'Every direct booking is margin back in your pocket.',ha:'bl'}
- ],
- caption:`Let's do some uncomfortable math 🧮\n\nIf you're doing 500 orders/month through aggregators at 30% commission... that's EGP 45,000 leaving your business every single month.\n\nEGP 540,000 a year to a platform that holds your customer data and can change their fee structure whenever they want.\n\nI'll show you the way out in this carousel.\n\n#RestaurantEconomics #FoodDelivery #RestaurantOwner #HospitalityBusiness #Reservya #Margins`
-},
-{day:5,cat:'p',title:"No-Shows Are Costing You Real Money",time:'Thu · 7:00 PM',goal:'No-show problem → Reservya smart confirmations',
- slides:[
-  {b:'c',p:'PROBLEM 03',h1:'Table for 4.',h2:'NOBODY\nSHOWED UP.',sub:'One no-show costs more than you think.',g:'04',ha:'br'},
-  {b:'d',p:'THE REAL COST',h2:'IT\'S NOT JUST A MISSED TABLE.',bd:'Staff cost. Prepped food. Table blocked from walk-ins. One no-show can represent EGP 800–2,000 in real losses — not just one empty cover.'},
-  {b:'k',p:'THE OLD FIX',pc:'dk',h2:'CALL TO CONFIRM?',bd:"Guests don't answer. Even the ones who do sometimes don't show. Manual confirmation calls don't scale — and they burn your team's time during service."},
-  {b:'d',p:'THE SMART WAY',h2:'AUTOMATED REMINDERS + CONFIRMATION LINKS.',bd:'Reservya sends confirmations 48h and 2h before. Guest confirms with one tap — or cancels so you can resell the slot to your waitlist.'},
-  {b:'c',p:'RESULT',h1:'20% fewer\nno-shows.',h2:'THAT\'S REAL\nMONEY BACK.',sub:'Automated system. Zero calls needed from your team.',ha:'bl'}
- ],
- caption:`We ran the numbers on a client account: 12 no-shows in one week × EGP 1,200 average table spend = EGP 14,400 in lost revenue.\n\nFor one week.\n\nThis is why smart confirmation systems have moved from "nice to have" to essential.\n\nHere's exactly how we fixed it 👇\n\n#RestaurantBusiness #NoShows #ReservationManagement #Reservya #HospitalityTech #TableManagement`
-},
-{day:7,cat:'p',title:"Your Staff Wastes Hours on Manual Bookings",time:'Sat · 6:00 PM',goal:'Operational pain → automation benefit',
- slides:[
-  {b:'c',p:'PROBLEM 04',h1:'Phone rang.',h2:'NO ONE\nANSWERED.',sub:'And a reservation walked out the door.',g:'📞',gs:80,ha:'br',ri:'tr'},
-  {b:'d',p:'THE HIDDEN COST',h2:'2–3 HOURS A DAY ON BOOKING CALLS.',bd:'Writing in the paper book. Calling to confirm. Fielding date changes. That\'s your best people doing admin, not the hospitality your guests are paying for.'},
-  {b:'k',p:'WHAT GETS MISSED',pc:'dk',h2:'EVERY RING AT THE WRONG MOMENT.',bd:'During service. During prep. The booking call that becomes "sorry we\'re full" because nobody could get to it.'},
-  {b:'d',p:'THE RESERVYA FIX',h2:'ONLINE BOOKING. AUTO CONFIRMATIONS. ZERO CALLS.',bd:'Guests book at 11pm on Sunday. System confirms instantly. The shift brief is ready before the team arrives.'},
-  {b:'c',p:'THE TRADE',h1:'Less admin.',h2:'MORE\nHOSPITALITY.',sub:'Give your team the time to do what they were hired for.',ha:'bl'}
- ],
- caption:`I visited a restaurant where the host answered 11 phone calls during a 45-minute lunch service.\n\n11 calls.\n\nThat's not hospitality — that's admin with an apron on.\n\nHere's what I'd change immediately. 👇\n\n#RestaurantOps #HospitalityManagement #RestaurantTech #TeamCulture #Reservya #Automation`
-},
-{day:9,cat:'p',title:"You Can't Predict Busy vs. Dead Nights",time:'Mon · 7:00 PM',goal:'Forecasting gap → data intelligence',
- slides:[
-  {b:'c',p:'PROBLEM 05',h1:'Thursday: dead.',h2:'FRIDAY:\nCHAOS.',sub:"You staffed the same for both.",g:'?',gs:120,ha:'br'},
-  {b:'d',p:'THE PATTERN',h2:'OVERSTAFFED ON QUIET. UNDERSTAFFED ON RUSH.',bd:'Quiet nights = wasted labor cost. Rush nights = broken experience. Both hurt your margins. Both hurt your review score. The root cause is the same: no foresight.'},
-  {b:'k',p:'WHAT YOU NEED',pc:'dk',h2:'RESERVATION DATA TELLS YOU WHAT\'S COMING.',bd:'With a smart booking system, you know Tuesday will be 60% at 7pm and 90% at 8:30pm before the day even starts.'},
-  {b:'d',p:'THE RESERVYA EDGE',h2:'DEMAND FORECASTING FROM YOUR OWN HISTORY.',bd:'When, who, how often, what size party — your historical booking patterns predict your next shift better than any intuition can.'},
-  {b:'c',p:'THE OUTCOME',h1:'Right staff.',h2:'RIGHT TIME.\nEVERY SHIFT.',sub:'Stop guessing. Start planning with data you already have.',ha:'bl'}
- ],
- caption:`What if you knew on Monday that Friday 8pm would be your busiest slot — before a single reservation came in?\n\nThis is what happens when your booking data works for you, not just for taking bookings.\n\nLabor cost is your biggest controllable expense. Forecasting is how you control it.\n\n#RestaurantManagement #DataDriven #HospitalityOps #Reservya #Forecasting #RestaurantBusiness`
-},
-{day:11,cat:'p',title:"Bad Reviews Come In, Feedback Never Does",time:'Wed · 7:00 PM',goal:'Feedback gap → Reservya pre-emptive capture',
- slides:[
-  {b:'c',p:'PROBLEM 06',h1:'1 star on\nGoogle.',h2:'FIRST YOU\nKNEW.',sub:'By then, 1,000 people had already read it.',g:'1★',gs:70,ha:'br'},
-  {b:'d',p:'THE GAP',h2:'GUESTS SMILE TO YOUR FACE.',bd:"Then rate you 1-star at home. By the time you read it, there's nothing you can do. The damage is done, public, and permanent."},
-  {b:'k',p:'WHY THEY DON\'T TELL YOU',pc:'dk',h2:'FRICTION IS TOO HIGH.',bd:"A printed feedback card feels like effort. A generic survey link goes unclicked. Most guests won't complain — they just won't come back."},
-  {b:'d',p:'THE RESERVYA FIX',h2:'ONE MESSAGE AFTER EVERY VISIT.',bd:'A quick check-in after their meal. Catch unhappy guests before they reach Google. Happy ones? Guide them straight to leave that review.'},
-  {b:'c',p:'THE RESULT',h1:'Catch problems\nearly.',h2:'AMPLIFY\nTHE WINS.',sub:'Fewer 1-star surprises. More 5-star reviews that actually happened.',ha:'bl'}
- ],
- caption:`The worst review isn't the unfair one — it's the one you could have prevented if you'd just asked the guest how it went before they left.\n\nThe feedback gap is real, and it's costing restaurants thousands in lost repeat business every month.\n\n#ReviewManagement #GuestFeedback #RestaurantBusiness #OnlineReputation #Reservya #GoogleReviews`
-},
-{day:13,cat:'p',title:"Loyalty Programs Nobody Uses",time:'Fri · 7:00 PM',goal:'Traditional loyalty failure → Reservya network loyalty',
- slides:[
-  {b:'c',p:'PROBLEM 07',h1:'Stamp card in',h2:'THEIR JUNK\nDRAWER.',sub:'82% of restaurant loyalty cards are abandoned.',g:'LOYAL',gs:48,ha:'br'},
-  {b:'d',p:'THE REALITY',h2:'GUESTS FORGET. LOSE. DON\'T BOTHER.',bd:"The friction of carrying a physical card defeats the purpose before it starts. And even digital apps go undownloaded."},
-  {b:'k',p:'THE BIGGER PROBLEM',pc:'dk',h2:'LOCKED TO ONE LOCATION.',bd:'Your regular who moves across town stops coming. Traditional loyalty doesn\'t follow the guest — it follows the postcode.'},
-  {b:'d',p:'THE RESERVYA MODEL',h2:'LOYALTY THAT LIVES IN THE BOOKING.',bd:'Every reservation builds points automatically. No card. No app to download. No friction. Just value every time they return — across the network.'},
-  {b:'c',p:'THE SHIFT',h1:'Effortless.',h2:'AUTOMATIC\nRETURN.',sub:'Guests don\'t want to manage loyalty. They want to feel it.',ha:'bl'}
- ],
- caption:`Real question: when's the last time a loyalty stamp card actually made you go back to a restaurant?\n\nNow think about what actually brings you back. It's not the stamp — it's the feeling of being recognized.\n\nHere's what actually works (and why the old model is finished). 👇\n\n#CustomerLoyalty #RestaurantBusiness #GuestRetention #Reservya #LoyaltyProgram`
-},
-{day:15,cat:'p',title:"New Competitor Opens, You Have No Defense",time:'Sun · 7:00 PM',goal:'Competitive threat → guest data as defense',
- slides:[
-  {b:'c',p:'PROBLEM 08',h1:'New place\nopened',h2:'ACROSS THE\nSTREET.',sub:'Your regulars are curious. That\'s not disloyalty — it\'s human nature.',g:'NEW',gs:52,ha:'br',ri:'tr'},
-  {b:'d',p:'THE VULNERABILITY',h2:'YOUR REGULARS WILL TRY IT.',bd:"The question isn't whether they'll try the new place — they will. The question is whether they come back to you, and whether you'll know if they don't."},
-  {b:'k',p:'WHAT YOU NEED',pc:'dk',h2:'WHEN DID YOUR REGULARS LAST VISIT?',bd:"If you can't answer this question for your top 50 guests, you have no early warning system for drift."},
-  {b:'d',p:'THE RESERVYA EDGE',h2:'VISIT FREQUENCY TRACKING.',bd:'When a regular breaks their normal pattern, the system flags it. Send a personalized note at day 30 — not day 90 when they\'re already someone else\'s regular.'},
-  {b:'c',p:'THE PLAY',h1:'Know before',h2:'THEY\nLEAVE.',sub:'Your data is your defense. Use it to act early, not reactively.',ha:'bl'}
- ],
- caption:`Every restaurant will face a new competitor eventually. The ones who survive it aren't necessarily the ones with the best food — they're the ones who know their guests well enough to reach out before it's too late. 🛡️\n\n#RestaurantStrategy #CompetitiveAdvantage #Reservya #HospitalityBusiness #GuestRetention`
-},
-{day:17,cat:'p',title:"Your Best Customers Disappear Silently",time:'Tue · 7:00 PM',goal:'Silent churn → automated lapse detection',
- slides:[
-  {b:'c',p:'PROBLEM 09',h1:'Table 7 hasn\'t',h2:'BEEN BACK\nIN 60 DAYS.',sub:'They didn\'t complain. They just stopped.',g:'60',ha:'br'},
-  {b:'d',p:'THE SILENCE',h2:'90% OF UNHAPPY GUESTS NEVER SAY ANYTHING.',bd:"They simply choose somewhere else. And you'll never know why unless you track when they stopped coming."},
-  {b:'k',p:'THE PATTERN',pc:'dk',h2:'GUEST LOSS SIGNALS ITSELF EARLY.',bd:"A monthly regular misses one month. Then two. By month three, they're someone else's regular. The window to win them back was month one."},
-  {b:'d',p:'THE RESERVYA FIX',h2:'AUTOMATED LAPSE DETECTION.',bd:"When a guest breaks their normal pattern, the system flags it. A personalized re-engagement at day 30 wins back 3× more than one at day 90."},
-  {b:'c',p:'THE WINDOW',h1:'Act at 30 days.',h2:'NOT\n90.',sub:'The difference between "we miss you" and "too late" is timing.',ha:'bl'}
- ],
- caption:`The scariest thing in hospitality isn't bad reviews — it's the guests who leave quietly and never tell you why.\n\nI track when my best customers stop coming. Most owners don't — and that's exactly why competitor opens sting so much.\n\nHere's how I know when a regular is drifting before it's too late 👇\n\n#GuestRetention #RestaurantBusiness #CustomerExperience #Reservya #Churn`
-},
-{day:19,cat:'p',title:"One Platform Change Wiped Your Orders",time:'Thu · 7:00 PM',goal:'Platform dependency risk → own your channels',
- slides:[
-  {b:'c',p:'PROBLEM 10',h1:'Algorithm\nchanged.',h2:'REVENUE\nDROPPED 40%.',sub:'In a week. With no warning.',g:'40%',gs:60,ha:'br'},
-  {b:'d',p:'THE DEPENDENCY',h2:'BUILT ON SOMEONE ELSE\'S PLATFORM.',bd:"When your restaurant's survival depends on one app's algorithm, you've handed control of your business to their product team."},
-  {b:'k',p:'THE RISK',pc:'dk',h2:'THEY DON\'T OWN THE RELATIONSHIP.',bd:"Every order that comes through them is proof you don't control your own demand. One policy change and your livelihood shifts."},
-  {b:'d',p:'THE STRATEGY',h2:'OWN YOUR CHANNELS. BUILD YOUR LIST.',bd:'A direct booking system, an email list, a loyalty base — these can\'t be algorithm\'d away. They\'re yours, permanently.'},
-  {b:'c',p:'THE PRINCIPLE',h1:'Don\'t rent',h2:'YOUR\nAUDIENCE.',sub:'Build what can\'t be taken away. Guest data, direct relationships, your own channel.',ha:'bl'}
- ],
- caption:`In 2023, one algorithm change on a major food app wiped out 40%+ of orders for restaurants who'd built their whole model on it. No warning. No compensation.\n\nThis is exactly why owning your direct channel isn't optional anymore. 📉\n\n#RestaurantBusiness #BusinessRisk #DirectMarketing #Reservya #HospitalityStrategy #PlatformRisk`
-},
-// ── TIPS ──
-{day:2,cat:'t',title:"The 3-Second Table Impression",time:'Mon · 7:00 PM',goal:'Sensory first impression — operational tip',
- slides:[
-  {b:'c',p:'TIP 01',h1:'Guests decide in',h2:'3 SECONDS.',sub:"Here's what they're judging before they even sit down.",g:'3',gs:140,ha:'br'},
-  {b:'d',p:'WHAT THEY SEE',h2:'TABLE SETTING.',bd:"Fingerprints on glass. Uneven cutlery. A crooked centerpiece. These tiny details read as 'we don't care about the details' before you've said a word."},
-  {b:'k',p:'WHAT THEY HEAR',pc:'dk',h2:'AMBIENT SOUND.',bd:"Too loud = can't talk. Too quiet = feels awkward. The right volume says 'we thought about this'. Check it at every service."},
-  {b:'d',p:'WHAT THEY FEEL',h2:'TEMPERATURE + SCENT.',bd:'Cold draft from AC hitting the wrong spot. Kitchen smell hitting wrong. First impressions live in the body before they reach the brain.'},
-  {b:'c',p:'THE STANDARD',h1:'Walk the room',h2:'BEFORE EVERY\nSERVICE.',sub:'Sit at every table. See what your guests see. 3 seconds is all you get.',ha:'bl',ri:'tr'}
- ],
- caption:`I walked into a restaurant last week and knew in 3 seconds it was going to be a bad experience — before anyone had spoken to me.\n\nHere's the pre-service checklist that changes this. Walk the room. Every time. 👇\n\n#RestaurantTips #HospitalityLife #ServiceExcellence #RestaurantOwner #FOHLife #GuestExperience`
-},
-{day:4,cat:'t',title:"Menu Engineering That Sells",time:'Wed · 7:00 PM',goal:'Menu psychology for higher-margin item sales',
- slides:[
-  {b:'c',p:'TIP 02',h1:'Your menu is a',h2:'SALES\nTOOL.',sub:"Most restaurants don't treat it that way.",g:'MENU',gs:40,ha:'br'},
-  {b:'d',p:'THE EYE PATH',h2:'GUESTS READ MENUS LIKE NEWS.',bd:"Top right first. Then upper left. Stars, boxes, and bold text pull the eye — use them on your highest-margin items, not your cheapest ones."},
-  {b:'k',p:'NAMING POWER',pc:'dk',h2:'"SLOW-BRAISED SHORT RIB" VS. "BEEF"',bd:"Descriptive names increase order rate by up to 27%. Words sell. Generic words don't. Rename your dishes tonight."},
-  {b:'d',p:'THE DECOY',h2:'ADD A PREMIUM ITEM.',bd:'A EGP 950 wagyu makes your EGP 350 steak feel like a bargain. Anchor pricing is real. Use it deliberately.'},
-  {b:'c',p:'ACTION',h1:'Audit your menu',h2:'THIS WEEK.',sub:'Which items do you want to sell more of? Put them where the eye goes first.',ha:'bl'}
- ],
- caption:`This took me a while to learn: your menu isn't a list of food, it's a sales deck.\n\nEvery word, every position, every price placement is a decision that either works for you or against you.\n\nSwipe for the 4 things that change everything. 👇\n\n#MenuEngineering #RestaurantBusiness #FoodBusiness #RestaurantTips #MenuDesign #HospitalityMarketing`
-},
-{day:6,cat:'t',title:"Turn Complaints Into Your Fans",time:'Fri · 7:00 PM',goal:'Service recovery framework',
- slides:[
-  {b:'c',p:'TIP 03',h1:'A complaint is',h2:'A GIFT.',sub:"Most restaurants treat it like a threat.",g:'!',gs:150,ha:'br'},
-  {b:'d',p:'THE WINDOW',h2:'YOU HAVE 60 SECONDS.',bd:"A guest who complains, and has it resolved beautifully, is statistically more loyal than one who had no problem. That 60-second window decides which outcome you get."},
-  {b:'k',p:'THE SCRIPT',pc:'dk',h2:'"HEAR. ACKNOWLEDGE. ACT."',bd:'"Thank you for telling me. I understand why that\'s frustrating. Here\'s what I\'m going to do right now." No excuses. No blame. No delay.'},
-  {b:'d',p:'THE FOLLOW-THROUGH',h2:'DO MORE THAN EXPECTED.',bd:"Fix the problem. Then add something: a dessert, a note, a small gesture. The gesture is what gets remembered and shared."},
-  {b:'c',p:'THE OUTCOME',h1:'Handled right,',h2:'THEY COME\nBACK LOUDER.',sub:'A converted complainer is your most loyal customer and most powerful advocate.',ha:'bl'}
- ],
- caption:`The worst thing that can happen when a guest complains isn't the complaint — it's how you respond to it.\n\nI've seen restaurants turn 1-star situations into regulars with one simple framework.\n\nSave this for your next team training. 👇\n\n#ServiceRecovery #RestaurantTips #CustomerService #HospitalityLife #ServiceExcellence #GuestExperience`
-},
-{day:8,cat:'t',title:"The Art of Upselling Without Being Pushy",time:'Sun · 6:00 PM',goal:'Revenue per cover through genuine recommendation',
- slides:[
-  {b:'c',p:'TIP 04',h1:'Upselling is',h2:'HOSPITALITY.',sub:"If you're recommending the right things.",g:'↑',gs:130,ha:'br'},
-  {b:'d',p:'THE WRONG WAY',h2:'"WOULD YOU LIKE TO UPGRADE?"',bd:"Generic upgrades feel like a cashier script. Guests shut down. Trust drops. This is upselling as a transaction — and guests feel it."},
-  {b:'k',p:'THE RIGHT WAY',pc:'dk',h2:'"THE GRILLED LAMB IS EXCEPTIONAL TODAY."',bd:"Specific. Genuine. Personal. This is a recommendation from someone who cares — and it increases order rates without anyone feeling sold to."},
-  {b:'d',p:'TIMING MATTERS',h2:'BEFORE ORDERING, NOT AFTER.',bd:"Once the guest has decided, the moment has passed. Train staff to recommend during the conversation — not as a last-minute push at the end."},
-  {b:'c',p:'RESULT',h1:'Right upselling',h2:'BUILDS\nTRUST.',sub:"When guests leave having ordered something they loved that was recommended, they come back.",ha:'bl'}
- ],
- caption:`The difference between upselling and hospitality is knowledge and intention.\n\nIf your recommendation is genuine, it's a service. If it's scripted, it's a sale. Train your team on the difference.\n\n🙏\n\n#ServiceExcellence #RestaurantTraining #HospitalityTips #UpsellTips #RestaurantRevenue #RevenuePerCover`
-},
-{day:10,cat:'t',title:"Create a Signature Moment",time:'Tue · 7:00 PM',goal:'Brand differentiation through one memorable experience',
- slides:[
-  {b:'c',p:'TIP 05',h1:'Give them\nsomething',h2:'TO TALK\nABOUT.',sub:"It's not on the menu. It's the thing nobody else has.",g:'★',gs:120,ha:'br'},
-  {b:'d',p:'WHAT IT IS',h2:'THE THING THEY REMEMBER.',bd:"Not the food. Not even the service. The one moment nobody else has. The amuse-bouche from the chef. The handwritten note. The ritual that belongs only to you."},
-  {b:'k',p:'EXAMPLES',pc:'dk',h2:'BRANDS BUILT ON A MOMENT:',bd:"Nobu's black cod. The Four Seasons handshake. The Noma goodbye. These aren't accidents — they're designed. Find your version."},
-  {b:'d',p:'HOW TO BUILD ONE',h2:'WHAT CAN ONLY YOUR RESTAURANT DO?',bd:"It doesn't need to cost money. It needs to feel intentional, genuine, and yours. Authenticity is the only requirement."},
-  {b:'c',p:'THE PAYOFF',h1:'One moment.',h2:'SHARED A\nTHOUSAND TIMES.',sub:'Instagram. Word of mouth. Repeat visits. A signature moment pays for itself.',ha:'bl',ri:'tr'}
- ],
- caption:`Every restaurant I admire has one thing: a moment that couldn't happen anywhere else.\n\nThat's your brand. Not your logo, not your font — the thing guests describe to their friends when they're recommending you.\n\nWhat's yours?\n\n#BrandExperience #RestaurantBranding #HospitalityDesign #Signature #GuestExperience #RestaurantMarketing`
-},
-{day:12,cat:'t',title:"Speed vs. Experience: Finding the Balance",time:'Thu · 7:00 PM',goal:'Timing optimization for different guest types',
- slides:[
-  {b:'c',p:'TIP 06',h1:'Fast service or',h2:'GREAT\nSERVICE?',sub:"Trick question — it depends entirely on the table.",g:'⏱',gs:90,ha:'br'},
-  {b:'d',p:'READ THE TABLE',h2:'NOT EVERY GUEST WANTS THE SAME PACE.',bd:"Business lunch? They want fast. Anniversary dinner? A rushed experience feels cheap. Read their body language, not your kitchen schedule."},
-  {b:'k',p:'THE DANGER ZONES',pc:'dk',h2:'WHERE WAIT KILLS THE EXPERIENCE:',bd:['1. After seating — before water arrives.','2. After ordering — before first course.','3. After last dish — before the bill.']},
-  {b:'d',p:'THE FIX',h2:'OWN THOSE THREE MOMENTS.',bd:"Water in 2 minutes. Table check at 10 minutes. Bill ready before they ask. The rest can breathe. These three define the experience."},
-  {b:'c',p:'PRINCIPLE',h1:'Speed where\nit hurts.',h2:'PRESENCE\nWHERE IT COUNTS.',sub:"Eliminate the waits that feel like neglect. Slow the moments that feel like care.",ha:'bl'}
- ],
- caption:`Speed in a restaurant isn't the goal — removing friction is. There's a huge difference.\n\nThese are the 3 moments where wait times hurt most, and what to do about each of them.\n\n🕐\n\n#ServiceStandards #RestaurantTraining #HospitalityExcellence #GuestExperience #Timing`
-},
-{day:14,cat:'t',title:"The 10-Minute Pre-Shift Briefing",time:'Sat · 6:00 PM',goal:'Team alignment ritual for consistent service',
- slides:[
-  {b:'c',p:'TIP 07',h1:'10 minutes that',h2:'CHANGE\nYOUR SHIFT.',sub:'Every time. Without exception.',g:'10',gs:130,ha:'br'},
-  {b:'d',p:'WHAT TO COVER',h2:'THE 5 THINGS YOUR TEAM NEEDS:',bd:['1. VIP guests and occasions tonight.','2. Any 86\'d or featured items.','3. Tonight\'s push (high-margin) items.','4. One thing we\'re focusing on this shift.','5. Any known problems to anticipate.']},
-  {b:'k',p:'WHY IT MATTERS',pc:'dk',h2:'YOUR TEAM SERVES WHAT THEY KNOW.',bd:"If they don't know Mr. Ahmed is celebrating an anniversary, they can't create the moment. Brief them or miss every opportunity."},
-  {b:'d',p:'HOW TO RUN IT',h2:'STAND. SPEAK. 10 MINUTES MAX.',bd:"No sitting. No phones. Eye contact. This is the one moment before the guest experience begins — treat it like it matters."},
-  {b:'c',p:'THE STANDARD',h1:'Every shift.',h2:'NO\nEXCEPTIONS.',sub:'The teams that brief consistently are the ones with the strongest culture.',ha:'bl'}
- ],
- caption:`The 10-minute pre-shift briefing is the most underrated tool in hospitality.\n\nThe restaurants that do it consistently are almost always the ones with the strongest culture and the best guest ratings.\n\nHere's exactly how to run one. 👇\n\n#RestaurantLeadership #HospitalityManagement #TeamCulture #ServiceStandards #Briefing #FOHLife`
-},
-{day:16,cat:'t',title:"Build a Regulars Program from Scratch",time:'Mon · 7:00 PM',goal:'Practical 3-step loyalty building without tech',
- slides:[
-  {b:'c',p:'TIP 08',h1:'Your regulars',h2:'ARE YOUR\nBUSINESS.',sub:'Here\'s how to build real loyalty from scratch.',g:'VIP',gs:52,ha:'br'},
-  {b:'d',p:'STEP 1',h2:'IDENTIFY YOUR TOP 20.',bd:"Who comes most often? Who spends most? Who brings others? Start with a list. If your system can't tell you — that's problem number one."},
-  {b:'k',p:'STEP 2',pc:'dk',h2:'RECOGNIZE THEM BY NAME.',bd:"Train your team. When a regular walks in, their name should be used within 60 seconds of arrival. This costs nothing and means everything."},
-  {b:'d',p:'STEP 3',h2:'GIVE THEM A REASON TO STAY REGULAR.',bd:"Chef's table access. Early reservation window. A dish in their honor. Exclusivity is the most powerful loyalty program ever built."},
-  {b:'c',p:'THE PRINCIPLE',h1:'Make them feel',h2:'KNOWN.',sub:"When a regular feels like the restaurant knows them, they stop considering the alternative.",ha:'bl',ri:'tr'}
- ],
- caption:`You don't need a points system to build loyalty — you need a system that makes people feel known.\n\nHere's the 3-step regulars program that actually works (and costs almost nothing). 👇\n\n#CustomerLoyalty #RestaurantBusiness #GuestExperience #HospitalityTips #Regulars #RetentionStrategy`
-},
-{day:18,cat:'t',title:"The Manager Table Visit",time:'Wed · 7:00 PM',goal:'Manager presence as a service tool',
- slides:[
-  {b:'c',p:'TIP 09',h1:'Go to their table.',h2:'NOT JUST THE\nPROBLEM ONES.',sub:'This is where the experience gets made.',g:'GO',gs:90,ha:'br'},
-  {b:'d',p:'THE MISTAKE',h2:'MANAGERS APPEAR WHEN SOMETHING IS WRONG.',bd:"Guests learn to associate your visit with trouble. The manager who visits every table every shift changes the entire dynamic of your restaurant."},
-  {b:'k',p:'HOW TO DO IT RIGHT',pc:'dk',h2:'"30 SECONDS. GENUINE. NOT A SCRIPT."',bd:'"How is everything tonight? Is there anything we can bring you?" Make eye contact. Wait for the real answer. Not just "fine"."'},
-  {b:'d',p:'WHAT YOU\'LL CATCH',h2:'WHAT NO ONE TOLD YOU.',bd:"The couple who wanted less ice. The birthday they forgot to mention. The business guest who'd book a private dinner if someone just asked."},
-  {b:'c',p:'THE STANDARD',h1:'Visit every table.',h2:'EVERY SHIFT.',sub:"Not to check up. To show up. There's a difference.",ha:'bl'}
- ],
- caption:`The table visit is the most powerful tool a manager has — and the most underused.\n\nWhen done right, it's not an interruption, it's the experience.\n\nHere's how to do it. 🙏\n\n#HospitalityLeadership #RestaurantManagement #GuestExperience #ServiceStandards #ManagerLife`
-},
-{day:20,cat:'t',title:"Master the Goodbye",time:'Fri · 7:00 PM',goal:'Peak-end rule — last impression drives return',
- slides:[
-  {b:'c',p:'TIP 10',h1:'How they leave',h2:'IS HOW THEY\nREMEMBER YOU.',sub:'The psychology of last impressions is real.',g:'BYE',gs:60,ha:'br'},
-  {b:'d',p:'THE CURRENT STATE',h2:'MOST GOODBYES: "HAVE A GOOD NIGHT."',bd:"A transaction end. The guest walks out and within 10 minutes your restaurant is blending into the rest of their day. That's not hospitality."},
-  {b:'k',p:'WHAT GREAT LOOKS LIKE',pc:'dk',h2:'"ACKNOWLEDGMENT + ANTICIPATION."',bd:'"Mr. Ahmed, it was wonderful having you. We\'ll see you Thursday." Specific. Memorable. Personal. This is what a goodbye becomes a returning visit.'},
-  {b:'d',p:'THE DOOR RITUAL',h2:'WALK THEM OUT. WAIT UNTIL THEY\'RE OUTSIDE.',bd:"Don't start the goodbye from across the room. Walk to the door. Wait until they look back — because they will. That moment is the lasting impression."},
-  {b:'c',p:'THE PRINCIPLE',h1:'End well.',h2:'THEY\'LL\nCOME BACK.',sub:"The last 60 seconds of a visit are retained more than the first 60 minutes.",ha:'bl',ri:'tr'}
- ],
- caption:`In psychology, it's called the peak-end rule: people judge an experience mostly by how it ends.\n\nThe last 60 seconds of your guest's visit are worth more than the first 60 minutes.\n\nAre you treating them that way?\n\n#ServiceExcellence #HospitalityTips #GuestExperience #PeakEndRule #RestaurantBusiness #CustomerExperience`
-},
-// ── HOW GUESTS RATE ──
-{day:21,cat:'r',title:"What Guests Notice Before the Food",time:'Sat · 7:00 PM',goal:'Arrival experience primes the whole review',
- slides:[
-  {b:'c',p:'GUEST INSIGHT 01',h1:'Food isn\'t the',h2:'FIRST\nIMPRESSION.',sub:"Your arrival experience is.",g:'01',ha:'br'},
-  {b:'d',p:'WHAT THEY CLOCK FIRST',h2:'IN ORDER:',bd:['1. Cleanliness of the entrance.','2. How they\'re greeted (or not).','3. How long before anyone acknowledges them.','4. Noise level and temperature.','5. The menu — before they read a single word.']},
-  {b:'k',p:'THE 8-SECOND RULE',pc:'dk',h2:'8 SECONDS TO ACKNOWLEDGE.',bd:"Guests who wait more than 8 seconds to be acknowledged feel ignored — even if service hasn't technically started. The eye contact counts."},
-  {b:'d',p:'WHY RATINGS START HERE',h2:'A GREAT MEAL CAN\'T FULLY RECOVER A BAD ARRIVAL.',bd:"Guests enter with an emotional set point. The arrival primes the whole review before the food appears."},
-  {b:'c',p:'THE STANDARD',h1:'Win the arrival.',h2:'WIN THE\nREVIEW.',sub:"Your entrance is your first plate. Design it like one.",ha:'bl',ri:'tr'}
- ],
- caption:`Before they taste anything, your guests have already formed 70% of their impression.\n\nI tracked this across 50+ restaurant visits. The entrance and greeting determine more of the final rating than the food does.\n\nHere's what they actually notice 👀\n\n#GuestExperience #RestaurantRatings #HospitalityInsights #Arrival #ServiceExcellence`
-},
-{day:23,cat:'r',title:"Why Food Score Doesn't Equal Overall Rating",time:'Mon · 7:00 PM',goal:'Service and ambiance weight in ratings data',
- slides:[
-  {b:'c',p:'GUEST INSIGHT 02',h1:'Incredible food.',h2:'3 STARS.',sub:"It happens more than you think.",g:'3★',gs:70,ha:'br'},
-  {b:'d',p:'THE BREAKDOWN',h2:'WHERE RATINGS ACTUALLY COME FROM:',bd:['Food/quality: ~35%','Service experience: ~35%','Ambiance + cleanliness: ~20%','Value for money: ~10%','— Avg. across Google/TripAdvisor research.']},
-  {b:'k',p:'THE IMPLICATION',pc:'dk',h2:'TWO-THIRDS IS NOT ABOUT FOOD.',bd:"A restaurant with average food and exceptional service outrates one with exceptional food and average service. Consistently. The data is clear."},
-  {b:'d',p:'WHAT MOVES SERVICE SCORE',h2:'THE 3 MOMENTS THAT DRIVE RATINGS:',bd:['1. Speed of greeting.','2. Attentiveness during the meal.','3. How a problem was handled.']},
-  {b:'c',p:'THE STRATEGY',h1:'Invest as much',h2:'IN YOUR TEAM\nAS YOUR KITCHEN.',sub:"Your chefs make the food. Your team makes the rating.",ha:'bl'}
- ],
- caption:`I analyzed 200+ restaurant reviews and found something uncomfortable: the food was barely mentioned in most 1-star reviews.\n\nIt was almost always about how they were made to feel.\n\nThis changes what you should be investing in. 👇\n\n#RestaurantRatings #ServiceExcellence #GuestExperience #HospitalityData #OnlineReviews`
-},
-{day:25,cat:'r',title:"The 5-Star Framework Decoded",time:'Wed · 7:00 PM',goal:'What emotionally triggers each rating tier',
- slides:[
-  {b:'c',p:'GUEST INSIGHT 03',h1:'What does',h2:'5 STARS\nACTUALLY MEAN?',sub:'The answer might surprise you.',g:'5★',gs:70,ha:'br'},
-  {b:'d',p:'1–2 STARS',h2:'"I WON\'T GO BACK AND I\'M WARNING OTHERS."',bd:"Food safety. Rude staff. A major failure without recovery. These aren't about preference — they're about a trust breakdown. And they go public."},
-  {b:'k',p:'3–4 STARS',pc:'dk',h2:'"FINE. BUT NOT SPECIAL."',bd:"Most restaurants live here. Good food. Decent service. Nothing memorable. The graveyard of 'meh' is fuller than the cemetery of 'terrible'. This is the real competitive battleground."},
-  {b:'d',p:'5 STARS',h2:'"I FELT SOMETHING AND I WANT OTHERS TO FEEL IT."',bd:"A 5-star review is an emotional response. Not about perfection — it's about a moment that exceeded expectation in a way they needed to share."},
-  {b:'c',p:'YOUR TARGET',h1:'Create moments.',h2:'NOT JUST\nMEALS.',sub:"People share emotions, not food. 5-star reviews are written in the feeling, not the flavor.",ha:'bl',ri:'tr'}
- ],
- caption:`5-star reviews aren't about perfect food.\n\nI've read 500+ restaurant reviews studying what actually triggers that 5th star — and it's almost always a story about a moment, not a dish.\n\nHere's the pattern. 👇\n\n#OnlineReviews #RestaurantMarketing #GuestExperience #5Stars #HospitalityInsights #ReviewStrategy`
-},
-{day:27,cat:'r',title:"How Wait Times Actually Affect Your Rating",time:'Fri · 7:00 PM',goal:'Perceived vs actual wait — the acknowledgment effect',
- slides:[
-  {b:'c',p:'GUEST INSIGHT 04',h1:'"We\'ll be right',h2:'WITH YOU."',sub:'Those five words are worth 1.5 stars in your rating.',g:'⏳',gs:90,ha:'br'},
-  {b:'d',p:'THE RESEARCH',h2:'PERCEIVED VS ACTUAL WAIT:',bd:"Guests consistently overestimate wait times by 30–40% when they haven't been acknowledged. An acknowledged wait feels 50% shorter than an ignored one."},
-  {b:'k',p:'THE CRITICAL WINDOWS',pc:'dk',h2:'THESE THREE WAITS DRIVE YOUR RATING:',bd:['1. Arrival to seating.','2. Seating to first order taken.','3. Main course finished to bill.']},
-  {b:'d',p:'THE RESET',h2:'OWN EACH MOMENT WITH AN ACKNOWLEDGMENT.',bd:'"We\'ll have your table ready in 3 minutes" changes everything. Not the wait — the acknowledgment of it. The difference is 1.5 stars on average.'},
-  {b:'c',p:'THE STANDARD',h1:'Acknowledge first.',h2:'RESOLVE\nSECOND.',sub:"Guests can tolerate a wait. They cannot tolerate feeling invisible during one.",ha:'bl'}
- ],
- caption:`We ran a test: same restaurant, same wait times. Group A was acknowledged. Group B wasn't.\n\nGroup A rated the experience 1.5 stars higher on average.\n\nIt wasn't the wait. It was the acknowledgment. 👀\n\n#ServiceExcellence #GuestExperience #RestaurantInsights #HospitalityData #WaitTimes #RatingsStrategy`
-},
-{day:29,cat:'r',title:"The Silent Dealbreaker",time:'Sun · 7:00 PM',goal:'Accumulated small negatives that kill return rate',
- slides:[
-  {b:'c',p:'GUEST INSIGHT 05',h1:'They didn\'t',h2:'COMPLAIN.\nTHEY JUST LEFT.',sub:"And they're not coming back.",g:'...',gs:60,ha:'br'},
-  {b:'d',p:'THE INVISIBLE LIST',h2:'WHAT KILLS RETURNS WITHOUT A WORD:',bd:['Bathroom cleanliness.','Sticky or torn menus.','Staff on phones during service.','Waiting for the bill while staff chat nearby.','Being ignored while seated and visible.']},
-  {b:'k',p:'THE PATTERN',pc:'dk',h2:'"DIDN\'T FEEL LIKE COMING BACK."',bd:"In exit surveys, guests rarely cite one catastrophic reason. They cite accumulated small things. Three minor irritants equal one lost guest."},
-  {b:'d',p:'THE AUDIT',h2:'MYSTERY DINE YOUR OWN RESTAURANT.',bd:"Sit at a table. Try to get a server's attention. Use the bathroom. Pay the bill. What did you actually experience as a guest?"},
-  {b:'c',p:'THE STANDARD',h1:'If it bothers',h2:'YOUR GUESTS,\nTHEY WON\'T TELL YOU.',sub:"Conduct your own mystery visit quarterly. Find the small things first.",ha:'bl',ri:'tr'}
- ],
- caption:`I've mystery dined in my own (and others') restaurants 50+ times.\n\nThe pattern is always the same: it's not one big thing. It's three or four small ones that accumulate into a lost guest.\n\nHere's the silent dealbreaker checklist. Save this. 📋\n\n#GuestExperience #QualityControl #HospitalityStandards #MysteryDining #RestaurantBusiness`
-},
-// ── OPENING GUIDE ──
-{day:22,cat:'o',title:"The One-Page Business Plan",time:'Sun · 11:00 AM',goal:'Pre-spend clarity for first-time casual dining owner',
- slides:[
-  {b:'c',p:'OPENING GUIDE 01',h1:'Before you spend',h2:'A SINGLE\nEGP.',sub:"Start with a one-page plan. Seriously.",g:'PLAN',gs:44,ha:'br'},
-  {b:'d',p:'THE FOUR QUESTIONS',h2:'YOUR PLAN MUST ANSWER:',bd:['1. Who is this for? (Be specific. Very specific.)','2. What experience do you create that others don\'t?','3. Why here and why now?','4. How does the math work at 60% capacity?']},
-  {b:'k',p:'THE CONCEPT',pc:'dk',h2:'CASUAL DINING: DEFINE YOUR NICHE.',bd:"'Casual dining' is a category, not a concept. 'Neighborhood pasta bar for families' is a concept. What\'s yours? The more specific, the stronger."},
-  {b:'d',p:'THE NUMBERS',h2:'BACK-OF-NAPKIN P&L:',bd:['Seats × turns × avg. spend = potential revenue.','Food cost: 28–32%. Labor: 30–35%. Rent: under 10%.','If the math doesn\'t work at 60% capacity, revisit the concept.']},
-  {b:'c',p:'THE RULE',h1:'If you can\'t explain\nit in one page—',h2:'YOU\'RE NOT\nREADY YET.',sub:"That's not failure. That's clarity, found early. It saves you everything.",ha:'bl',ri:'tr'}
- ],
- caption:`Every restaurant I've seen fail had one thing in common: the concept was clear in the owner's head but not on paper.\n\nThe one-page business plan forces the clarity that saves you before you've spent anything.\n\n📋\n\n#RestaurantStartup #OpeningARestaurant #CasualDining #BusinessPlanning #NewRestaurant #FoodBusiness`
-},
-{day:24,cat:'o',title:"Location Checklist Before You Sign",time:'Tue · 11:00 AM',goal:'Site selection for casual dining — practical due diligence',
- slides:[
-  {b:'c',p:'OPENING GUIDE 02',h1:'Location is not',h2:'WHERE YOU\nLIKE IT.',sub:'It\'s where your guests already are.',g:'📍',gs:90,ha:'br'},
-  {b:'d',p:'WHAT TO MEASURE',h2:'BEFORE YOU SIGN A LEASE:',bd:['✓ Foot traffic at lunch, dinner, and Friday night.','✓ Parking — count spaces, not just availability.','✓ Competitor proximity (not always bad — clusters work).','✓ Delivery zone reach for the first 2 years.']},
-  {b:'k',p:'WHAT TO INVESTIGATE',pc:'dk',h2:'THE HIDDEN FACTORS:',bd:['Why did the previous tenant leave?','What\'s the landlord\'s reputation with F&B?','Is there planned construction within 500m?','What\'s the demographic within 3km?']},
-  {b:'d',p:'CASUAL DINING SPECIFICALLY',h2:'YOUR CUSTOMER IS LOCAL.',bd:"For casual dining, 80% of your regulars will come from within 3km. That 3km radius is your real business plan. Know it intimately before you sign."},
-  {b:'c',p:'THE RULE',h1:'Visit three times.',h2:'AT THREE\nDIFFERENT HOURS.',sub:"Morning. Lunch. Friday evening. What you see is what your guests will see.",ha:'bl'}
- ],
- caption:`I've watched restaurants with great food fail because of location — and average restaurants thrive because they picked right.\n\nLocation is the most expensive mistake you can make. Here's the checklist I use. 📍\n\n#OpeningARestaurant #RestaurantLocation #CasualDining #FoodBusiness #RestaurantStartup`
-},
-{day:26,cat:'o',title:"Build Your Menu Before Your Kitchen",time:'Thu · 11:00 AM',goal:'Menu-first principle for casual dining setup',
- slides:[
-  {b:'c',p:'OPENING GUIDE 03',h1:'Build your menu',h2:'BEFORE YOUR\nKITCHEN.',sub:"Your menu is your operations plan. It comes first.",g:'MENU',gs:40,ha:'br'},
-  {b:'d',p:'WHY ORDER MATTERS',h2:'YOUR MENU DETERMINES EVERYTHING:',bd:['Kitchen size and layout.','Equipment list (and cost).','Staff skills required.','Storage needs.','Your menu IS your kitchen spec. Write it first.']},
-  {b:'k',p:'CASUAL DINING PRINCIPLES',pc:'dk',h2:'AIM FOR:',bd:['✓ 30–40 items max. Not less, not more.','✓ 65–70% of items shareable or spliteable.','✓ One dish that is unmistakably yours.','✓ A kids section that isn\'t an afterthought.']},
-  {b:'d',p:'THE TEST',h2:'RUN A GHOST MENU FIRST.',bd:"Cook every dish. Time it. Cost it. Taste it cold. Time it again at service speed. What breaks under pressure in testing is what will break on opening night."},
-  {b:'c',p:'THE PRINCIPLE',h1:'Simplicity scales.',h2:'COMPLEXITY\nKILLS.',sub:"10 dishes you execute perfectly are worth more than 40 you can't.",ha:'bl',ri:'tr'}
- ],
- caption:`One of the most common mistakes first-time restaurant owners make: designing the space before the menu.\n\nYour menu should come first — it determines your kitchen, your team, your costs.\n\nHere's why. 🍽️\n\n#RestaurantStartup #MenuDesign #CasualDining #OpeningARestaurant #KitchenDesign #FoodBusiness`
-},
-{day:28,cat:'o',title:"Every Paper You Need to Open",time:'Sat · 11:00 AM',goal:'Complete licensing and permit checklist for casual dining',
- slides:[
-  {b:'c',p:'OPENING GUIDE 04',h1:'The paperwork.',h2:'ALL OF IT.',sub:"Start earlier than you think you need to.",g:'📄',gs:80,ha:'br'},
-  {b:'d',p:'BEFORE YOU BUILD',h2:'REQUIRED BEFORE CONSTRUCTION:',bd:['✓ Commercial lease / ownership documentation.','✓ No-objection from building owner for F&B use.','✓ Municipality commercial activity license.','✓ Health authority pre-approval (get this first).']},
-  {b:'k',p:'BEFORE YOU OPEN',pc:'dk',h2:'REQUIRED BEFORE FIRST SERVICE:',bd:['✓ Health & safety certificate.','✓ Fire safety compliance sign-off.','✓ Food handler certifications for all staff.','✓ Signage permit. ✓ Music license (if applicable).']},
-  {b:'d',p:'THE TIMELINE',h2:'ALLOW 60–90 DAYS FOR APPROVALS.',bd:"The most common reason restaurants miss their opening date isn't construction — it's paperwork. Start the approvals process before you pick up a hammer."},
-  {b:'c',p:'ADVICE',h1:'Hire a licensing\nconsultant.',h2:'ONCE.',sub:"The cost of guidance is 10× less than the cost of a delayed opening.",ha:'bl'}
- ],
- caption:`The permits and paperwork side of opening a restaurant is where most first-timers lose 2–3 months they didn't plan for.\n\nHere's the full checklist — and the order that actually matters. 📋\n\n#RestaurantStartup #OpeningARestaurant #CasualDining #NewRestaurant #Licensing #FoodBusiness`
-},
-{day:30,cat:'o',title:"Your First 90 Days: A Survival Plan",time:'Mon · 7:00 PM',goal:'Post-opening roadmap for first casual dining restaurant',
- slides:[
-  {b:'c',p:'OPENING GUIDE 05',h1:'You\'re open.',h2:'NOW WHAT?',sub:"The hardest 90 days of your career begin today.",g:'90',gs:120,ha:'br'},
-  {b:'d',p:'DAYS 1–30',h2:'SURVIVE. DON\'T PERFECT.',bd:"Expect systems to break. Expect mistakes. Your job in month one is to identify what you're bad at and fix it quickly. Not to perform flawlessness."},
-  {b:'k',p:'DAYS 31–60',pc:'dk',h2:'STABILIZE. START MEASURING.',bd:['Track these four numbers daily:','Cover count. Average spend per head.','Review velocity (new reviews per week).','Repeat customer rate. These four tell you everything.']},
-  {b:'d',p:'DAYS 61–90',h2:'GROW. DOUBLE DOWN ON WHAT WORKS.',bd:"By day 90, you know your best tables, best shift, best dish, best day. Scale what's working. Cut what isn't. This is when you stop surviving."},
-  {b:'c',p:'THE PROMISE',h1:'Day 90 is not\nthe end.',h2:'IT\'S THE\nBEGINNING.',sub:"If you survive and learn from the first 90 days, you have the foundation for something that lasts.",ha:'bl',ri:'tr'}
- ],
- caption:`Opening day is not the finish line.\n\nFor most first-time restaurant owners, it's the starting gun of the hardest 90 days of their career.\n\nHere's what I wish someone had told me about the first three months.\n\n🏁\n\n#RestaurantStartup #OpeningARestaurant #NewRestaurant #CasualDining #Hospitality #FirstRestaurant`
-}
+// PROBLEMS
+{day:1,cat:'p',title:"You Don't Own Your Guest Data",time:'Sun · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 01',h1:'Who Actually',h2:'OWNS YOUR\nGUESTS?',sub:"Most restaurant owners don't know the answer.",g:'01',ha:'br',ri:'tr'},
+ {b:'d',p:'THE REALITY',h2:'EVERY BOOKING THROUGH AN APP',bd:"They collect the name, number, visit history. You collect the order. When they leave, they take the guest with them.",g:'01'},
+ {b:'k',p:'THE COST',h2:'TOMORROW, IF THEY RAISED FEES—',bd:"Could you email your 50 best customers and say 'book direct'? Be honest. Most restaurant owners can't."},
+ {b:'d',p:'THE RESERVYA FIX',h2:'EVERY RESERVATION BUILDS YOUR DATABASE.',bd:"Names, visit frequency, preferences, occasions — staying in YOUR system. Not the platform's.",g:'RX'},
+ {b:'c',p:'TAKEAWAY',h1:'Own the data.',h2:'OWN THE\nRELATIONSHIP.',sub:'Your guests are your biggest asset. Start owning them today.',ha:'bl'}
+],caption:`Quick question: if your 3 biggest platforms disappeared tomorrow, could you reach your regulars? 🤔\n\nMost restaurant owners can't — and that's the scariest thing in hospitality right now.\n\nGuest data ownership is the difference between building a business and building someone else's customer base.\n\nSave this if it hit home. 👇\n\n#RestaurantBusiness #HospitalityIndustry #GuestExperience #RestaurantMarketing #Reservya #GuestData`},
+{day:3,cat:'p',title:"Aggregator Commission Is Eating You Alive",time:'Tue · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 02',h1:'30% to them.',h2:'WHAT\'S LEFT\nFOR YOU?',sub:"Let's do the math nobody wants to do.",g:'30%',gs:72,ha:'br',ri:'tr'},
+ {b:'d',p:'THE MATH',h2:'EGP 300 ORDER × 30% = EGP 90 GONE.',bd:"500 orders a month. That's EGP 45,000 going to a middleman that doesn't care about your survival.",g:'45K'},
+ {b:'k',p:'THE TRAP',h2:'THEY OWN THE CUSTOMER.',bd:"If you stop paying commission, the guest disappears — because they were never really yours. You've been renting your own audience."},
+ {b:'d',p:'THE WAY OUT',h2:'BUILD YOUR DIRECT CHANNEL.',bd:"A smart booking system captures guests directly. Commission paid once to build the asset — not monthly rent with no equity.",g:'DIR'},
+ {b:'c',p:'BOTTOM LINE',h1:'Stop renting.',h2:'START\nOWNING.',sub:'Every direct booking is margin back in your pocket.',ha:'bl'}
+],caption:`Let's do some uncomfortable math 🧮\n\nIf you're doing 500 orders/month through aggregators at 30% commission... that's EGP 45,000 leaving your business every single month.\n\nEGP 540,000 a year to a platform that holds your customer data and can change their fee structure whenever they want.\n\nI'll show you the way out in this carousel.\n\n#RestaurantEconomics #FoodDelivery #RestaurantOwner #HospitalityBusiness #Reservya #Margins`},
+{day:5,cat:'p',title:"No-Shows Are Costing You Real Money",time:'Thu · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 03',h1:'Table for 4.',h2:'NOBODY\nSHOWED UP.',sub:'One no-show costs more than you think.',g:'04',ha:'br'},
+ {b:'d',p:'THE REAL COST',h2:'IT\'S NOT JUST A MISSED TABLE.',bd:"Staff cost. Prepped food. Table blocked from walk-ins. One no-show can represent EGP 800–2,000 in real losses.",g:'EGP'},
+ {b:'k',p:'THE OLD FIX',h2:'CALL TO CONFIRM?',bd:"Guests don't answer. Even the ones who do sometimes don't show. Manual calls don't scale — and they burn your team during service."},
+ {b:'d',p:'THE SMART WAY',h2:'AUTOMATED REMINDERS + CONFIRMATION LINKS.',bd:"Reservya sends confirmations 48h and 2h before. Guest confirms with one tap — or cancels so you can resell the slot.",g:'2H'},
+ {b:'c',p:'RESULT',h1:'20% fewer\nno-shows.',h2:'THAT\'S REAL\nMONEY BACK.',sub:'Automated system. Zero calls needed from your team.',ha:'bl',ri:'tr'}
+],caption:`We ran the numbers on a client account: 12 no-shows in one week × EGP 1,200 average table spend = EGP 14,400 in lost revenue.\n\nFor one week.\n\nThis is why smart confirmation systems have moved from "nice to have" to essential.\n\nHere's exactly how we fixed it 👇\n\n#RestaurantBusiness #NoShows #ReservationManagement #Reservya #HospitalityTech #TableManagement`},
+{day:7,cat:'p',title:"Your Staff Wastes Hours on Manual Bookings",time:'Sat · 6:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 04',h1:'Phone rang.',h2:'NO ONE\nANSWERED.',sub:'And a reservation walked out the door.',g:'📞',gs:80,ha:'br',ri:'tr'},
+ {b:'d',p:'THE HIDDEN COST',h2:'2–3 HOURS A DAY ON BOOKING CALLS.',bd:"Writing in the paper book. Calling to confirm. Fielding date changes. That's your best people doing admin, not hospitality.",g:'3H'},
+ {b:'k',p:'WHAT GETS MISSED',h2:'EVERY RING AT THE WRONG MOMENT.',bd:"During service. During prep. The booking call that becomes 'sorry we're full' because nobody could get to it."},
+ {b:'d',p:'THE RESERVYA FIX',h2:'ONLINE BOOKING. AUTO CONFIRMATIONS. ZERO CALLS.',bd:"Guests book at 11pm. System confirms instantly. The shift brief is ready before the team arrives.",g:'0'},
+ {b:'c',p:'THE TRADE',h1:'Less admin.',h2:'MORE\nHOSPITALITY.',sub:'Give your team the time to do what they were hired for.',ha:'bl'}
+],caption:`I visited a restaurant where the host answered 11 phone calls during a 45-minute lunch service.\n\n11 calls.\n\nThat's not hospitality — that's admin with an apron on.\n\nHere's what I'd change immediately. 👇\n\n#RestaurantOps #HospitalityManagement #RestaurantTech #TeamCulture #Reservya #Automation`},
+{day:9,cat:'p',title:"You Can't Predict Busy vs. Dead Nights",time:'Mon · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 05',h1:'Thursday: dead.',h2:'FRIDAY:\nCHAOS.',sub:"You staffed the same for both.",g:'?',gs:120,ha:'br'},
+ {b:'d',p:'THE PATTERN',h2:'OVERSTAFFED ON QUIET. UNDERSTAFFED ON RUSH.',bd:"Quiet nights = wasted labor cost. Rush nights = broken experience. Both hurt your margins and your review score.",g:'$$'},
+ {b:'k',p:'WHAT YOU NEED',h2:'RESERVATION DATA TELLS YOU WHAT\'S COMING.',bd:"With a smart booking system, you know Tuesday will be 60% at 7pm and 90% at 8:30pm before the day starts."},
+ {b:'d',p:'THE RESERVYA EDGE',h2:'DEMAND FORECASTING FROM YOUR OWN HISTORY.',bd:"When, who, how often, what size party — your historical booking patterns predict your next shift better than any intuition.",g:'📊'},
+ {b:'c',p:'THE OUTCOME',h1:'Right staff.',h2:'RIGHT TIME.\nEVERY SHIFT.',sub:'Stop guessing. Start planning with data you already have.',ha:'bl',ri:'tr'}
+],caption:`What if you knew on Monday that Friday 8pm would be your busiest slot — before a single reservation came in?\n\nThis is what happens when your booking data works for you, not just for taking bookings.\n\nLabor cost is your biggest controllable expense. Forecasting is how you control it.\n\n#RestaurantManagement #DataDriven #HospitalityOps #Reservya #Forecasting #RestaurantBusiness`},
+{day:11,cat:'p',title:"Bad Reviews Come In, Feedback Never Does",time:'Wed · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 06',h1:'1 star on\nGoogle.',h2:'FIRST YOU\nKNEW.',sub:'By then, 1,000 people had already read it.',g:'1★',gs:70,ha:'br'},
+ {b:'d',p:'THE GAP',h2:'GUESTS SMILE TO YOUR FACE.',bd:"Then rate you 1-star at home. By the time you read it, there's nothing you can do. The damage is done, public, and permanent.",g:'★'},
+ {b:'k',p:'WHY THEY DON\'T TELL YOU',h2:'FRICTION IS TOO HIGH.',bd:"A printed feedback card feels like effort. A generic survey goes unclicked. Most guests won't complain — they just won't come back."},
+ {b:'d',p:'THE RESERVYA FIX',h2:'ONE MESSAGE AFTER EVERY VISIT.',bd:"A quick check-in after their meal. Catch unhappy guests before they reach Google. Happy ones? Guide them to leave that review.",g:'✓'},
+ {b:'c',p:'THE RESULT',h1:'Catch problems\nearly.',h2:'AMPLIFY\nTHE WINS.',sub:'Fewer 1-star surprises. More 5-star reviews that actually happened.',ha:'bl'}
+],caption:`The worst review isn't the unfair one — it's the one you could have prevented if you'd just asked the guest how it went before they left.\n\nThe feedback gap is real, and it's costing restaurants thousands in lost repeat business every month.\n\n#ReviewManagement #GuestFeedback #RestaurantBusiness #OnlineReputation #Reservya #GoogleReviews`},
+{day:13,cat:'p',title:"Loyalty Programs Nobody Uses",time:'Fri · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 07',h1:'Stamp card in',h2:'THEIR JUNK\nDRAWER.',sub:'82% of restaurant loyalty cards are abandoned.',g:'LOYAL',gs:36,ha:'br'},
+ {b:'d',p:'THE REALITY',h2:'GUESTS FORGET. LOSE. DON\'T BOTHER.',bd:"The friction of carrying a physical card defeats the purpose before it starts. And even digital apps go undownloaded.",g:'%'},
+ {b:'k',p:'THE BIGGER PROBLEM',h2:'LOCKED TO ONE LOCATION.',bd:"Your regular who moves across town stops coming. Traditional loyalty doesn't follow the guest — it follows the postcode."},
+ {b:'d',p:'THE RESERVYA MODEL',h2:'LOYALTY THAT LIVES IN THE BOOKING.',bd:"Every reservation builds points automatically. No card. No app to download. No friction. Just value every time they return.",g:'0'},
+ {b:'c',p:'THE SHIFT',h1:'Effortless.',h2:'AUTOMATIC\nRETURN.',sub:"Guests don't want to manage loyalty. They want to feel it.",ha:'bl',ri:'tr'}
+],caption:`Real question: when's the last time a loyalty stamp card actually made you go back to a restaurant?\n\nNow think about what actually brings you back. It's not the stamp — it's the feeling of being recognized.\n\nHere's what actually works (and why the old model is finished). 👇\n\n#CustomerLoyalty #RestaurantBusiness #GuestRetention #Reservya #LoyaltyProgram`},
+{day:15,cat:'p',title:"New Competitor Opens, You Have No Defense",time:'Sun · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 08',h1:'New place\nopened',h2:'ACROSS THE\nSTREET.',sub:"Your regulars are curious. That's not disloyalty — it's human nature.",g:'NEW',gs:52,ha:'br',ri:'tr'},
+ {b:'d',p:'THE VULNERABILITY',h2:'YOUR REGULARS WILL TRY IT.',bd:"The question isn't whether they'll try the new place — they will. The question is whether you'll know if they don't come back.",g:'?'},
+ {b:'k',p:'WHAT YOU NEED',h2:'WHEN DID YOUR REGULARS LAST VISIT?',bd:"If you can't answer this question for your top 50 guests, you have no early warning system for drift."},
+ {b:'d',p:'THE RESERVYA EDGE',h2:'VISIT FREQUENCY TRACKING.',bd:"When a regular breaks their normal pattern, the system flags it. Send a personalized note at day 30 — not day 90.",g:'30'},
+ {b:'c',p:'THE PLAY',h1:'Know before',h2:'THEY\nLEAVE.',sub:'Your data is your defense. Use it to act early, not reactively.',ha:'bl'}
+],caption:`Every restaurant will face a new competitor eventually. The ones who survive it aren't necessarily the ones with the best food — they're the ones who know their guests well enough to reach out before it's too late. 🛡️\n\n#RestaurantStrategy #CompetitiveAdvantage #Reservya #HospitalityBusiness #GuestRetention`},
+{day:17,cat:'p',title:"Your Best Customers Disappear Silently",time:'Tue · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 09',h1:'Table 7 hasn\'t',h2:'BEEN BACK\nIN 60 DAYS.',sub:"They didn't complain. They just stopped.",g:'60',ha:'br'},
+ {b:'d',p:'THE SILENCE',h2:'90% OF UNHAPPY GUESTS NEVER SAY ANYTHING.',bd:"They simply choose somewhere else. And you'll never know why unless you track when they stopped coming.",g:'90%'},
+ {b:'k',p:'THE PATTERN',h2:'GUEST LOSS SIGNALS ITSELF EARLY.',bd:"A monthly regular misses one month. Then two. By month three, they're someone else's regular. The window was month one."},
+ {b:'d',p:'THE RESERVYA FIX',h2:'AUTOMATED LAPSE DETECTION.',bd:"When a guest breaks their normal pattern, the system flags it. A personalized re-engagement at day 30 wins back 3× more than one at day 90.",g:'30'},
+ {b:'c',p:'THE WINDOW',h1:'Act at 30 days.',h2:'NOT\n90.',sub:'The difference between "we miss you" and "too late" is timing.',ha:'bl',ri:'tr'}
+],caption:`The scariest thing in hospitality isn't bad reviews — it's the guests who leave quietly and never tell you why.\n\nI track when my best customers stop coming. Most owners don't — and that's exactly why competitor opens sting so much.\n\nHere's how I know when a regular is drifting before it's too late 👇\n\n#GuestRetention #RestaurantBusiness #CustomerExperience #Reservya #Churn`},
+{day:19,cat:'p',title:"One Platform Change Wiped Your Orders",time:'Thu · 7:00 PM',
+slides:[
+ {b:'c',p:'PROBLEM 10',h1:'Algorithm\nchanged.',h2:'REVENUE\nDROPPED 40%.',sub:'In a week. With no warning.',g:'40%',gs:60,ha:'br'},
+ {b:'d',p:'THE DEPENDENCY',h2:'BUILT ON SOMEONE ELSE\'S PLATFORM.',bd:"When your restaurant's survival depends on one app's algorithm, you've handed control to their product team.",g:'APP'},
+ {b:'k',p:'THE RISK',h2:'THEY DON\'T OWN THE RELATIONSHIP.',bd:"Every order that comes through them is proof you don't control your own demand. One policy change and your livelihood shifts."},
+ {b:'d',p:'THE STRATEGY',h2:'OWN YOUR CHANNELS. BUILD YOUR LIST.',bd:"A direct booking system, an email list, a loyalty base — these can't be algorithm'd away. They're yours, permanently.",g:'OWN'},
+ {b:'c',p:'THE PRINCIPLE',h1:'Don\'t rent',h2:'YOUR\nAUDIENCE.',sub:'Build what can\'t be taken. Guest data, direct relationships, your own channel.',ha:'bl'}
+],caption:`In 2023, one algorithm change on a major food app wiped out 40%+ of orders for restaurants who'd built their whole model on it. No warning. No compensation.\n\nThis is exactly why owning your direct channel isn't optional anymore. 📉\n\n#RestaurantBusiness #BusinessRisk #DirectMarketing #Reservya #HospitalityStrategy #PlatformRisk`},
+// TIPS
+{day:2,cat:'t',title:"The 3-Second Table Impression",time:'Mon · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 01',h1:'Guests decide in',h2:'3 SECONDS.',sub:"Here's what they're judging before they even sit down.",g:'3',gs:140,ha:'br'},
+ {b:'d',p:'WHAT THEY SEE',h2:'TABLE SETTING.',bd:"Fingerprints on glass. Uneven cutlery. A crooked centerpiece. These tiny details read as 'we don't care about the details'.",g:'👁'},
+ {b:'k',p:'WHAT THEY HEAR',h2:'AMBIENT SOUND.',bd:"Too loud = can't talk. Too quiet = feels awkward. The right volume says 'we thought about this'. Check it at every service."},
+ {b:'d',p:'WHAT THEY FEEL',h2:'TEMPERATURE + SCENT.',bd:"Cold draft from AC hitting the wrong spot. Kitchen smell hitting wrong. First impressions live in the body before the brain.",g:'~'},
+ {b:'c',p:'THE STANDARD',h1:'Walk the room',h2:'BEFORE EVERY\nSERVICE.',sub:'Sit at every table. See what your guests see. 3 seconds is all you get.',ha:'bl',ri:'tr'}
+],caption:`I walked into a restaurant last week and knew in 3 seconds it was going to be a bad experience — before anyone had spoken to me.\n\nHere's the pre-service checklist that changes this. Walk the room. Every time. 👇\n\n#RestaurantTips #HospitalityLife #ServiceExcellence #RestaurantOwner #FOHLife #GuestExperience`},
+{day:4,cat:'t',title:"Menu Engineering That Sells",time:'Wed · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 02',h1:'Your menu is a',h2:'SALES\nTOOL.',sub:"Most restaurants don't treat it that way.",g:'MENU',gs:38,ha:'br'},
+ {b:'d',p:'THE EYE PATH',h2:'GUESTS READ MENUS LIKE NEWS.',bd:"Top right first. Then upper left. Stars, boxes, and bold text pull the eye — use them on your highest-margin items.",g:'👁'},
+ {b:'k',p:'NAMING POWER',h2:'"SLOW-BRAISED SHORT RIB" VS. "BEEF"',bd:"Descriptive names increase order rate by up to 27%. Words sell. Generic words don't. Rename your dishes tonight."},
+ {b:'d',p:'THE DECOY',h2:'ADD A PREMIUM ITEM.',bd:"A EGP 950 wagyu makes your EGP 350 steak feel like a bargain. Anchor pricing is real. Use it deliberately.",g:'↑'},
+ {b:'c',p:'ACTION',h1:'Audit your menu',h2:'THIS WEEK.',sub:'Which items do you want to sell more of? Put them where the eye goes first.',ha:'bl'}
+],caption:`This took me a while to learn: your menu isn't a list of food, it's a sales deck.\n\nEvery word, every position, every price placement is a decision that either works for you or against you.\n\nSwipe for the 4 things that change everything. 👇\n\n#MenuEngineering #RestaurantBusiness #FoodBusiness #RestaurantTips #MenuDesign #HospitalityMarketing`},
+{day:6,cat:'t',title:"Turn Complaints Into Your Fans",time:'Fri · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 03',h1:'A complaint is',h2:'A GIFT.',sub:"Most restaurants treat it like a threat.",g:'!',gs:150,ha:'br'},
+ {b:'d',p:'THE WINDOW',h2:'YOU HAVE 60 SECONDS.',bd:"A guest who complains, and has it resolved beautifully, is statistically more loyal than one who had no problem. That 60-second window decides.",g:'60'},
+ {b:'k',p:'THE SCRIPT',h2:'"HEAR. ACKNOWLEDGE. ACT."',bd:"'Thank you for telling me. I understand why that's frustrating. Here's what I'm going to do right now.' No excuses. No delay."},
+ {b:'d',p:'THE FOLLOW-THROUGH',h2:'DO MORE THAN EXPECTED.',bd:"Fix the problem. Then add something: a dessert, a note, a small gesture. The gesture is what gets remembered and shared.",g:'+'},
+ {b:'c',p:'THE OUTCOME',h1:'Handled right,',h2:'THEY COME\nBACK LOUDER.',sub:'A converted complainer is your most loyal customer and most powerful advocate.',ha:'bl',ri:'tr'}
+],caption:`The worst thing that can happen when a guest complains isn't the complaint — it's how you respond to it.\n\nI've seen restaurants turn 1-star situations into regulars with one simple framework.\n\nSave this for your next team training. 👇\n\n#ServiceRecovery #RestaurantTips #CustomerService #HospitalityLife #ServiceExcellence #GuestExperience`},
+{day:8,cat:'t',title:"The Art of Upselling Without Being Pushy",time:'Sun · 6:00 PM',
+slides:[
+ {b:'c',p:'TIP 04',h1:'Upselling is',h2:'HOSPITALITY.',sub:"If you're recommending the right things.",g:'↑',gs:130,ha:'br'},
+ {b:'d',p:'THE WRONG WAY',h2:'"WOULD YOU LIKE TO UPGRADE?"',bd:"Generic upgrades feel like a cashier script. Guests shut down. Trust drops. This is upselling as a transaction.",g:'✗'},
+ {b:'k',p:'THE RIGHT WAY',h2:'"THE GRILLED LAMB IS EXCEPTIONAL TODAY."',bd:"Specific. Genuine. Personal. This is a recommendation from someone who cares — and it increases order rates without anyone feeling sold to."},
+ {b:'d',p:'TIMING MATTERS',h2:'BEFORE ORDERING, NOT AFTER.',bd:"Once the guest has decided, the moment has passed. Train staff to recommend during the conversation — not as a last-minute push.",g:'⏰'},
+ {b:'c',p:'RESULT',h1:'Right upselling',h2:'BUILDS\nTRUST.',sub:"When guests leave having ordered something they loved that was recommended, they come back.",ha:'bl'}
+],caption:`The difference between upselling and hospitality is knowledge and intention.\n\nIf your recommendation is genuine, it's a service. If it's scripted, it's a sale. Train your team on the difference.\n\n🙏\n\n#ServiceExcellence #RestaurantTraining #HospitalityTips #UpsellTips #RestaurantRevenue #RevenuePerCover`},
+{day:10,cat:'t',title:"Create a Signature Moment",time:'Tue · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 05',h1:'Give them\nsomething',h2:'TO TALK\nABOUT.',sub:"It's not on the menu. It's the thing nobody else has.",g:'★',gs:120,ha:'br'},
+ {b:'d',p:'WHAT IT IS',h2:'THE THING THEY REMEMBER.',bd:"Not the food. Not even the service. The one moment nobody else has. The amuse-bouche from the chef. The handwritten note. The ritual that belongs only to you.",g:'?'},
+ {b:'k',p:'EXAMPLES',h2:'BRANDS BUILT ON A MOMENT:',bd:"Nobu's black cod. The Four Seasons handshake. The Noma goodbye. These aren't accidents — they're designed. Find your version."},
+ {b:'d',p:'HOW TO BUILD ONE',h2:'WHAT CAN ONLY YOUR RESTAURANT DO?',bd:"It doesn't need to cost money. It needs to feel intentional, genuine, and yours. Authenticity is the only requirement.",g:'✦'},
+ {b:'c',p:'THE PAYOFF',h1:'One moment.',h2:'SHARED A\nTHOUSAND TIMES.',sub:'Instagram. Word of mouth. Repeat visits. A signature moment pays for itself.',ha:'bl',ri:'tr'}
+],caption:`Every restaurant I admire has one thing: a moment that couldn't happen anywhere else.\n\nThat's your brand. Not your logo, not your font — the thing guests describe to their friends when they're recommending you.\n\nWhat's yours?\n\n#BrandExperience #RestaurantBranding #HospitalityDesign #Signature #GuestExperience #RestaurantMarketing`},
+{day:12,cat:'t',title:"Speed vs. Experience: Finding the Balance",time:'Thu · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 06',h1:'Fast service or',h2:'GREAT\nSERVICE?',sub:"Trick question — it depends entirely on the table.",g:'⏱',gs:90,ha:'br'},
+ {b:'d',p:'READ THE TABLE',h2:'NOT EVERY GUEST WANTS THE SAME PACE.',bd:"Business lunch? They want fast. Anniversary dinner? A rushed experience feels cheap. Read their body language, not your kitchen schedule.",g:'?'},
+ {b:'k',p:'THE DANGER ZONES',h2:'WHERE WAIT KILLS THE EXPERIENCE:',bd:['1. After seating — before water arrives.','2. After ordering — before first course.','3. After last dish — before the bill.']},
+ {b:'d',p:'THE FIX',h2:'OWN THOSE THREE MOMENTS.',bd:"Water in 2 minutes. Table check at 10 minutes. Bill ready before they ask. The rest can breathe. These three define the experience.",g:'3'},
+ {b:'c',p:'PRINCIPLE',h1:'Speed where\nit hurts.',h2:'PRESENCE\nWHERE IT COUNTS.',sub:"Eliminate the waits that feel like neglect. Slow the moments that feel like care.",ha:'bl'}
+],caption:`Speed in a restaurant isn't the goal — removing friction is. There's a huge difference.\n\nThese are the 3 moments where wait times hurt most, and what to do about each of them.\n\n🕐\n\n#ServiceStandards #RestaurantTraining #HospitalityExcellence #GuestExperience #Timing`},
+{day:14,cat:'t',title:"The 10-Minute Pre-Shift Briefing",time:'Sat · 6:00 PM',
+slides:[
+ {b:'c',p:'TIP 07',h1:'10 minutes that',h2:'CHANGE\nYOUR SHIFT.',sub:'Every time. Without exception.',g:'10',gs:130,ha:'br'},
+ {b:'d',p:'WHAT TO COVER',h2:'THE 5 THINGS YOUR TEAM NEEDS:',bd:['1. VIPs and occasions tonight.','2. Any 86\'d or featured items.','3. Tonight\'s push (high-margin) items.','4. One focus for this shift.','5. Any known problems to anticipate.']},
+ {b:'k',p:'WHY IT MATTERS',h2:'YOUR TEAM SERVES WHAT THEY KNOW.',bd:"If they don't know Mr. Ahmed is celebrating an anniversary, they can't create the moment. Brief them or miss every opportunity."},
+ {b:'d',p:'HOW TO RUN IT',h2:'STAND. SPEAK. 10 MINUTES MAX.',bd:"No sitting. No phones. Eye contact. This is the one moment before the guest experience begins — treat it like it matters.",g:'10'},
+ {b:'c',p:'THE STANDARD',h1:'Every shift.',h2:'NO\nEXCEPTIONS.',sub:'The teams that brief consistently are the ones with the strongest culture.',ha:'bl',ri:'tr'}
+],caption:`The 10-minute pre-shift briefing is the most underrated tool in hospitality.\n\nThe restaurants that do it consistently are almost always the ones with the strongest culture and the best guest ratings.\n\nHere's exactly how to run one. 👇\n\n#RestaurantLeadership #HospitalityManagement #TeamCulture #ServiceStandards #Briefing #FOHLife`},
+{day:16,cat:'t',title:"Build a Regulars Program from Scratch",time:'Mon · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 08',h1:'Your regulars',h2:'ARE YOUR\nBUSINESS.',sub:"Here's how to build real loyalty from scratch.",g:'VIP',gs:52,ha:'br'},
+ {b:'d',p:'STEP 1',h2:'IDENTIFY YOUR TOP 20.',bd:"Who comes most often? Who spends most? Who brings others? Start with a list. If your system can't tell you — that's problem number one.",g:'20'},
+ {b:'k',p:'STEP 2',h2:'RECOGNIZE THEM BY NAME.',bd:"Train your team. When a regular walks in, their name should be used within 60 seconds of arrival. This costs nothing and means everything."},
+ {b:'d',p:'STEP 3',h2:'GIVE THEM A REASON TO STAY REGULAR.',bd:"Chef's table access. Early reservation window. A dish in their honor. Exclusivity is the most powerful loyalty program ever built.",g:'★'},
+ {b:'c',p:'THE PRINCIPLE',h1:'Make them feel',h2:'KNOWN.',sub:"When a regular feels like the restaurant knows them, they stop considering the alternative.",ha:'bl'}
+],caption:`You don't need a points system to build loyalty — you need a system that makes people feel known.\n\nHere's the 3-step regulars program that actually works (and costs almost nothing). 👇\n\n#CustomerLoyalty #RestaurantBusiness #GuestExperience #HospitalityTips #Regulars #RetentionStrategy`},
+{day:18,cat:'t',title:"The Manager Table Visit",time:'Wed · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 09',h1:'Go to their table.',h2:'NOT JUST THE\nPROBLEM ONES.',sub:'This is where the experience gets made.',g:'GO',gs:90,ha:'br'},
+ {b:'d',p:'THE MISTAKE',h2:'MANAGERS APPEAR WHEN SOMETHING IS WRONG.',bd:"Guests learn to associate your visit with trouble. The manager who visits every table every shift changes the entire dynamic.",g:'!'},
+ {b:'k',p:'HOW TO DO IT RIGHT',h2:'"30 SECONDS. GENUINE. NOT A SCRIPT."',bd:"'How is everything tonight? Is there anything we can bring you?' Make eye contact. Wait for the real answer. Not just 'fine'."},
+ {b:'d',p:'WHAT YOU\'LL CATCH',h2:'WHAT NO ONE TOLD YOU.',bd:"The couple who wanted less ice. The birthday they forgot to mention. The business guest who'd book a private dinner if someone just asked.",g:'💡'},
+ {b:'c',p:'THE STANDARD',h1:'Visit every table.',h2:'EVERY SHIFT.',sub:"Not to check up. To show up. There's a difference.",ha:'bl',ri:'tr'}
+],caption:`The table visit is the most powerful tool a manager has — and the most underused.\n\nWhen done right, it's not an interruption, it's the experience.\n\nHere's how to do it. 🙏\n\n#HospitalityLeadership #RestaurantManagement #GuestExperience #ServiceStandards #ManagerLife`},
+{day:20,cat:'t',title:"Master the Goodbye",time:'Fri · 7:00 PM',
+slides:[
+ {b:'c',p:'TIP 10',h1:'How they leave',h2:'IS HOW THEY\nREMEMBER YOU.',sub:'The psychology of last impressions is real.',g:'BYE',gs:60,ha:'br'},
+ {b:'d',p:'THE CURRENT STATE',h2:'MOST GOODBYES: "HAVE A GOOD NIGHT."',bd:"A transaction end. The guest walks out and within 10 minutes your restaurant is blending into the rest of their day.",g:'...'},
+ {b:'k',p:'WHAT GREAT LOOKS LIKE',h2:'"ACKNOWLEDGMENT + ANTICIPATION."',bd:"'Mr. Ahmed, it was wonderful having you. We'll see you Thursday.' Specific. Memorable. Personal."},
+ {b:'d',p:'THE DOOR RITUAL',h2:'WALK THEM OUT. WAIT UNTIL THEY\'RE OUTSIDE.',bd:"Don't start the goodbye from across the room. Walk to the door. Wait until they look back — because they will. That moment is the lasting impression.",g:'→'},
+ {b:'c',p:'THE PRINCIPLE',h1:'End well.',h2:'THEY\'LL\nCOME BACK.',sub:"The last 60 seconds of a visit are retained more than the first 60 minutes.",ha:'bl',ri:'tr'}
+],caption:`In psychology, it's called the peak-end rule: people judge an experience mostly by how it ends.\n\nThe last 60 seconds of your guest's visit are worth more than the first 60 minutes.\n\nAre you treating them that way?\n\n#ServiceExcellence #HospitalityTips #GuestExperience #PeakEndRule #RestaurantBusiness #CustomerExperience`},
+// HOW GUESTS RATE
+{day:21,cat:'r',title:"What Guests Notice Before the Food",time:'Sat · 7:00 PM',
+slides:[
+ {b:'c',p:'GUEST INSIGHT 01',h1:'Food isn\'t the',h2:'FIRST\nIMPRESSION.',sub:"Your arrival experience is.",g:'01',ha:'br'},
+ {b:'d',p:'WHAT THEY CLOCK FIRST',h2:'IN ORDER:',bd:['1. Cleanliness of the entrance.','2. How they\'re greeted (or not).','3. How long before anyone acknowledges them.','4. Noise level and temperature.','5. The menu — before they read a single word.']},
+ {b:'k',p:'THE 8-SECOND RULE',h2:'8 SECONDS TO ACKNOWLEDGE.',bd:"Guests who wait more than 8 seconds to be acknowledged feel ignored — even if service hasn't technically started. The eye contact counts.",g:'8'},
+ {b:'d',p:'WHY RATINGS START HERE',h2:'A GREAT MEAL CAN\'T FULLY RECOVER A BAD ARRIVAL.',bd:"Guests enter with an emotional set point. The arrival primes the whole review before the food appears.",g:'!'},
+ {b:'c',p:'THE STANDARD',h1:'Win the arrival.',h2:'WIN THE\nREVIEW.',sub:"Your entrance is your first plate. Design it like one.",ha:'bl',ri:'tr'}
+],caption:`Before they taste anything, your guests have already formed 70% of their impression.\n\nI tracked this across 50+ restaurant visits. The entrance and greeting determine more of the final rating than the food does.\n\nHere's what they actually notice 👀\n\n#GuestExperience #RestaurantRatings #HospitalityInsights #Arrival #ServiceExcellence`},
+{day:23,cat:'r',title:"Why Food Score Doesn't Equal Overall Rating",time:'Mon · 7:00 PM',
+slides:[
+ {b:'c',p:'GUEST INSIGHT 02',h1:'Incredible food.',h2:'3 STARS.',sub:"It happens more than you think.",g:'3★',gs:70,ha:'br'},
+ {b:'d',p:'THE BREAKDOWN',h2:'WHERE RATINGS ACTUALLY COME FROM:',bd:['Food/quality: ~35%','Service experience: ~35%','Ambiance + cleanliness: ~20%','Value for money: ~10%','— Avg. across Google/TripAdvisor research.']},
+ {b:'k',p:'THE IMPLICATION',h2:'TWO-THIRDS IS NOT ABOUT FOOD.',bd:"A restaurant with average food and exceptional service outrates one with exceptional food and average service. Consistently. The data is clear.",g:'⅔'},
+ {b:'d',p:'WHAT MOVES SERVICE SCORE',h2:'THE 3 MOMENTS THAT DRIVE RATINGS:',bd:['1. Speed of greeting.','2. Attentiveness during the meal.','3. How a problem was handled.']},
+ {b:'c',p:'THE STRATEGY',h1:'Invest as much',h2:'IN YOUR TEAM\nAS YOUR KITCHEN.',sub:"Your chefs make the food. Your team makes the rating.",ha:'bl'}
+],caption:`I analyzed 200+ restaurant reviews and found something uncomfortable: the food was barely mentioned in most 1-star reviews.\n\nIt was almost always about how they were made to feel.\n\nThis changes what you should be investing in. 👇\n\n#RestaurantRatings #ServiceExcellence #GuestExperience #HospitalityData #OnlineReviews`},
+{day:25,cat:'r',title:"The 5-Star Framework Decoded",time:'Wed · 7:00 PM',
+slides:[
+ {b:'c',p:'GUEST INSIGHT 03',h1:'What does',h2:'5 STARS\nACTUALLY MEAN?',sub:'The answer might surprise you.',g:'5★',gs:70,ha:'br'},
+ {b:'d',p:'1–2 STARS',h2:'"I WON\'T GO BACK AND I\'M WARNING OTHERS."',hs2:20,bd:"Food safety. Rude staff. A major failure without recovery. These aren't about preference — they're about a trust breakdown.",g:'✗'},
+ {b:'k',p:'3–4 STARS',h2:'"FINE. BUT NOT SPECIAL."',bd:"Most restaurants live here. Good food. Decent service. Nothing memorable. The graveyard of 'meh' is fuller than the cemetery of 'terrible'.",g:'meh'},
+ {b:'d',p:'5 STARS',h2:'"I FELT SOMETHING AND I WANT OTHERS TO FEEL IT."',hs2:18,bd:"A 5-star review is an emotional response. Not about perfection — it's about a moment that exceeded expectation in a way they needed to share.",g:'5'},
+ {b:'c',p:'YOUR TARGET',h1:'Create moments.',h2:'NOT JUST\nMEALS.',sub:"People share emotions, not food. 5-star reviews are written in the feeling, not the flavor.",ha:'bl',ri:'tr'}
+],caption:`5-star reviews aren't about perfect food.\n\nI've read 500+ restaurant reviews studying what actually triggers that 5th star — and it's almost always a story about a moment, not a dish.\n\nHere's the pattern. 👇\n\n#OnlineReviews #RestaurantMarketing #GuestExperience #5Stars #HospitalityInsights #ReviewStrategy`},
+{day:27,cat:'r',title:"How Wait Times Actually Affect Your Rating",time:'Fri · 7:00 PM',
+slides:[
+ {b:'c',p:'GUEST INSIGHT 04',h1:'"We\'ll be right',h2:'WITH YOU."',sub:'Those five words are worth 1.5 stars in your rating.',g:'⏳',gs:90,ha:'br'},
+ {b:'d',p:'THE RESEARCH',h2:'PERCEIVED VS ACTUAL WAIT:',bd:"Guests consistently overestimate wait times by 30–40% when they haven't been acknowledged. An acknowledged wait feels 50% shorter.",g:'%'},
+ {b:'k',p:'THE CRITICAL WINDOWS',h2:'THESE THREE WAITS DRIVE YOUR RATING:',bd:['1. Arrival to seating.','2. Seating to first order taken.','3. Main course finished to bill.']},
+ {b:'d',p:'THE RESET',h2:'OWN EACH MOMENT WITH AN ACKNOWLEDGMENT.',bd:"'We'll have your table ready in 3 minutes' changes everything. Not the wait — the acknowledgment of it. The difference is 1.5 stars on average.",g:'★'},
+ {b:'c',p:'THE STANDARD',h1:'Acknowledge first.',h2:'RESOLVE\nSECOND.',sub:"Guests can tolerate a wait. They cannot tolerate feeling invisible during one.",ha:'bl'}
+],caption:`We ran a test: same restaurant, same wait times. Group A was acknowledged. Group B wasn't.\n\nGroup A rated the experience 1.5 stars higher on average.\n\nIt wasn't the wait. It was the acknowledgment. 👀\n\n#ServiceExcellence #GuestExperience #RestaurantInsights #HospitalityData #WaitTimes #RatingsStrategy`},
+{day:29,cat:'r',title:"The Silent Dealbreaker",time:'Sun · 7:00 PM',
+slides:[
+ {b:'c',p:'GUEST INSIGHT 05',h1:'They didn\'t',h2:'COMPLAIN.\nTHEY JUST LEFT.',sub:"And they're not coming back.",g:'...',gs:60,ha:'br'},
+ {b:'d',p:'THE INVISIBLE LIST',h2:'WHAT KILLS RETURNS WITHOUT A WORD:',bd:['Bathroom cleanliness.','Sticky or torn menus.','Staff on phones during service.','Waiting for the bill while staff chat nearby.','Being ignored while seated and visible.']},
+ {b:'k',p:'THE PATTERN',h2:'"DIDN\'T FEEL LIKE COMING BACK."',bd:"In exit surveys, guests rarely cite one catastrophic reason. They cite accumulated small things. Three minor irritants equal one lost guest.",g:'×3'},
+ {b:'d',p:'THE AUDIT',h2:'MYSTERY DINE YOUR OWN RESTAURANT.',bd:"Sit at a table. Try to get a server's attention. Use the bathroom. Pay the bill. What did you actually experience as a guest?",g:'?'},
+ {b:'c',p:'THE STANDARD',h1:'If it bothers',h2:'YOUR GUESTS,\nTHEY WON\'T TELL YOU.',sub:"Conduct your own mystery visit quarterly. Find the small things first.",ha:'bl',ri:'tr'}
+],caption:`I've mystery dined in my own (and others') restaurants 50+ times.\n\nThe pattern is always the same: it's not one big thing. It's three or four small ones that accumulate into a lost guest.\n\nHere's the silent dealbreaker checklist. Save this. 📋\n\n#GuestExperience #QualityControl #HospitalityStandards #MysteryDining #RestaurantBusiness`},
+// OPENING GUIDE
+{day:22,cat:'o',title:"The One-Page Business Plan",time:'Sun · 11:00 AM',
+slides:[
+ {b:'c',p:'OPENING GUIDE 01',h1:'Before you spend',h2:'A SINGLE\nEGP.',sub:"Start with a one-page plan. Seriously.",g:'PLAN',gs:38,ha:'br'},
+ {b:'d',p:'THE FOUR QUESTIONS',h2:'YOUR PLAN MUST ANSWER:',bd:['1. Who is this for? (Be specific. Very specific.)','2. What experience do you create that others don\'t?','3. Why here and why now?','4. How does the math work at 60% capacity?']},
+ {b:'k',p:'THE CONCEPT',h2:'CASUAL DINING: DEFINE YOUR NICHE.',bd:"'Casual dining' is a category, not a concept. 'Neighborhood pasta bar for families' is a concept. What's yours? The more specific, the stronger."},
+ {b:'d',p:'THE NUMBERS',h2:'BACK-OF-NAPKIN P&L:',bd:['Seats × turns × avg. spend = potential revenue.','Food cost: 28–32%. Labor: 30–35%. Rent: under 10%.','If the math doesn\'t work at 60% capacity, revisit the concept.']},
+ {b:'c',p:'THE RULE',h1:'If you can\'t explain\nit in one page—',h2:'YOU\'RE NOT\nREADY YET.',sub:"That's not failure. That's clarity, found early.",ha:'bl',ri:'tr'}
+],caption:`Every restaurant I've seen fail had one thing in common: the concept was clear in the owner's head but not on paper.\n\nThe one-page business plan forces the clarity that saves you before you've spent anything.\n\n📋\n\n#RestaurantStartup #OpeningARestaurant #CasualDining #BusinessPlanning #NewRestaurant #FoodBusiness`},
+{day:24,cat:'o',title:"Location Checklist Before You Sign",time:'Tue · 11:00 AM',
+slides:[
+ {b:'c',p:'OPENING GUIDE 02',h1:'Location is not',h2:'WHERE YOU\nLIKE IT.',sub:"It's where your guests already are.",g:'📍',gs:90,ha:'br'},
+ {b:'d',p:'WHAT TO MEASURE',h2:'BEFORE YOU SIGN A LEASE:',bd:['✓ Foot traffic at lunch, dinner, and Friday night.','✓ Parking — count spaces, not just availability.','✓ Competitor proximity (clusters can work in your favor).','✓ Delivery zone reach for the first 2 years.']},
+ {b:'k',p:'WHAT TO INVESTIGATE',h2:'THE HIDDEN FACTORS:',bd:['Why did the previous tenant leave?','What\'s the landlord\'s reputation with F&B?','Is there planned construction within 500m?','What\'s the demographic within 3km?']},
+ {b:'d',p:'CASUAL DINING SPECIFICALLY',h2:'YOUR CUSTOMER IS LOCAL.',bd:"For casual dining, 80% of your regulars will come from within 3km. That 3km radius is your real business plan. Know it intimately before you sign.",g:'3KM'},
+ {b:'c',p:'THE RULE',h1:'Visit three times.',h2:'AT THREE\nDIFFERENT HOURS.',sub:"Morning. Lunch. Friday evening. What you see is what your guests will see.",ha:'bl'}
+],caption:`I've watched restaurants with great food fail because of location — and average restaurants thrive because they picked right.\n\nLocation is the most expensive mistake you can make. Here's the checklist I use. 📍\n\n#OpeningARestaurant #RestaurantLocation #CasualDining #FoodBusiness #RestaurantStartup`},
+{day:26,cat:'o',title:"Build Your Menu Before Your Kitchen",time:'Thu · 11:00 AM',
+slides:[
+ {b:'c',p:'OPENING GUIDE 03',h1:'Build your menu',h2:'BEFORE YOUR\nKITCHEN.',sub:"Your menu is your operations plan. It comes first.",g:'MENU',gs:38,ha:'br'},
+ {b:'d',p:'WHY ORDER MATTERS',h2:'YOUR MENU DETERMINES EVERYTHING:',bd:['Kitchen size and layout.','Equipment list (and cost).','Staff skills required.','Storage needs.','Your menu IS your kitchen spec. Write it first.']},
+ {b:'k',p:'CASUAL DINING PRINCIPLES',h2:'AIM FOR:',bd:['✓ 30–40 items max. Not less, not more.','✓ 65–70% of items shareable or splittable.','✓ One dish that is unmistakably yours.','✓ A kids section that isn\'t an afterthought.']},
+ {b:'d',p:'THE TEST',h2:'RUN A GHOST MENU FIRST.',bd:"Cook every dish. Time it. Cost it. Taste it cold. Time it again at service speed. What breaks under pressure in testing breaks on opening night.",g:'TEST'},
+ {b:'c',p:'THE PRINCIPLE',h1:'Simplicity scales.',h2:'COMPLEXITY\nKILLS.',sub:"10 dishes you execute perfectly are worth more than 40 you can't.",ha:'bl',ri:'tr'}
+],caption:`One of the most common mistakes first-time restaurant owners make: designing the space before the menu.\n\nYour menu should come first — it determines your kitchen, your team, your costs.\n\nHere's why. 🍽️\n\n#RestaurantStartup #MenuDesign #CasualDining #OpeningARestaurant #KitchenDesign #FoodBusiness`},
+{day:28,cat:'o',title:"Every Paper You Need to Open",time:'Sat · 11:00 AM',
+slides:[
+ {b:'c',p:'OPENING GUIDE 04',h1:'The paperwork.',h2:'ALL OF IT.',sub:"Start earlier than you think you need to.",g:'📄',gs:80,ha:'br'},
+ {b:'d',p:'BEFORE YOU BUILD',h2:'REQUIRED BEFORE CONSTRUCTION:',bd:['✓ Commercial lease / ownership documentation.','✓ No-objection from building owner for F&B use.','✓ Municipality commercial activity license.','✓ Health authority pre-approval (get this first).']},
+ {b:'k',p:'BEFORE YOU OPEN',h2:'REQUIRED BEFORE FIRST SERVICE:',bd:['✓ Health & safety certificate.','✓ Fire safety compliance sign-off.','✓ Food handler certifications for all staff.','✓ Signage permit. ✓ Music license (if applicable).']},
+ {b:'d',p:'THE TIMELINE',h2:'ALLOW 60–90 DAYS FOR APPROVALS.',bd:"The most common reason restaurants miss their opening date isn't construction — it's paperwork. Start the approvals process before you pick up a hammer.",g:'90'},
+ {b:'c',p:'ADVICE',h1:'Hire a licensing\nconsultant.',h2:'ONCE.',sub:"The cost of guidance is 10× less than the cost of a delayed opening.",ha:'bl'}
+],caption:`The permits and paperwork side of opening a restaurant is where most first-timers lose 2–3 months they didn't plan for.\n\nHere's the full checklist — and the order that actually matters. 📋\n\n#RestaurantStartup #OpeningARestaurant #CasualDining #NewRestaurant #Licensing #FoodBusiness`},
+{day:30,cat:'o',title:"Your First 90 Days: A Survival Plan",time:'Mon · 7:00 PM',
+slides:[
+ {b:'c',p:'OPENING GUIDE 05',h1:'You\'re open.',h2:'NOW WHAT?',sub:"The hardest 90 days of your career begin today.",g:'90',gs:120,ha:'br'},
+ {b:'d',p:'DAYS 1–30',h2:'SURVIVE. DON\'T PERFECT.',bd:"Expect systems to break. Expect mistakes. Your job in month one is to identify what you're bad at and fix it quickly. Not to perform flawlessness.",g:'01'},
+ {b:'k',p:'DAYS 31–60',h2:'STABILIZE. START MEASURING.',bd:['Track these four numbers daily:','Cover count. Average spend per head.','Review velocity (new reviews per week).','Repeat customer rate. These four tell you everything.'],g:'02'},
+ {b:'d',p:'DAYS 61–90',h2:'GROW. DOUBLE DOWN ON WHAT WORKS.',bd:"By day 90, you know your best tables, best shift, best dish, best day. Scale what's working. Cut what isn't. This is when you stop surviving.",g:'03'},
+ {b:'c',p:'THE PROMISE',h1:'Day 90 is not\nthe end.',h2:'IT\'S THE\nBEGINNING.',sub:"Survive and learn from the first 90 days — you'll have the foundation for something that lasts.",ha:'bl',ri:'tr'}
+],caption:`Opening day is not the finish line.\n\nFor most first-time restaurant owners, it's the starting gun of the hardest 90 days of their career.\n\nHere's what I wish someone had told me about the first three months.\n\n🏁\n\n#RestaurantStartup #OpeningARestaurant #NewRestaurant #CasualDining #Hospitality #FirstRestaurant`}
 ];
-
-// Sort by day
 PLAN.sort((a,b)=>a.day-b.day);
 
 // ── State ───────────────────────────────────────────────────────────────────
-let posted={};
-try{posted=JSON.parse(localStorage.getItem('brandplan_posted')||'{}')}catch(e){}
-let activeCat='all', openIdx=0, openSlide=0;
+let posted={},activeCat='all',openIdx=0,openSlide=0;
+try{posted=JSON.parse(localStorage.getItem('bp30_v2')||'{}')}catch(e){}
 
-// ── Progress ────────────────────────────────────────────────────────────────
-function updateProg(){
-  const n=Object.keys(posted).length;
-  document.getElementById('progTxt').textContent=n+' / 30 posted';
-}
+function savePosted(){try{localStorage.setItem('bp30_v2',JSON.stringify(posted))}catch(e){}}
+function updateProg(){document.getElementById('prog').textContent=Object.keys(posted).length+' / 30 posted'}
 
 // ── Grid ────────────────────────────────────────────────────────────────────
-const CAT_LABEL={p:'Problem',t:'Tip',r:'Rating Insight',o:'Opening Guide'};
+const CLABEL={p:'Problem',t:'Tip',r:'Rating Insight',o:'Opening Guide'};
 function buildGrid(){
-  const grid=document.getElementById('grid');
-  grid.innerHTML='';
-  const items=PLAN.filter(c=>activeCat==='all'||c.cat===activeCat);
-  items.forEach((c,i)=>{
-    const idx=PLAN.indexOf(c);
-    const isPosted=!!posted[c.day];
-    const card=document.createElement('div');
-    card.className='card'+(isPosted?' posted':'');
-    card.innerHTML=`<div class="card-top">
-      <span class="day-num">Day ${c.day}</span>
-      <span class="cat-dot" data-c="${c.cat}"></span>
-      <span class="cat-label" data-c="${c.cat}">${CAT_LABEL[c.cat]}</span>
-    </div>
-    <div class="card-title">${c.title}</div>
-    <div class="card-time">${c.time}</div>
-    <div class="card-actions">
-      <button class="view-btn">View Carousel</button>
-      <label class="post-chk"><input type="checkbox" ${isPosted?'checked':''} data-day="${c.day}"> Posted</label>
-    </div>`;
-    card.querySelector('.view-btn').addEventListener('click',e=>{e.stopPropagation();openCarousel(idx)});
-    card.querySelector('input').addEventListener('change',ev=>{
-      if(ev.target.checked) posted[c.day]=1; else delete posted[c.day];
-      try{localStorage.setItem('brandplan_posted',JSON.stringify(posted))}catch(e){}
-      card.classList.toggle('posted',!!posted[c.day]);
-      updateProg();
-    });
+  const grid=document.getElementById('grid');grid.innerHTML='';
+  PLAN.filter(c=>activeCat==='all'||c.cat===activeCat).forEach(c=>{
+    const idx=PLAN.indexOf(c);const isP=!!posted[c.day];
+    const card=document.createElement('div');card.className='card'+(isP?' posted':'');
+    card.innerHTML=`<div class="card-top"><span class="dn">Day ${c.day}</span><span class="cdot" data-c="${c.cat}"></span><span class="clabel" data-c="${c.cat}">${CLABEL[c.cat]}</span></div><div class="ctitle">${c.title}</div><div class="ctime">${c.time}</div><div class="cacts"><button class="vbtn">View Carousel</button><label class="pchk"><input type="checkbox" ${isP?'checked':''} data-day="${c.day}"> Posted</label></div>`;
+    card.querySelector('.vbtn').addEventListener('click',e=>{e.stopPropagation();openCarousel(idx)});
+    card.querySelector('input').addEventListener('change',ev=>{if(ev.target.checked)posted[c.day]=1;else delete posted[c.day];savePosted();card.classList.toggle('posted',!!posted[c.day]);updateProg()});
     grid.appendChild(card);
   });
 }
 
 // ── Carousel modal ───────────────────────────────────────────────────────────
 const modal=document.getElementById('modal');
-const mStage=document.getElementById('mStage');
-const mTitle=document.getElementById('mTitle');
-const mMeta=document.getElementById('mMeta');
-const capText=document.getElementById('capText');
-const sDots=document.getElementById('sDots');
-const sCnt=document.getElementById('sCnt');
-const sPrev=document.getElementById('sPrev');
-const sNext=document.getElementById('sNext');
+const stageEl=document.getElementById('stage');
+const sdotsEl=document.getElementById('sdots');
 
-function buildStage(c){
-  mStage.innerHTML='';
+function buildCarousel(c){
+  stageEl.innerHTML='';sdotsEl.innerHTML='';
   c.slides.forEach((s,i)=>{
-    const div=document.createElement('div');
-    div.className='sld'+(i===openSlide?' on':'');
-    div.innerHTML=renderSlide(s);
-    mStage.appendChild(div);
+    const div=document.createElement('div');div.className='sld'+(i===openSlide?' on':'');
+    div.innerHTML=renderSlide(s);stageEl.appendChild(div);
+    const d=document.createElement('div');d.className='sdot'+(i===openSlide?' on':'');
+    d.addEventListener('click',()=>goSlide(i));sdotsEl.appendChild(d);
   });
-  sDots.innerHTML='';
-  c.slides.forEach((_,i)=>{
-    const d=document.createElement('div');
-    d.className='sdot'+(i===openSlide?' on':'');
-    d.addEventListener('click',()=>goSlide(i));
-    sDots.appendChild(d);
-  });
-  updateSlideNav(c);
+  updateNav(c);
 }
 
 function goSlide(i){
-  const slsEls=mStage.querySelectorAll('.sld');
-  const dEls=sDots.querySelectorAll('.sdot');
-  slsEls[openSlide].classList.remove('on');
-  dEls[openSlide].classList.remove('on');
+  const slds=stageEl.querySelectorAll('.sld');const dots=sdotsEl.querySelectorAll('.sdot');
+  slds[openSlide].classList.remove('on');dots[openSlide].classList.remove('on');
   openSlide=Math.max(0,Math.min(4,i));
-  slsEls[openSlide].classList.add('on');
-  dEls[openSlide].classList.add('on');
-  updateSlideNav(PLAN[openIdx]);
+  slds[openSlide].classList.add('on');dots[openSlide].classList.add('on');
+  updateNav(PLAN[openIdx]);
 }
-
-function updateSlideNav(c){
-  sCnt.textContent=(openSlide+1)+'/'+c.slides.length;
-  sPrev.disabled=openSlide===0;
-  sNext.disabled=openSlide===c.slides.length-1;
+function updateNav(c){
+  document.getElementById('scnt').textContent=(openSlide+1)+'/'+c.slides.length;
+  document.getElementById('sprev').disabled=openSlide===0;
+  document.getElementById('snext').disabled=openSlide===c.slides.length-1;
 }
 
 function openCarousel(idx){
-  openIdx=idx; openSlide=0;
-  const c=PLAN[idx];
-  mTitle.textContent=c.title;
-  mMeta.textContent='Day '+c.day+' · '+CAT_LABEL[c.cat]+' · '+c.time;
-  capText.textContent=c.caption;
-  buildStage(c);
-  modal.hidden=false;
-  document.body.style.overflow='hidden';
+  openIdx=idx;openSlide=0;const c=PLAN[idx];
+  document.getElementById('mtitle').textContent=c.title;
+  document.getElementById('mmeta').textContent='Day '+c.day+' · '+CLABEL[c.cat]+' · '+c.time;
+  document.getElementById('captxt').textContent=c.caption;
+  buildCarousel(c);modal.hidden=false;document.body.style.overflow='hidden';
 }
 
-sPrev.addEventListener('click',()=>goSlide(openSlide-1));
-sNext.addEventListener('click',()=>goSlide(openSlide+1));
-document.getElementById('mClose').addEventListener('click',()=>{modal.hidden=true;document.body.style.overflow='';});
-modal.addEventListener('click',e=>{if(e.target===modal){modal.hidden=true;document.body.style.overflow='';}});
-
-// Keyboard
-document.addEventListener('keydown',e=>{
-  if(modal.hidden) return;
-  if(e.key==='ArrowLeft') goSlide(openSlide-1);
-  if(e.key==='ArrowRight') goSlide(openSlide+1);
-  if(e.key==='Escape'){modal.hidden=true;document.body.style.overflow='';}
-});
-
-// Swipe on stage
+document.getElementById('mclose').addEventListener('click',()=>{modal.hidden=true;document.body.style.overflow=''});
+modal.addEventListener('click',e=>{if(e.target===modal){modal.hidden=true;document.body.style.overflow=''}});
+document.getElementById('sprev').addEventListener('click',()=>goSlide(openSlide-1));
+document.getElementById('snext').addEventListener('click',()=>goSlide(openSlide+1));
+document.addEventListener('keydown',e=>{if(modal.hidden)return;if(e.key==='ArrowLeft')goSlide(openSlide-1);if(e.key==='ArrowRight')goSlide(openSlide+1);if(e.key==='Escape'){modal.hidden=true;document.body.style.overflow=''}});
 let tx=null;
-mStage.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
-mStage.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)goSlide(openSlide+(dx<0?1:-1));tx=null},{passive:true});
+stageEl.addEventListener('touchstart',e=>{tx=e.touches[0].clientX},{passive:true});
+stageEl.addEventListener('touchend',e=>{if(tx===null)return;const dx=e.changedTouches[0].clientX-tx;if(Math.abs(dx)>40)goSlide(openSlide+(dx<0?1:-1));tx=null},{passive:true});
 
-// Copy caption
-document.getElementById('copyBtn').addEventListener('click',()=>{
-  const btn=document.getElementById('copyBtn');
-  navigator.clipboard.writeText(capText.textContent).then(()=>{
-    btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='Copy Caption'},1800);
-  }).catch(()=>{
-    const r=document.createRange();r.selectNode(capText);window.getSelection().removeAllRanges();window.getSelection().addRange(r);
-    btn.textContent='✓ Selected — copy manually';setTimeout(()=>{btn.textContent='Copy Caption'},2500);
-  });
+document.getElementById('copybtn').addEventListener('click',()=>{
+  const btn=document.getElementById('copybtn');
+  navigator.clipboard.writeText(document.getElementById('captxt').textContent).then(()=>{btn.textContent='✓ Copied!';setTimeout(()=>{btn.textContent='Copy Caption'},1800)}).catch(()=>{const r=document.createRange();r.selectNode(document.getElementById('captxt'));window.getSelection().removeAllRanges();window.getSelection().addRange(r);btn.textContent='✓ Selected';setTimeout(()=>{btn.textContent='Copy Caption'},2500)});
 });
 
-// Tabs
-document.querySelectorAll('.tab').forEach(t=>{
-  t.addEventListener('click',()=>{
-    document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));
-    t.classList.add('on');
-    activeCat=t.dataset.cat;
-    buildGrid();
-  });
-});
+document.querySelectorAll('.tab').forEach(t=>{t.addEventListener('click',()=>{document.querySelectorAll('.tab').forEach(x=>x.classList.remove('on'));t.classList.add('on');activeCat=t.dataset.c;buildGrid()})});
 
-// Init
-buildGrid();
-updateProg();
+buildGrid();updateProg();
 </script>
