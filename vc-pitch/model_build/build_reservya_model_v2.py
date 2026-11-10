@@ -220,6 +220,24 @@ r += 1; a.cell(r, 1, "Series A"); put(a, r, 2, 2030, GEN, BLUE); put(a, r, 3, 60
 note(a, r, 9, "Illustrative assumption used only for dilution and returns.")
 r += 1; hdr(a, r, ["", "Unit"] + [str(y) for y in YEARS] + ["", "Notes"])
 byyear("addfin", "Additional financing included in cash flow (received in January)", "EGP", [0, 0, 0, 0, 0], EGP, "Leave at 0 unless a further round is committed.", "—", "Policy")
+scalar("stress_days", "Stress test: extra collection delay on all revenue", "days", 30, NUM, "Used only in the downside liquidity stress (Funding Scenarios, Checks). Does not change the plan.", "—", "Policy")
+
+r += 2; sec(a, r, "CURRENT TRACTION — ACTUALS (company-reported; enter only figures you can document)")
+r += 1; hdr(a, r, ["Metric", "Unit", "Value", "", "", "", "", "As of", "Evidence required"])
+TRX = {}
+for k, lab, unit, val, fmt_, asof, ev in [
+    ("tested", "Venues tested in real service", "#", 22, NUM, "Oct-2026", "List of venues, dates, test reports"),
+    ("launch", "Public launch date (iOS, Android, web)", "date", "15-May-2026", GEN, "May-2026", "App-store listing history"),
+    ("invested", "Founder investment to date", "EGP", "='Opening BS'!B5", EGP, "Oct-2026", "Bank statements, invoices"),
+    ("live", "Live restaurants (verified count)", "#", None, NUM, "", "Signed agreements + dashboard export — leave blank until documented"),
+    ("paying", "Restaurants paying a subscription", "#", None, NUM, "", "Invoices / payment records"),
+    ("bills", "Completed online bills — latest full month", "#", None, NUM, "", "Kashier settlement report"),
+    ("gmv", "Completed GMV — latest full month", "EGP", None, EGP, "", "Kashier settlement report"),
+    ("rate", "Average commission actually charged", "%", None, PCT, "", "Signed restaurant contracts")]:
+    r += 1; a.cell(r, 1, lab); a.cell(r, 2, unit).font = fnt("5A675F", size=9)
+    put(a, r, 3, val, fmt_, GREEN if isinstance(val, str) and val.startswith("=") else BLUE)
+    a.cell(r, 8, asof); note(a, r, 9, ev); TRX[k] = f"Assumptions!$C${r}"
+note(a, r + 1, 1, "Actuals are separate from the forecast. Blank = not yet documented; the model then shows 'evidence pending', never a made-up figure.")
 
 # ───────────── FX ─────────────
 fx = new_sheet("FX", "Exchange-Rate Schedule", "Editable. EGP per USD by year; other currencies per USD (pegs and assumptions).", (40, 12, 14, 14, 14, 14, 14, 60))
@@ -278,14 +296,14 @@ CT["mgmt"] = rr
 # ───────────── OPENING BALANCE SHEET & FOUNDER RECONCILIATION ─────────────
 ob = new_sheet("Opening BS", "Founder Investment Reconciliation & Opening Balance Sheet (31 Dec 2026)",
                "Reconciles the EGP 2.7M founder investment to its uses. Figures are management estimates until matched to bank statements and the company ledger.",
-               (52, 16, 16, 18, 16, 70))
+               (52, 16, 16, 18, 16, 70, 18, 18))
 r = 4; sec(ob, r, "A. Sources — founder funding", 6)
 r += 1; ob.cell(r, 1, "Total founder contributions to date"); put(ob, r, 2, 2700000, EGP, BLUE, fill=YFILL)
 note(ob, r, 6, "Company figure (financial sheet 'Investment to date'). To reconcile to bank statements."); OB = {"contrib": r}
 r += 1; ob.cell(r, 1, "Share recorded as equity (rest = shareholder loan)"); put(ob, r, 2, 1.0, PCT, BLUE, fill=YFILL)
 note(ob, r, 6, "Assumed 100% equity. If any amount was lent by founders, enter the loan share — it becomes a liability."); OB["eqshare"] = r
 r += 2; sec(ob, r, "B. Uses — how the money was spent (company 'Investment to date' table)", 6)
-r += 1; hdr(ob, r, ["Category", "Amount (EGP)", "Capitalised (EGP)", "Expensed (EGP)", "Treatment", "Basis / documents needed"])
+r += 1; hdr(ob, r, ["Category", "Amount (EGP)", "Capitalised (EGP)", "Expensed (EGP)", "Treatment", "Basis / documents needed", "Documented (EGP)", "Evidence gap (EGP)"])
 USES = [("Software development (2 years)", 1650000, "Midpoint of EGP 1.5–1.8M in the company sheet. Expensed: IAS 38 forbids retroactive capitalisation without contemporaneous evidence that development criteria were met."),
         ("Operations & infrastructure", 600000, "Servers, security, compliance, integrations (Orascom, Kashier, Stripe)."),
         ("Team & salaries", 300000, "Core product, operations, support."),
@@ -295,14 +313,19 @@ u0 = r + 1
 for name, amt, basis in USES:
     r += 1; ob.cell(r, 1, name); put(ob, r, 2, amt, EGP, BLUE); put(ob, r, 3, 0, EGP, BLUE)
     put(ob, r, 4, f"=B{r}-C{r}", EGP); put(ob, r, 5, f'=IF(C{r}>0,"Partly capitalised","Expensed")', GEN); note(ob, r, 6, basis)
+    put(ob, r, 7, 0, EGP, BLUE); put(ob, r, 8, f"=B{r}-G{r}", EGP)
 u1 = r
 r += 1; ob.cell(r, 1, "Equipment purchased (computers, devices)"); put(ob, r, 2, 0, EGP, BLUE); put(ob, r, 3, f"=B{r}", EGP); put(ob, r, 4, 0, EGP)
 put(ob, r, 5, "Capitalised", GEN); note(ob, r, 6, "Enter cost of owned equipment with invoices. Not itemised in company records yet."); OB["equip"] = r
+put(ob, r, 7, 0, EGP, BLUE); put(ob, r, 8, f"=B{r}-G{r}", EGP)
 r += 1; ob.cell(r, 1, "Cash remaining at 31 Dec 2026"); put(ob, r, 2, 0, EGP, BLUE, fill=YFILL); put(ob, r, 3, "", GEN); put(ob, r, 4, "", GEN)
 note(ob, r, 6, "Enter the actual bank balance."); OB["cash"] = r
+put(ob, r, 7, 0, EGP, BLUE); put(ob, r, 8, f"=B{r}-G{r}", EGP)
 r += 1; ob.cell(r, 1, "Total uses").font = fnt(bold=True)
 put(ob, r, 2, f"=SUM(B{u0}:B{OB['cash']})", EGP, bold=True); put(ob, r, 3, f"=SUM(C{u0}:C{OB['equip']})", EGP, bold=True); put(ob, r, 4, f"=SUM(D{u0}:D{u1})", EGP, bold=True)
-OB["uses"] = r
+put(ob, r, 7, f"=SUM(G{u0}:G{OB['cash']})", EGP, bold=True); put(ob, r, 8, f"=SUM(H{u0}:H{OB['cash']})", EGP, bold=True)
+OB["uses"] = r; OB["u0"] = u0; OB["u1"] = u1
+note(ob, r + 1, 7, "Documented = matched to bank statements, invoices or payroll. Gap must reach 0 before closing.")
 r += 1; ob.cell(r, 1, "Unreconciled difference (sources − uses, must be 0)").font = fnt(bold=True)
 put(ob, r, 2, f"=B{OB['contrib']}-B{OB['uses']}", EGP, bold=True, fill=TFILL); OB["var"] = r
 r += 2; sec(ob, r, "C. Opening balance sheet at 31 Dec 2026 (EGP)", 6)
@@ -670,6 +693,31 @@ X_.add("gm_tot", "Total gross profit", "EGP", lambda c, i: f"=SUM({c}{X_.R['gm_c
 for k, base in [("gmp_comm", "comm"), ("gmp_sub", "subrev"), ("gmp_mkt", "mtot"), ("gmp_spon", "s_rev")]:
     X_.add(k, "Gross margin — " + {"comm": "commission", "subrev": "subscriptions", "mtot": "marketing", "s_rev": "sponsorships"}[base], "%",
            lambda c, i, k=k, base=base: f"=IFERROR({c}{X_.R['gm_'+k.split('_')[1]]}/{c}{X_.R[base]},0)", PCT)
+X_.sec("GMV → commission reconciliation (each step once; no double deduction)")
+X_.add("rc_gmv", "1. Completed GMV (restaurants' revenue through Reservya)", "EGP", lambda c, i: f"={c}{X_.R['gmv']}")
+X_.add("rc_ref", "2. Less refunds & cancellations (deducted once, here only)", "EGP", lambda c, i: f"={c}{X_.R['refunds']}")
+X_.add("rc_cgmv", "3. Commissionable GMV (1 + 2)", "EGP", lambda c, i: f"={c}{X_.R['rc_gmv']}+{c}{X_.R['rc_ref']}", bold=True, border=TOP)
+X_.add("rc_rate", "4. × Commission rate used", "%", lambda c, i: f"={A['c_eff']}", PCT, color=GREEN)
+X_.add("rc_gc", "5. Gross commission (3 × 4)", "EGP", lambda c, i: f"={c}{X_.R['rc_cgmv']}*{c}{X_.R['rc_rate']}", bold=True)
+X_.add("rc_wv", "6. Less waivers & launch incentives", "EGP", lambda c, i: f"={c}{X_.R['waived']}")
+X_.add("rc_net", "7. Net commission revenue (5 + 6)", "EGP", lambda c, i: f"={c}{X_.R['rc_gc']}+{c}{X_.R['rc_wv']}", bold=True, border=TOP)
+X_.add("rc_chk", "Check: step 7 − commission in income statement (must be 0)", "EGP", lambda c, i: f"=ROUND({c}{X_.R['rc_net']}-{c}{X_.R['comm']},0)")
+X_.add("rc_eff", "Net commission ÷ completed GMV", "%", lambda c, i: f"=IFERROR({c}{X_.R['rc_net']}/{c}{X_.R['rc_gmv']},0)", PCT)
+X_.add("rc_pay", "Memo: card/bank fees on GMV — passed through to restaurants, not Reservya revenue or cost", "", lambda c, i: "", GEN)
+X_.r += 2
+_vr = X_.r
+hdr(rv, _vr, ["Monetisation stream", "Pricing basis", "Adoption basis", "", "Revenue recognition", "", "Delivery cost", "Cash collection", "Evidence status"])
+for k_, row_ in enumerate([
+    ("Commission (4–7%)", "Feature Guide range; tier mix 30/40/30", "Bills × transacting restaurants", "", "Net of refunds & waivers, when the bill is completed (agent: GMV is not revenue)", "", "Messaging, hosting share", "Settled by Kashier, ~7 days", "Management forecast — no signed rate schedule"),
+    ("Subscriptions", "Feature Guide: 0 / 2,000 / 5,000 / 3,000 per branch", "Plan mix on live restaurants", "", "Monthly, over the service period", "", "Hosting, payment fees", "Billed monthly, 15 days, 97% collected", "Price list documented; adoption forecast"),
+    ("Restaurant marketing packages", "Packages PDF: 5K / 15K / 25K a month", "Adoption % of live", "", "Over the package month; Reservya fee only (media is agent pass-through, net)", "", "30% creative & account management", "Billed monthly, 15 days", "Price list documented; adoption forecast"),
+    ("One-time campaigns & sponsored placements", "Average EGP 7,500 per campaign", "Campaigns per live restaurant per year", "", "When the campaign runs", "", "30% creative", "15 days", "Management forecast"),
+    ("Brand sponsorships", "ACV EGP 250K → 600K", "Projected campaigns; signed = 0", "", "Evenly over the campaign (3 months)", "", "20% delivery", "60 days (corporate terms)", "No signed contracts — forecast only")]):
+    for j_, v_ in enumerate(row_):
+        if v_:
+            c_ = rv.cell(_vr + 1 + k_, 1 + j_, v_); c_.font = fnt(size=9); c_.alignment = Alignment(wrap_text=True, vertical="top")
+    rv.row_dimensions[_vr + 1 + k_].height = 40
+X_.r = _vr + 6
 RVR = X_.R
 
 # ───────────── COUNTRY ECONOMICS ─────────────
@@ -790,6 +838,7 @@ CFR = C_.R
 
 # ═════════════ PART 4 — runway, unit economics, funding, cap table, valuation, sensitivities, registers, checks, dashboard ═════════════
 from openpyxl.chart import BarChart, LineChart, Reference
+from openpyxl.worksheet.datavalidation import DataValidation
 def ER(scn, key):   # full 60-month range of an engine row
     sn, R = ENG[scn]; return f"{sn}!${FIRST}${R[key]}:${LAST}${R[key]}"
 def SELR(key):      # selected-scenario MIN/aggregations need CHOOSE over ranges
@@ -850,8 +899,9 @@ U_.add("acq_cons", "Hospitality-consultant fees", "EGP", lambda c, i: f"={SY('o_
 U_.add("acq_onb", "Onboarding (training, setup)", "EGP", lambda c, i: f"={SY('o_onb', c)}", color=GREEN)
 U_.add("acq_mkt", "Restaurant-acquisition marketing", "EGP", lambda c, i: f"={SY('o_perf', c)}", color=GREEN)
 U_.add("acq", "Total acquisition spend", "EGP", lambda c, i: f"=SUM({c}{U_.R['acq_sal']}:{c}{U_.R['acq_mkt']})", bold=True, border=TOP)
-U_.add("cac", "CAC per restaurant", "EGP", lambda c, i: f"=IFERROR({c}{U_.R['acq']}/{c}{U_.R['new']},0)", bold=True)
-U_.add("brand", "Memo: brand & consumer marketing (excluded from CAC)", "EGP", lambda c, i: f"={SY('o_brand', c)}", color=GREEN)
+U_.add("cac", "Restaurant CAC — acquisition only (projected)", "EGP", lambda c, i: f"=IFERROR({c}{U_.R['acq']}/{c}{U_.R['new']},0)", bold=True)
+U_.add("brand", "Brand & consumer (diner) marketing", "EGP", lambda c, i: f"={SY('o_brand', c)}", color=GREEN)
+U_.add("cac_mp", "Marketplace CAC — incl. diner marketing, per new restaurant (projected)", "EGP", lambda c, i: f"=IFERROR(({c}{U_.R['acq']}+{c}{U_.R['brand']})/{c}{U_.R['new']},0)", bold=True, note_="Two-sided view: a restaurant only stays if diners come, so diner marketing is part of the full cost.")
 U_.sec("Revenue & contribution per restaurant (monthly)")
 U_.add("avglive", "Average live restaurants", "#", lambda c, i: f"={RVn}!{c}{RVR['avglive']}", NUM, color=GREEN)
 U_.add("arpa", "ARPA — revenue per live restaurant (excl. sponsorships)", "EGP / mo", lambda c, i: f"=IFERROR(({SY('rev', c)}-{SY('spon', c)})/{c}{U_.R['avglive']}/12,0)", bold=True)
@@ -863,9 +913,10 @@ U_.sec("Retention & lifetime value")
 U_.add("churn", "Monthly restaurant churn", "%", lambda c, i: f"={SEL('churn')}", PCT, color=GREEN)
 U_.add("ret", "Annual restaurant retention", "%", lambda c, i: f"=(1-{c}{U_.R['churn']})^12", PCT)
 U_.add("life", "Expected lifetime (1 ÷ churn, capped at 36)", "months", lambda c, i: f"=MIN(36,1/{c}{U_.R['churn']})", NUM)
-U_.add("ltv", "LTV (contribution × lifetime, undiscounted)", "EGP", lambda c, i: f"={c}{U_.R['contrib']}*{c}{U_.R['life']}", bold=True)
-U_.add("ltvcac", "LTV / CAC", "x", lambda c, i: f"=IFERROR({c}{U_.R['ltv']}/{c}{U_.R['cac']},0)", X, True, note_="Rule of thumb: above 3x is healthy. Untested — no cohort data yet.")
-U_.add("payback", "CAC payback", "months", lambda c, i: f"=IFERROR({c}{U_.R['cac']}/{c}{U_.R['contrib']},0)", DEC2, note_="Months of contribution to recover CAC.")
+U_.add("ltv", "LTV — contribution × lifetime, undiscounted (projected)", "EGP", lambda c, i: f"={c}{U_.R['contrib']}*{c}{U_.R['life']}", bold=True)
+U_.add("ltvcac", "LTV / restaurant CAC (projected, not historical)", "x", lambda c, i: f"=IFERROR({c}{U_.R['ltv']}/{c}{U_.R['cac']},0)", X, True, note_="Rule of thumb: above 3x is healthy. Untested — no cohort data yet.")
+U_.add("ltvcac_mp", "LTV / marketplace CAC (projected, not historical)", "x", lambda c, i: f"=IFERROR({c}{U_.R['ltv']}/{c}{U_.R['cac_mp']},0)", X, True)
+U_.add("payback", "Restaurant CAC payback (projected)", "months", lambda c, i: f"=IFERROR({c}{U_.R['cac']}/{c}{U_.R['contrib']},0)", DEC2, note_="Months of contribution to recover CAC.")
 U_.add("nrr", "Net revenue retention (approx.)", "%", lambda c, i: "" if i == 0 else f"=IFERROR({c}{U_.R['ret']}*{c}{U_.R['arpa']}/{L(2+i)}{U_.R['arpa']},0)", PCT, note_="Retention × ARPA growth. Approximation; needs cohort data.")
 U_.sec("Monetisation & adoption")
 U_.add("take", "Take rate (revenue ÷ completed GMV)", "%", lambda c, i: f"={RVn}!{c}{RVR['take']}", PCT, color=GREEN)
@@ -902,15 +953,16 @@ def fsec(t):
     global r
     r += 1; sec(fs, r, t, 7)
 fsec("Round terms")
-frow("raise", "Amount raised", "USD", lambda c, j: f"=Assumptions!{c}{AR['raise']}", color=GREEN, bold=True)
-frow("inv", "Number of investors", "#", lambda c, j: f"=Assumptions!{c}{AR['n_inv']}", NUM, color=GREEN)
+frow("raise", "Total round size (investment received)", "USD", lambda c, j: f"=Assumptions!{c}{AR['raise']}", color=GREEN, bold=True)
+frow("inv", "Number of investors in the round", "#", lambda c, j: f"=Assumptions!{c}{AR['n_inv']}", NUM, color=GREEN)
 frow("pre", "Pre-money valuation (negotiation target)", "USD", lambda c, j: f"={A['premoney']}", color=GREEN)
 frow("post", "Post-money valuation", "USD", lambda c, j: f"={c}{FR['pre']}+{c}{FR['raise']}", bold=True)
 frow("own", "New investors' ownership", "%", lambda c, j: f"={c}{FR['raise']}/{c}{FR['post']}", PCT, True)
 frow("pool", "Option pool (post-money)", "%", lambda c, j: f"={A['pool']}", PCT, color=GREEN)
 frow("fnd", "Founders' ownership after round", "%", lambda c, j: f"=1-{c}{FR['own']}-{c}{FR['pool']}", PCT, True)
 frow("dil", "Founder dilution in this round", "%", lambda c, j: f"=1-{c}{FR['fnd']}", PCT)
-frow("perinv", "Ticket per investor", "USD", lambda c, j: f"={c}{FR['raise']}/{c}{FR['inv']}")
+frow("perinv", "Individual investor ticket (round ÷ investors)", "USD", lambda c, j: f"={c}{FR['raise']}/{c}{FR['inv']}", n="Target investors write $100K–$150K each; C is two tickets, not one.")
+frow("perown", "Ownership per individual investor", "%", lambda c, j: f"={c}{FR['own']}/{c}{FR['inv']}", PCT)
 fsec("Cash & runway — selected operating scenario")
 frow("egp", "Amount raised in EGP", "EGP", lambda c, j: f"={c}{FR['raise']}*{FX27}", EGP)
 frow("open", "Opening cash (31 Dec 2026)", "EGP", lambda c, j: f"={OBS('b_cash')}", EGP, color=GREEN)
@@ -927,18 +979,41 @@ frow("d_minpre", "Lowest cash before financing — downside", "EGP", lambda c, j
 frow("d_mincash", "Lowest cash after the round — downside", "EGP", lambda c, j: f"={c}{FR['d_minpre']}+{c}{FR['egp']}", EGP, True)
 frow("d_below", "Months below buffer — downside", "months", lambda c, j: f"=SUMPRODUCT(--({ER('Downside','precash')}+{c}{FR['egp']}<{A['minbuf']}))", NUM)
 frow("d_need", "Additional financing needed — downside", "USD", lambda c, j: f"=MAX(0,{A['minbuf']}-{c}{FR['d_mincash']})/{FX27}", USD, True)
+frow("d_stress", "Lowest cash — downside AND collections delayed (stress)", "EGP", lambda c, j: f"=SUMPRODUCT(MIN({ER('Downside','precash')}+{c}{FR['egp']}-{ER('Downside','rev')}*{A['stress_days']}/30))", EGP, True, n="Every customer pays later by the stress delay (Assumptions). Conservative: commission is really settled by Kashier.")
+frow("d_sneed", "Additional financing needed — downside + delayed collections", "USD", lambda c, j: f"=MAX(0,{A['minbuf']}-{c}{FR['d_stress']})/{FX27}", USD, True)
 fsec("Minimum capital & verdict")
 frow("mincap", "Minimum raise to hold buffer — selected scenario", "USD", lambda c, j: f"=MAX(0,{A['minbuf']}-{c}{FR['minpre']})/{FX27}", USD, True)
 frow("mincapd", "Minimum raise to hold buffer — downside", "USD", lambda c, j: f"=MAX(0,{A['minbuf']}-{c}{FR['d_minpre']})/{FX27}", USD, True)
-frow("verdict", "Verdict", "", lambda c, j: f'=IF({c}{FR["d_need"]}=0,"Funds plan incl. downside",IF({c}{FR["need"]}=0,"Funds base plan; downside needs more","Underfunded"))', GEN, True)
-fsec("Milestones the round is meant to fund (management view — to confirm)")
-MIL = ["Core team retained; Egypt sales from revenue; ~100–150 restaurants live by end 2027",
-       "Full Egypt sales team; 200 restaurants live by end 2027; marketing packages launched",
-       "200 restaurants by end 2027, Gulf partner groundwork, 6+ months of costs in reserve"]
-r += 1; FR["mil"] = r; lbl_row(fs, r, "Milestone funded", "")
+frow("verdict", "Funding verdict", "", lambda c, j: f'=IF({c}{FR["d_sneed"]}=0,"Covers plan, downside and late-payment stress",IF({c}{FR["d_need"]}=0,"Covers plan and downside; late-payment stress needs a bridge",IF({c}{FR["need"]}=0,"Covers base plan only; downside needs more","Underfunded")))', GEN, True)
+SY27 = lambda key: SY(key, "C").replace("C$3", "2027")
+UFN = "'Use of Funds'"
+fsec("What each amount pays for (Use of Funds % × 2027 cost schedule)")
+frow("f_sales", "Sales & onboarding budget", "EGP", lambda c, j: f"={UFN}!{L(2+j)}5*{c}{FR['egp']}", EGP)
+frow("f_rest", "  Restaurants it can acquire at 2027 restaurant CAC", "#", lambda c, j: f"=IFERROR({c}{FR['f_sales']}/'Unit Economics'!$C${UER['cac']},0)", NUM, True)
+frow("f_rest_pct", "  Share of the 2027 new-restaurant plan", "%", lambda c, j: f"=IFERROR({c}{FR['f_rest']}/'Unit Economics'!$C${UER['new']},0)", PCT)
+frow("f_tech", "Product & engineering budget", "EGP", lambda c, j: f"={UFN}!{L(2+j)}6*{c}{FR['egp']}", EGP)
+frow("f_eng", "  Engineer-years it pays for (2027 loaded salary)", "years", lambda c, j: f"=IFERROR({c}{FR['f_tech']}/(Assumptions!$H${HC['eng']}*12),0)", DEC2)
+frow("f_mkt", "Marketing & season-launch budget", "EGP", lambda c, j: f"={UFN}!{L(2+j)}7*{c}{FR['egp']}", EGP)
+frow("f_mkt_m", "  Months of the 2027 marketing plan it covers", "months", lambda c, j: f"=IFERROR({c}{FR['f_mkt']}/(({SY27('o_brand')}+{SY27('o_perf')})/12),0)", DEC2)
+frow("f_ops", "Operations, legal & support budget", "EGP", lambda c, j: f"={UFN}!{L(2+j)}8*{c}{FR['egp']}", EGP)
+frow("f_hc", "Headcount the whole round supports for 12 months", "people", lambda c, j: f"=IFERROR({c}{FR['egp']}/(({SY27('sal_eng')}+{SY27('sal_prod')}+{SY27('sal_sales')}+{SY27('sal_supp')}+{SY27('sal_mkt')}+{SY27('sal_adm')})/({SY27('hc')}/12)),0)", DEC2, True, n="Round ÷ average 2027 loaded cost per head. The plan has 16 people by end 2027.")
+frow("f_plan", "Share of total 2027 spend (direct costs + opex + capex)", "%", lambda c, j: f"=IFERROR({c}{FR['egp']}/({c}{FR['burn12']}*12),0)", PCT)
+fsec("Milestones, purpose and next round (management view — to confirm)")
+MIL = ["Restaurant growth paid from revenue; thin margin for error.",
+       "Full-year sales capacity for the 200-restaurant target; paid marketing packages launched.",
+       "Ramadan & summer launches and Gulf partner groundwork without waiting for revenue."]
+r += 1; FR["mil"] = r; lbl_row(fs, r, "Operating milestones funded", "")
 for j, t in enumerate(MIL):
+    cl = L(3 + j)
+    c = put(fs, r, 3 + j, f'="~"&TEXT({cl}{FR["runway0"]},"0.0")&" months of 2027 costs at zero revenue; ~"&TEXT({cl}{FR["f_rest"]},"0")&" restaurants of acquisition capacity. {t}"', GEN)
+    c.alignment = Alignment(wrap_text=True, vertical="top")
+fs.row_dimensions[r].height = 76
+PUR = ["Base case only.", "Buys time and sales capacity: the extra $50K over A is mostly sales & marketing.", "Buys resilience: the extra $150K over A covers the downside and delayed-collection stress without a bridge."]
+r += 1; FR["purpose"] = r; lbl_row(fs, r, "Strategic purpose of capital above A", "")
+for j, t in enumerate(PUR):
     c = put(fs, r, 3 + j, t, GEN, BLUE); c.alignment = Alignment(wrap_text=True, vertical="top")
-fs.row_dimensions[r].height = 64
+fs.row_dimensions[r].height = 52
+frow("nextfin", "Expected next financing requirement", "", lambda c, j: f'=IF({c}{FR["d_sneed"]}>0,"Bridge of ~"&TEXT({c}{FR["d_sneed"]},"$#,##0")&" in a downside with late payments; then seed "&Assumptions!$B${AR["seed"]},IF({c}{FR["d_need"]}>0,"Bridge in downside; seed "&Assumptions!$B${AR["seed"]},"No bridge needed; seed "&Assumptions!$B${AR["seed"]}&" (illustrative $"&TEXT(Assumptions!$C${AR["seed"]}/1000000,"0.0")&"M) for Gulf expansion"))', GEN, True)
 fsec("Instrument options (illustrative)")
 frow("safe_cap", "Post-money SAFE — ownership at valuation cap", "%", lambda c, j: f"={c}{FR['raise']}/{c}{FR['post']}", PCT, n="Cap = post-money above. Converts at the next priced round.")
 frow("safe_disc", "SAFE — ownership via discount at seed price", "%", lambda c, j: f"={c}{FR['raise']}/(Assumptions!$D${AR['seed']}*(1-{A['safe_disc']})+{c}{FR['raise']})", PCT, n="Seed pre-money × (1 − discount). Investor gets the better of cap or discount.")
@@ -989,7 +1064,7 @@ r = rt + 2; sec(ctb, r, "ROUND VALUES (USD)", 7)
 r += 1; ctb.cell(r, 1, "Post-money valuation"); put(ctb, r, 3, f"={FSsel('post')}", USD, GREEN)
 put(ctb, r, 4, f"=Assumptions!$C${AR['seed']}+Assumptions!$D${AR['seed']}", USD); put(ctb, r, 5, f"=Assumptions!$C${AR['seriesA']}+Assumptions!$D${AR['seriesA']}", USD); CTR["postv"] = r
 r += 1; ctb.cell(r, 1, "Value of pre-seed stake"); [put(ctb, r, cc, f"={L(cc)}{CTR['ps']}*{L(cc)}{CTR['postv']}", USD) for cc in (3, 4, 5)]; CTR["psv"] = r
-r += 1; ctb.cell(r, 1, "Pre-seed paper multiple (MOIC)"); [put(ctb, r, cc, f"=IFERROR({L(cc)}{CTR['psv']}/{FSsel('raise')},0)", X, bold=True) for cc in (3, 4, 5)]
+r += 1; ctb.cell(r, 1, "Pre-seed paper multiple (ILLUSTRATIVE)"); [put(ctb, r, cc, f"=IFERROR({L(cc)}{CTR['psv']}/{FSsel('raise')},0)", X, bold=True) for cc in (3, 4, 5)]
 r += 1; ctb.cell(r, 1, "Value of founders' stake"); [put(ctb, r, cc, f"={L(cc)}{CTR['fnd']}*{L(cc)}{CTR['postv']}", USD) for cc in (3, 4, 5)]
 r += 2; sec(ctb, r, "PRE-SEED OWNERSHIP BY FUNDING SCENARIO", 7)
 r += 1; hdr(ctb, r, ["", "A", "B", "C"])
@@ -999,6 +1074,41 @@ for lab, f in [("After pre-seed", lambda c: f"={FSN}!{c}{FR['own']}"), ("After s
 r += 1; ctb.cell(r, 1, "Founders after Series A")
 for j in range(3): put(ctb, r, 2 + j, f"={FSN}!{L(3+j)}{FR['fnd']}*(1-{seed_sh})*(1-{a_sh})", PCT)
 note(ctb, r + 2, 1, "Option pool assumed created before the pre-seed (dilutes founders only) and not topped up later. Future rounds are illustrative, not commitments.")
+
+# ───────────── DUE-DILIGENCE / EVIDENCE LIST (data; sheet built later) ─────────────
+DDI = [  # (key, item, area, why, priority, linked input / sheet, impact if missing)
+ ("reg", "Company registration, articles, shareholder register", "Legal", "Who owns the company today", "High", "Cap Table", "Round cannot close"),
+ ("ip", "IP assignment from founders and every developer / contractor", "IP", "The company must own the code it sells", "Critical", "Asset Register A1–A6", "Valuation unsupported; deal blocker"),
+ ("repo", "Source-code repositories held in a company account, access list", "IP", "Control of the core asset", "Critical", "Asset Register A6", "Key-person and IP risk"),
+ ("dom", "Domain reservya.com and app-store developer accounts in the company's name", "IP", "Control of distribution", "High", "Asset Register A5", "Product can be lost with one person"),
+ ("tm", "Trademark filing for Reservya (Egypt, later GCC)", "IP", "Brand protection", "Medium", "Asset Register A4", "Rebrand risk"),
+ ("bank", "Bank statements and receipts for the EGP 2.7M invested", "Finance", "Reconciles the opening balance sheet", "Critical", "Opening BS", "Opening equity unsupported"),
+ ("loan", "Founder contribution: equity or loan, in writing", "Finance", "Changes balance sheet and cap table", "High", "Opening BS", "Hidden liability"),
+ ("sw", "Software spend EGP 1.65M: invoices, payroll, contracts", "Finance", "Historical cost of the technology", "High", "Asset Register reconciliation", "Asset value unsupported"),
+ ("ias", "IAS 38 documentation (feasibility, timesheets) for future capitalisation", "Accounting", "Needed before capitalising any development", "Medium", "Assumptions: capitalised share", "Set capitalisation to 0%"),
+ ("live", "Live restaurant count at 31 Dec 2026 with signed agreements", "Traction", "Opening restaurants and traction claim", "Critical", "Assumptions: current traction", "Forecast starts from an unproven base"),
+ ("bills", "Monthly completed bills per restaurant (Kashier reports) — tests 125/month", "Traction", "Largest revenue driver", "Critical", "Assumptions: bills per restaurant", "−20% bills ≈ −15% revenue"),
+ ("activ", "Share of live restaurants transacting each month — tests 90%", "Traction", "Revenue driver", "High", "Assumptions: activation", "Lower commission"),
+ ("churn", "Restaurant churn history — tests 1.5% a month", "Traction", "Retention and CAC", "High", "Assumptions: churn", "Higher acquisition cost"),
+ ("bill", "Average completed bill — tests EGP 3,000", "Traction", "Revenue driver", "High", "Countries: average bill", "Lower commission"),
+ ("rate", "Commission rates in signed restaurant contracts — tests 5.5% tier mix", "Commercial", "Revenue driver", "Critical", "Assumptions: tier mix", "4% case: ≈ −20% revenue"),
+ ("conv", "Restaurants on paid plans — tests 70% conversion", "Commercial", "Subscription revenue", "High", "Assumptions: plan mix", "Lower recurring revenue"),
+ ("mkt", "Marketing packages sold to date — tests adoption", "Commercial", "Marketing revenue", "Medium", "Assumptions: package adoption", "Lower marketing revenue"),
+ ("spon", "Sponsorship LOIs or contracts", "Commercial", "Sponsorship revenue", "Medium", "Assumptions: sponsorships", "Sponsorship revenue falls to 0"),
+ ("kash", "Kashier merchant agreement and fee pass-through terms", "Commercial", "Payment flow and costs", "High", "Revenue & Monetization", "Fees may become Reservya's cost"),
+ ("cons", "Hospitality-consultant agreements and fee terms", "Commercial", "Acquisition cost", "Medium", "Assumptions: consultant fee", "Higher CAC"),
+ ("team", "Team list, roles, contracts, vesting", "People", "Key-person risk and option pool", "High", "Opex & Headcount", "Team claim unsupported"),
+ ("pay", "Payroll and supplier costs 2025–2026", "Finance", "Validates the cost base", "Medium", "Opex & Headcount", "Costs may be understated"),
+ ("dp", "Data-protection compliance (Law 151/2020), privacy policy", "Legal", "Diner data is a core asset", "Medium", "Asset Register D2", "Regulatory risk"),
+ ("tax", "Tax registration, VAT status, losses carried forward", "Tax", "Tax schedule", "Medium", "Assumptions: tax", "Tax timing wrong"),
+ ("fx", "EGP/USD rate path agreed with investors", "Finance", "USD figures and the raise in EGP", "Medium", "FX", "USD values misstated"),
+ ("prod", "Product demo, app-store ratings, uptime", "Product", "Live-product claim", "High", "Valuation", "Product readiness unsupported"),
+ ("comp", "Comparable financings with sources", "Valuation", "Market support for the price", "Medium", "Valuation", "Price rests on methods only"),
+ ("gulf", "Gulf operating-partner term sheets", "Expansion", "Revenue share and launch costs", "Low", "Countries", "Expansion timing at risk"),
+]
+DDROW = {k: 5 + i for i, (k, *_) in enumerate(DDI)}
+def DDS(k): return f"'Due Diligence'!$E${DDROW[k]}"
+def DDCLOSED(*ks): return "AND(" + ",".join(f'{DDS(k)}="Closed"' for k in ks) + ")"
 
 # ───────────── VALUATION ─────────────
 va = new_sheet("Valuation", "Valuation Analysis", "Four methods. Asset-based methods are deliberately not used: an early software company's value is its future cash flows, not its book assets.", (52, 14, 16, 16, 16, 4, 60))
@@ -1048,15 +1158,18 @@ for d, mx, sc_, ev in BK:
     r += 1; va.cell(r, 1, d); put(va, r, 2, mx, USD, BLUE); put(va, r, 3, sc_, PCT, BLUE); put(va, r, 4, f"=B{r}*C{r}", USD); note(va, r, 7, ev)
 vrow("bk_pre", "Berkus pre-money", "USD", f"=SUM(D{b0}:D{r})", USD, True, col=4)
 r += 1; sec(va, r + 1, "5. COMPARABLE FINANCINGS — enter verified data only", 7); r += 1
-r += 1; hdr(va, r, ["Company", "Country", "Date", "Round", "Pre-money (USD)", "", "Source & verification"])
+r += 1; hdr(va, r, ["Company", "Country", "Date", "Round", "Pre-money (USD)", "Verified? (Y/N)", "Source & verification", "Counted (USD)"])
 c0 = r + 1
 for k in range(6):
     r += 1
     for cc in range(1, 6): put(va, r, cc, None, USD if cc == 5 else GEN, BLUE)
-    note(va, r, 7, "Leave blank until verified (MAGNiTT, Crunchbase, press release, term sheet).")
+    put(va, r, 6, "N", GEN, BLUE); put(va, r, 8, f'=IF(AND(F{r}="Y",ISNUMBER(E{r})),E{r},"")', USD)
+    note(va, r, 7, "Count only if verified (MAGNiTT, Crunchbase, press release, term sheet) — set Y.")
 c1 = r
-vrow("cmp", "Median of verified comparables", "USD", f'=IF(COUNT(E{c0}:E{c1})=0,"n/a",MEDIAN(E{c0}:E{c1}))', USD, True)
-r += 1; sec(va, r + 1, "SUMMARY — is the $1.25M target defensible?", 7); r += 1
+va.column_dimensions["H"].width = 16
+vrow("cmpn", "Verified comparables counted", "#", f"=COUNT(H{c0}:H{c1})", NUM)
+vrow("cmp", "Median of verified comparables", "USD", f'=IF(C{VA["cmpn"]}=0,"n/a",MEDIAN(H{c0}:H{c1}))', USD, True, n="Unverified entries never count as market support.")
+r += 1; sec(va, r + 1, "SUMMARY — where the $1.25M target sits against the methods", 7); r += 1
 r += 1; hdr(va, r, ["Method", "", "Pre-money (USD)"])
 s0 = r + 1
 for lab, k in [("VC method", "vc_pre"), ("First Chicago", "fc_pre"), ("Risk-adjusted milestone", "ms_pre"), ("Modified Berkus", "bk_pre")]:
@@ -1065,13 +1178,36 @@ r += 1; va.cell(r, 1, "Comparable financings"); put(va, r, 3, f'=IF(ISNUMBER(C{V
 s1 = r
 vrow("lo", "Low", "USD", f"=MIN(C{s0}:C{s1})"); vrow("med", "Median", "USD", f"=MEDIAN(C{s0}:C{s1})", USD, True); vrow("hi", "High", "USD", f"=MAX(C{s0}:C{s1})")
 vrow("tgt", "Management target pre-money", "USD", f"={A['premoney']}", USD, True, GREEN)
-vrow("verdict", "Verdict", "", f'=IF(C{VA["tgt"]}<=C{VA["med"]},"Defensible: at or below the median of methods",IF(C{VA["tgt"]}<=C{VA["hi"]},"Arguable: inside the range but above the median","Aggressive: above every method"))', GEN, True)
-r += 1; sec(va, r + 1, "ILLUSTRATIVE EXIT OUTCOMES (not a forecast)", 7); r += 1
+vrow("pos", "Position of the target", "", f'="Target = "&TEXT(C{VA["tgt"]}/C{VA["med"]},"0%")&" of the method median; "&IF(AND(C{VA["tgt"]}>=C{VA["lo"]},C{VA["tgt"]}<=C{VA["hi"]}),"inside","outside")&" the range"', GEN, True)
+r += 1; sec(va, r + 1, "WHAT HAS TO BE EVIDENCED FOR THE PRICE TO HOLD", 7); r += 1
+r += 1; hdr(va, r, ["Value driver", "", "Evidence status", "", "", "", "Evidence (Due Diligence items)"])
+ev0 = r + 1
+for lab, keys, ev in [("Product readiness (live apps, dashboard, payments)", ["prod"], "Demo, store listings, uptime"),
+                      ("Intellectual property owned by the company", ["ip", "repo", "dom"], "IP assignments, repo & domain ownership"),
+                      ("Team capability", ["team"], "Roles, contracts, vesting"),
+                      ("Documented commercial traction", ["live", "bills", "rate"], "Signed restaurants, Kashier reports, contract rates"),
+                      ("Realistic milestone execution", ["bills", "pay"], "Actual volumes and costs vs plan")]:
+    r += 1; va.cell(r, 1, lab); put(va, r, 3, f'=IF({DDCLOSED(*keys)},"Evidenced","Open")', GEN, bold=True); note(va, r, 7, ev)
+ev1 = r
+vrow("evn", "Value drivers evidenced", "of 5", f'=COUNTIF(C{ev0}:C{ev1},"Evidenced")', NUM, True)
+vrow("verdict", "Assessment", "", f'=IF(C{VA["evn"]}=5,IF(C{VA["tgt"]}<=C{VA["hi"]},"Supportable: inside the method range and evidenced","Above the method range"),"Not yet supportable: "&(5-C{VA["evn"]})&" of 5 value drivers lack evidence. The methods give a range, not proof.")', GEN, True)
+r += 1; sec(va, r + 1, "SENSITIVITY — VC-method pre-money (USD) by exit multiple × target return (ILLUSTRATIVE)", 7); r += 1
+r += 1; hdr(va, r, ["Exit multiple ↓ / target return →", "", "15x", "20x", "25x", "30x"])
+for mx in [2, 3, 4, 5]:
+    r += 1; put(va, r, 1, mx, X)
+    for j, tr in enumerate([15, 20, 25, 30]):
+        put(va, r, 3 + j, f"=C{VA['rev31']}*A{r}*C{VA['retain']}/{tr}-{FSsel('raise')}", USD)
+r += 1; sec(va, r + 1, "TIMING & DILUTION TESTS (ILLUSTRATIVE)", 7); r += 1
+vrow("t_early", "VC method if exit happens in 2030 instead of 2031", "USD", f"={SYS('Base','rev','F').replace('F$3','2030')}/FX!$F$5*C{VA['mult']}*C{VA['retain']}/C{VA['ret_m']}-{FSsel('raise')}")
+for sp in [5000000, 8000000, 12000000]:
+    vrow(f"t_seed{sp}", f"Pre-seed stake after Series A if seed pre-money is ${sp/1e6:.0f}M", "%", f"={FSsel('own')}*(1-Assumptions!$C${AR['seed']}/(Assumptions!$C${AR['seed']}+{sp}))*(1-{a_sh})", PCT)
+vrow("t_noA", "Pre-seed stake at exit if Series A is skipped (profitable)", "%", f"={FSsel('own')}*(1-{seed_sh})", PCT)
+r += 1; sec(va, r + 1, "ILLUSTRATIVE EXIT OUTCOMES — not a forecast, not a promise of returns", 7); r += 1
 r += 1; hdr(va, r, ["", "Unit", "Downside", "Base", "Upside"])
 r += 1; lbl_row(va, r, "Exit value 2031", "USD"); [put(va, r, 3 + j, f"={L(3+j)}{VA['fc_ev']}", USD) for j in range(3)]; ev_r = r
 r += 1; lbl_row(va, r, "Pre-seed investors' stake after dilution", "%"); [put(va, r, 3 + j, f"={FSsel('own')}*C{VA['retain']}", PCT) for j in range(3)]; st_r = r
 r += 1; lbl_row(va, r, "Value of pre-seed stake", "USD"); [put(va, r, 3 + j, f"={L(3+j)}{ev_r}*{L(3+j)}{st_r}", USD) for j in range(3)]; vv = r
-r += 1; lbl_row(va, r, "Multiple on invested capital", "x", True); [put(va, r, 3 + j, f"=IFERROR({L(3+j)}{vv}/{FSsel('raise')},0)", X, bold=True) for j in range(3)]
+r += 1; lbl_row(va, r, "Illustrative multiple on invested capital", "x", True); [put(va, r, 3 + j, f"=IFERROR({L(3+j)}{vv}/{FSsel('raise')},0)", X, bold=True) for j in range(3)]
 
 # ───────────── COMMISSION SENSITIVITY ─────────────
 cs = ann_sheet("Commission Sensitivity", "Commission-Rate Sensitivity", "Selected operating scenario. Commission = eligible GMV × rate × (1 − waivers). Costs that move with revenue are flexed; fixed costs held.")
@@ -1119,48 +1255,151 @@ for s in ["Downside", "Base", "Upside"]:
 QR = Q_.R
 
 # ───────────── ASSET REGISTER ─────────────
-arg = new_sheet("Asset Register", "Asset Register & IP Assessment", "Accounting assets (IAS 16 / IAS 38) are separated from strategic value drivers. No market values are assigned.",
-                (6, 34, 14, 40, 20, 14, 14, 14, 14, 14, 12, 36, 30, 12))
-hdr(arg, 4, ["ID", "Asset", "Category", "Description", "Legal owner", "Date", "Historical cost (EGP)", "Capitalisable (EGP)", "Acc. amortisation (EGP)", "NBV (EGP)", "Life (mo)", "Documents needed", "Accounting treatment", "Significance"])
-sw_cost = f"'Opening BS'!$B${OB['uses']}"
-ob_ws = wb["Opening BS"]
+arg = new_sheet("Asset Register", "Asset Register & IP Assessment", "Recognised assets (IAS 16 / IAS 38) are separated from strategic value drivers. No market values are assigned. Ownership is unconfirmed until the evidence column says Closed.",
+                (6, 34, 16, 38, 20, 12, 15, 15, 15, 15, 9, 34, 30, 11, 16))
+hdr(arg, 4, ["ID", "Asset", "Category", "Description", "Legal owner", "Created", "Historical cost (EGP)", "Recognised cost (EGP)", "Acc. amortisation (EGP)", "NBV (EGP)", "Life (mo)", "Documents needed", "Accounting treatment", "Significance", "Ownership evidence"])
 sw_row = None
+ob_ws = wb["Opening BS"]
 for rr in range(1, ob_ws.max_row + 1):
     if str(ob_ws.cell(rr, 1).value or "").startswith("Software development"): sw_row = rr
 ASSETS = [
- ("A1", "Reservya mobile apps (iOS & Android)", "A · Software & IP", "Booking, pre-order, serving-time choice, payment", "To confirm: company vs founder", "2024–2026", f"='Opening BS'!B{sw_row}", f"='Opening BS'!C{sw_row}", f"={OBS('b_swa')}", "Build timesheets, invoices, repo history, IP assignment", "Expensed (no retro capitalisation, IAS 38)", "High"),
- ("A2", "Restaurant web dashboard & back end", "A · Software & IP", "Table plan, orders, kitchen timing, analytics, API", "To confirm", "2024–2026", None, None, None, "Same as A1 (cost included in A1)", "Expensed", "High"),
- ("A3", "Payment integration (Kashier) & WhatsApp messaging", "A · Software & IP", "Integrations and merchant set-up", "Company", "2026", None, None, None, "Signed provider agreements", "Expensed", "Medium"),
- ("A4", "Brand: Reservya name & logo", "A · Software & IP", "Trademark — registration status unknown", "To confirm", "—", 0, 0, 0, "Trademark filing (Egypt ITDA; GCC later)", "Not recognised until registered and costs evidenced", "Medium"),
- ("A5", "Domain reservya.com & app-store accounts", "A · Software & IP", "Digital identity", "To confirm", "—", 0, 0, 0, "Registrar & store account ownership", "Expensed (immaterial)", "Medium"),
- ("B1", "Laptops, devices, office equipment", "B · Physical", "Owned equipment", "Company", "—", f"={OBS('b_eqc')}", f"={OBS('b_eqc')}", f"={OBS('b_eqd')}", "Purchase invoices", "IAS 16, straight line", "Low"),
- ("C1", "Restaurant partner agreements (22+ venues tested)", "C · Contracts (strategic)", "Number signed & terms to confirm", "Company", "2026", 0, 0, 0, "Signed agreements, usage data", "Not an accounting asset", "High"),
- ("C2", "Hospitality-consultant agreements", "C · Contracts (strategic)", "Sales channel", "Company", "2026", 0, 0, 0, "Signed agreements", "Not an accounting asset", "Medium"),
- ("D1", "Product know-how & 2-year build experience", "D · Strategic driver", "Team capability", "—", "—", 0, 0, 0, "Team CVs, vesting, IP assignment", "Not recognised", "High"),
- ("D2", "Restaurant & diner data (growing)", "D · Strategic driver", "Booking and spend data; network effects", "Company", "—", 0, 0, 0, "Privacy policy, Law 151/2020 compliance", "Not recognised", "High"),
+ ("A1", "Mobile apps (iOS & Android)", "A · Software & IP", "Booking, pre-order, serving-time choice, payment", "Unconfirmed: company vs founder", "2024–2026", f"='Opening BS'!B{sw_row}", f"='Opening BS'!C{sw_row}", f"={OBS('b_swa')}", "Repo history, developer contracts, IP assignment", "Expensed — no retroactive capitalisation (IAS 38)", "High", "ip"),
+ ("A2", "Restaurant web dashboard", "A · Software & IP", "Table plan, orders, kitchen timing, analytics", "Unconfirmed", "2024–2026", None, None, None, "Cost included in A1", "Expensed", "High", "ip"),
+ ("A3", "Back end, API and database", "A · Software & IP", "Core platform and data model", "Unconfirmed", "2024–2026", None, None, None, "Cost included in A1; hosting account ownership", "Expensed", "High", "ip"),
+ ("A4", "Brand: Reservya name & logo", "A · Software & IP", "Trademark — registration status unknown", "Unconfirmed", "—", 0, 0, 0, "Trademark filing (Egypt ITDA; GCC later)", "Not recognised until registered and costs evidenced", "Medium", "tm"),
+ ("A5", "Website, domain reservya.com, app-store accounts", "A · Software & IP", "Distribution and digital identity", "Unconfirmed", "—", 0, 0, 0, "Registrar record, Apple / Google developer accounts", "Expensed (immaterial)", "High", "dom"),
+ ("A6", "Source code & repositories", "A · Software & IP", "All code, build scripts, infrastructure config", "Unconfirmed", "2024–2026", None, None, None, "Company-owned repo account, access list, licences of third-party code", "Part of A1 cost", "High", "repo"),
+ ("A7", "Payment (Kashier) & WhatsApp integrations", "A · Software & IP", "Merchant set-up and messaging integration", "Company (to confirm)", "2026", None, None, None, "Provider agreements", "Expensed", "Medium", "kash"),
+ ("B1", "Laptops, devices, office equipment", "B · Physical", "Owned equipment", "Company (to confirm)", "—", f"={OBS('b_eqc')}", f"={OBS('b_eqc')}", f"={OBS('b_eqd')}", "Purchase invoices", "IAS 16, straight line", "Low", "bank"),
+ ("C1", "Restaurant partner agreements (22+ venues tested)", "C · Contracts (strategic)", "Number signed and terms to confirm", "Company", "2026", 0, 0, 0, "Signed agreements, usage data", "Not a recognised asset", "High", "live"),
+ ("C2", "Hospitality-consultant agreements", "C · Contracts (strategic)", "Sales channel", "Company", "2026", 0, 0, 0, "Signed agreements", "Not a recognised asset", "Medium", "cons"),
+ ("D1", "Product know-how & 2-year build experience", "D · Strategic driver", "Team capability", "—", "—", 0, 0, 0, "Team CVs, vesting, IP assignment", "Not recognised", "High", "team"),
+ ("D2", "Restaurant & diner data (growing)", "D · Strategic driver", "Booking and spend data; network effects", "Company", "—", 0, 0, 0, "Privacy policy, Law 151/2020 compliance", "Not recognised", "High", "dp"),
 ]
 for i, row_ in enumerate(ASSETS):
     rr = 5 + i
-    for j, v in enumerate(row_):
+    for j, v in enumerate(row_[:12]):
         col = {0: 1, 1: 2, 2: 3, 3: 4, 4: 5, 5: 6, 6: 7, 7: 8, 8: 9, 9: 12, 10: 13, 11: 14}[j]
         isnum = col in (7, 8, 9)
         put(arg, rr, col, v if v is not None else 0, EGP if isnum else GEN, GREEN if isinstance(v, str) and v.startswith("=") else BLACK)
         if not isnum: arg.cell(rr, col).alignment = Alignment(wrap_text=True, vertical="top")
     put(arg, rr, 10, f"=H{rr}-I{rr}", EGP); put(arg, rr, 11, f"={A['life_sw']}" if row_[2].startswith("A") else (f"={A['life_eq']}" if row_[2].startswith("B") else "n/a"), GEN)
+    put(arg, rr, 15, f'=IF({DDS(row_[12])}="Closed","Closed","Open")', GEN, GREEN, bold=True)
     arg.row_dimensions[rr].height = 30
-at = 5 + len(ASSETS); arg.cell(at, 2, "Total accounting assets (NBV)").font = fnt(bold=True)
+at = 5 + len(ASSETS); arg.cell(at, 2, "Total recognised assets (NBV)").font = fnt(bold=True)
 for cc in (7, 8, 9, 10): put(arg, at, cc, f"=SUM({L(cc)}5:{L(cc)}{at-1})", EGP, bold=True).border = TOP
 r = at + 1; arg.cell(r, 2, "Check: NBV = Opening BS non-current assets"); put(arg, r, 10, f"=ROUND(J{at}-({OBS('b_eqc')}-{OBS('b_eqd')}+{OBS('b_swc')}-{OBS('b_swa')}),0)", EGP, bold=True); AREG_CHK = f"'Asset Register'!$J${r}"
-note(arg, r + 2, 2, "Historical build cost (EGP 1.65M software) is shown for transparency but expensed: IAS 38 allows capitalisation only from the date all six development criteria are met and documented; it cannot be applied retroactively.")
-note(arg, r + 3, 2, "Categories C and D create value for investors but are not balance-sheet assets. Do not present them with a monetary value without an independent valuation.")
+r += 1; arg.cell(r, 2, "Software & IP assets with ownership evidence closed"); put(arg, r, 10, f'=COUNTIFS(C5:C{at-1},"A*",O5:O{at-1},"Closed")&" of "&COUNTIF(C5:C{at-1},"A*")', GEN, bold=True); AREG_OWN = f"'Asset Register'!$J${r}"
+
+r += 2; sec(arg, r, "HISTORICAL SOFTWARE SPEND — EGP 1.65M reconciliation", 15)
+r += 1; arg.cell(r, 2, "Stated by management (midpoint of EGP 1.5–1.8M)"); put(arg, r, 7, f"='Opening BS'!B{sw_row}", EGP, GREEN); SWR = {"stated": r}
+r += 1; arg.cell(r, 2, "Documented by invoices, payroll or contracts"); put(arg, r, 7, f"='Opening BS'!G{sw_row}", EGP, GREEN); SWR["doc"] = r
+note(arg, r, 12, "Enter on Opening BS (column G) as documents are matched.")
+r += 1; arg.cell(r, 2, "Undocumented").font = fnt(bold=True); put(arg, r, 7, f"=G{SWR['stated']}-G{SWR['doc']}", EGP, bold=True); SWR["gap"] = r
+r += 1; arg.cell(r, 2, "Share documented"); put(arg, r, 7, f"=IFERROR(G{SWR['doc']}/G{SWR['stated']},0)", PCT, bold=True); SWR["pct"] = r
+SW_DOC = f"'Asset Register'!$G${SWR['pct']}"
+
+r += 2; sec(arg, r, "IAS 38 — can any development cost be capitalised? (answer Yes / No / Unknown)", 15)
+IAS = ["Technical feasibility of completing the asset", "Intention to complete and use or sell it", "Ability to use or sell it", "Probable future economic benefits (market exists)",
+       "Adequate technical, financial and other resources", "Costs measured reliably (timesheets, invoices)", "Criteria met and documented at the time the cost was incurred (not after)"]
+i0 = r + 1
+for q in IAS:
+    r += 1; arg.cell(r, 2, q); arg.merge_cells(start_row=r, start_column=2, end_row=r, end_column=6); put(arg, r, 7, "Unknown", GEN, BLUE)
+i1 = r
+dvy = DataValidation(type="list", formula1='"Yes,No,Unknown"'); arg.add_data_validation(dvy); dvy.add(f"G{i0}:G{i1}")
+r += 1; arg.cell(r, 2, "Result").font = fnt(bold=True)
+put(arg, r, 7, f'=IF(COUNTIF(G{i0}:G{i1},"Yes")=7,"Eligible for future costs only","Not eligible — expense")', GEN, bold=True); IAS_RES = f"'Asset Register'!$G${r}"
+note(arg, r, 12, "Even if eligible, historical spend stays expensed: IAS 38 does not allow retroactive capitalisation.")
+r += 1; arg.cell(r, 2, "Historical development capitalised on the opening balance sheet"); put(arg, r, 7, f"={OBS('b_swc')}", EGP, GREEN); IAS_CAP = f"'Asset Register'!$G${r}"
+r += 2
+note(arg, r, 2, "Categories C and D create value for investors but are not balance-sheet assets. Do not present them with a monetary value without an independent valuation.")
+note(arg, r + 1, 2, "Founder contributions (EGP 2.7M), shareholder loans, equipment, liabilities and remaining cash are reconciled on the Opening BS sheet.")
 
 # ───────────── ASSUMPTION REGISTER ─────────────
-rg = new_sheet("Assumption Register", "Assumption Register", "Every input, its value, source, confidence and verification status.", (64, 26, 70, 12, 34))
-hdr(rg, 4, ["Assumption", "Value", "Source / rationale", "Confidence", "Verification status"])
-for i, (lab, f, fmt_, src, conf, status) in enumerate(REG):
-    rr = 5 + i; rg.cell(rr, 1, lab); put(rg, rr, 2, f, fmt_, GREEN); rg.cell(rr, 3, src).alignment = Alignment(wrap_text=True)
-    rg.cell(rr, 4, conf); rg.cell(rr, 5, status)
-    if conf == "Low": rg.cell(rr, 4).fill = RFILL
+rg = new_sheet("Assumption Register", "Assumption Register & Evidence Status",
+               "A formula passing is not evidence. Only inputs backed by a reviewed document may be set to 'Verified'. Status cells (blue) are updated as evidence arrives.",
+               (52, 20, 34, 13, 18, 22, 11, 13, 40, 30, 9))
+r = 4; sec(rg, r, "PRIORITY ASSUMPTIONS — what happens if each one is wrong (selected scenario, impact vs plan)", 11)
+r += 1; hdr(rg, r, ["Assumption", "Plan value", "Stress tested", "", "Δ 2027 revenue", "Δ 2027 EBITDA", "", "Δ 2031 revenue", "Evidence needed", "Evidence status", ""])
+CSn = "'Commission Sensitivity'"
+k27, k31 = f"{CSn}!$C${CSR['k']}", f"{CSn}!$G${CSR['k']}"
+def isv(key, col): return f"{ISn}!{col}{ISR[key]}"
+PRI = [
+ ("125 completed bills / restaurant / month", f"=TEXT(Assumptions!D{AR['bills']},\"0\")", "−20% bills", lambda col: f"=-0.2*{isv('comm', col)}", "bills"),
+ ("90% of live restaurants transact", f"=TEXT(Assumptions!D{AR['activ']},\"0%\")", "80% activation", lambda col: f"=-{isv('comm', col)}*(1-Assumptions!$C${AR['activ']}/Assumptions!$D${AR['activ']})", "activ"),
+ ("EGP 3,000 average bill (Egypt)", f"=TEXT(Countries!C{CP['bill']},\"#,##0\")", "−10% bill", lambda col: f"=-0.1*{isv('comm', col)}", "bill"),
+ ("5.5% weighted commission (tier mix)", f"=TEXT({A['c_tier']},\"0.0%\")", "4% on all GMV", lambda col: f"={CSn}!{col}{CSR['tr_0']}-{isv('rev', col)}", "rate"),
+ ("70% of live restaurants on a paid plan", f"=TEXT(1-Assumptions!C{AR['p_free']},\"0%\")", "+10 pts on free plan", lambda col: f"=-{isv('sub', col)}*0.1/(1-Assumptions!{col}{AR['p_free']})", "conv"),
+ ("Marketing-package adoption (Bronze/Silver/Gold)", f"=TEXT(Assumptions!C{AR['m_b']}+Assumptions!C{AR['m_s']}+Assumptions!C{AR['m_g']},\"0%\")&\" of live\"", "Half the adoption", lambda col: f"=-0.5*({isv('mrec', col)}+{isv('mone', col)})", "mkt"),
+]
+PRI0 = r + 1
+for lab, val, test, fn, ddk in PRI:
+    r += 1; rg.cell(r, 1, lab); put(rg, r, 2, val, GEN, GREEN); rg.cell(r, 3, test)
+    put(rg, r, 5, fn("C"), EGP); put(rg, r, 8, fn("G"), EGP)
+    k = k27 if ddk != "mkt" else f"({k27}-{A['m_cost']})"
+    put(rg, r, 6, f"=E{r}*{k}", EGP) if ddk != "rate" else put(rg, r, 6, f"={CSn}!C{CSR['eb_0']}-{isv('ebitda', 'C')}", EGP)
+    rg.cell(r, 9, [d for d in DDI if d[0] == ddk][0][1]).alignment = Alignment(wrap_text=True)
+    put(rg, r, 10, f'=IF({DDS(ddk)}="Closed","Verified","Management forecast")', GEN, GREEN, bold=True)
+r += 1; rg.cell(r, 1, "1.5% monthly restaurant churn"); put(rg, r, 2, f"=TEXT(Assumptions!D{AR['churn']},\"0.0%\")", GEN, GREEN); rg.cell(r, 3, "2.5% churn, targets held")
+put(rg, r, 5, 0, EGP); put(rg, r, 8, 0, EGP)
+put(rg, r, 6, f"=-{RVn}!C{RVR['avglive']}*0.01*12*'Unit Economics'!C{UER['cac']}", EGP)
+note(rg, r, 11, "Targets held, so extra churn costs more acquisition, not revenue.")
+rg.cell(r, 9, [d for d in DDI if d[0] == "churn"][0][1]).alignment = Alignment(wrap_text=True)
+put(rg, r, 10, f'=IF({DDS("churn")}="Closed","Verified","Management forecast")', GEN, GREEN, bold=True)
+PRI1 = r
+r += 2; sec(rg, r, "FULL REGISTER", 11)
+r += 1; hdr(rg, r, ["Assumption", "Value", "Source document", "Evidence date", "Responsible", "Actual vs estimate", "Confidence", "Last validated", "Impact if wrong", "Evidence status", "Material"])
+REG0 = r + 1
+def classify(lab, status):
+    l = lab.lower()
+    if status in ("Control", "Policy", "Memo") or "scenario (" in l:
+        return ("Model setting", "—", "n/a", "Model control / policy", "No")
+    if status == "Company pricing":
+        return ("Reservya Feature Guide / Packages PDF", "Undated — confirm version", "Estimate (published price, not contract)", "Documented — not contract-verified", "Yes")
+    if status == "Public source":
+        return ("PwC Worldwide Tax Summaries / Egyptian tax law", "To re-check at closing", "Public rule", "Public source — re-check", "Yes")
+    if status == "Market practice":
+        return ("Standard terms (YC post-money SAFE, market practice)", "—", "Market practice", "Market practice — confirm in term sheet", "Yes")
+    if status == "Management target":
+        return ("Company valuation calculator", "Undated", "Management target", "Management target — not a fair value", "Yes")
+    if status == "Verified: none":
+        return ("Management statement: none signed", "—", "Reported actual = 0", "Management forecast", "Yes")
+    return ("None — management forecast", "—", "Estimate", "Management forecast", "Yes")
+def impact(lab):
+    l = lab.lower()
+    for keys, t in [(("bill", "commission", "refund", "waive", "ramp", "transact", "targets achieved"), "Commission revenue and EBITDA"),
+                    (("plan", "price", "subscription", "collection rate"), "Subscription revenue and cash"),
+                    (("package", "campaign", "marketing-package", "adoption"), "Marketing revenue"),
+                    (("sponsor", "contract value", "renewal"), "Sponsorship revenue"),
+                    (("churn",), "Acquisition cost and LTV"),
+                    (("salary", "hosting", "marketing", "administration", "legal", "consultant", "onboarding", "equipment", "messaging", "devices", "headcount"), "Operating costs, EBITDA, runway"),
+                    (("tax",), "Net profit and cash timing"),
+                    (("days", "buffer"), "Cash timing and runway"),
+                    (("valuation", "exit", "probability", "pool", "safe", "pre-money"), "Valuation and dilution only"),
+                    (("capitalised", "useful life"), "EBITDA vs amortisation split")]:
+        if any(k in l for k in keys): return t
+    return "See Methodology"
+for lab, f, fmt_, src, conf, status in REG:
+    r += 1
+    srcdoc, edate, ave, est, mat = classify(lab, status)
+    rg.cell(r, 1, lab).alignment = Alignment(wrap_text=True); put(rg, r, 2, f, fmt_, GREEN)
+    rg.cell(r, 3, srcdoc).alignment = Alignment(wrap_text=True); rg.cell(r, 4, edate)
+    put(rg, r, 5, "Founder / CEO (assign)" if mat == "Yes" else "—", GEN, BLUE); rg.cell(r, 6, ave)
+    rg.cell(r, 7, conf); put(rg, r, 8, "Not validated" if mat == "Yes" else "—", GEN, BLUE)
+    rg.cell(r, 9, impact(lab)); put(rg, r, 10, est, GEN, BLUE); rg.cell(r, 11, mat)
+    note(rg, r, 12, src)
+    if conf == "Low": rg.cell(r, 7).fill = RFILL
+REG1 = r
+dvs = DataValidation(type="list", formula1='"Verified,Documented — not contract-verified,Public source — re-check,Market practice — confirm in term sheet,Management target — not a fair value,Management forecast,Verified (none exist),Model control / policy"', allow_blank=True)
+rg.add_data_validation(dvs); dvs.add(f"J{REG0}:J{REG1}")
+rg.column_dimensions["L"].width = 60
+r += 2; sec(rg, r, "EVIDENCE COMPLETENESS", 11)
+r += 1; rg.cell(r, 1, "Material assumptions"); put(rg, r, 2, f'=COUNTIF(K{REG0}:K{REG1},"Yes")', NUM); EV_MAT = f"'Assumption Register'!$B${r}"
+r += 1; rg.cell(r, 1, "… verified by a reviewed document"); put(rg, r, 2, f'=COUNTIFS(K{REG0}:K{REG1},"Yes",J{REG0}:J{REG1},"Verified*")', NUM); EV_VER = f"'Assumption Register'!$B${r}"
+r += 1; rg.cell(r, 1, "… documented or public but not yet verified"); put(rg, r, 2, f'=COUNTIFS(K{REG0}:K{REG1},"Yes",J{REG0}:J{REG1},"Documented*")+COUNTIFS(K{REG0}:K{REG1},"Yes",J{REG0}:J{REG1},"Public*")+COUNTIFS(K{REG0}:K{REG1},"Yes",J{REG0}:J{REG1},"Market*")', NUM); EV_DOC = f"'Assumption Register'!$B${r}"
+r += 1; rg.cell(r, 1, "… management forecast or target, no evidence").font = fnt(bold=True); put(rg, r, 2, f"={EV_MAT}-{EV_VER}-{EV_DOC}", NUM, bold=True); EV_UNR = f"'Assumption Register'!$B${r}"
+r += 1; rg.cell(r, 1, "Priority assumptions still unverified").font = fnt(bold=True); put(rg, r, 2, f'=COUNTIF(J{PRI0}:J{PRI1},"Management forecast")&" of "&ROWS(J{PRI0}:J{PRI1})', GEN, bold=True); EV_PRI = f"'Assumption Register'!$B${r}"
+rg.freeze_panes = "B6"
 
 # ───────────── METHODOLOGY ─────────────
 me = new_sheet("Methodology", "Methodology & Notes", "How the model works and the accounting policies behind it.", (120,))
@@ -1184,85 +1423,226 @@ NOTES = [
 for i, (h, t) in enumerate(NOTES):
     rr = 4 + i * 2; me.cell(rr, 1, h).font = fnt("1A2420", True, size=11); me.cell(rr + 1, 1, t).alignment = Alignment(wrap_text=True, vertical="top"); me.row_dimensions[rr + 1].height = 30
 
-# ───────────── DUE DILIGENCE ─────────────
-dd = new_sheet("Due Diligence", "Due-Diligence Checklist", "What an investor will ask for. Status open until the document exists.", (5, 52, 20, 60, 12))
-hdr(dd, 4, ["#", "Item", "Area", "Why it matters", "Status"])
-DDI = [("Company registration, articles, shareholder register", "Legal", "Who owns the company today"),
-       ("IP assignment from founders and every developer/contractor", "Legal / IP", "Company must own the code it is selling"),
-       ("Trademark filing for Reservya", "Legal / IP", "Brand protection in Egypt and GCC"),
-       ("Bank statements and receipts for the EGP 2.7M invested", "Finance", "Reconciles opening balance sheet"),
-       ("Founder contribution: equity or loan (written)", "Finance", "Changes the balance sheet and cap table"),
-       ("Kashier merchant agreement and fee schedule", "Commercial", "Payment flow and pass-through costs"),
-       ("Signed restaurant agreements and live usage data (22+ venues)", "Commercial", "Evidence for bills/month and activation"),
-       ("Commission rate actually agreed with each restaurant", "Commercial", "Replaces the 4–7% range assumption"),
-       ("Hospitality-consultant agreements and fee terms", "Commercial", "Acquisition cost"),
-       ("Team list, roles, contracts, vesting", "People", "Key-person risk and option pool"),
-       ("Payroll and supplier costs 2025–2026", "Finance", "Validates the cost base"),
-       ("Data-protection compliance (Law 151/2020), privacy policy", "Legal", "Diner data is a core asset"),
-       ("Tax registration, VAT status, losses carried forward", "Tax", "Tax schedule assumptions"),
-       ("Product demo, app-store ratings, uptime", "Product", "Live product claim"),
-       ("Comparable financings with sources", "Valuation", "Supports the pre-money target"),
-       ("Gulf operating-partner term sheets", "Expansion", "Revenue share and launch costs")]
-for i, (it, ar_, why) in enumerate(DDI):
-    rr = 5 + i; put(dd, rr, 1, i + 1, GEN); dd.cell(rr, 2, it); dd.cell(rr, 3, ar_); dd.cell(rr, 4, why); put(dd, rr, 5, "Open", GEN, BLUE)
+r_me = 4 + len(NOTES) * 2 + 1
+sec(me, r_me, "CHANGE LOG — V2.1 investor-readiness corrections (November 2026)", 1)
+CHANGES = [
+ "Engines audited (all 3 scenarios, 60 months): refunds deducted once; commission = commissionable GMV × rate − waivers; funnel rolls forward exactly; tax carry-forward and April payment confirmed; no circular references. No formula errors found that changed results.",
+ "Added GMV → commissionable GMV → gross commission → net commission reconciliation with a zero-difference check (Revenue & Monetization).",
+ "Added a monetisation verification table: pricing, adoption basis, revenue recognition (net for agent media), delivery cost, collection timing and evidence status per stream.",
+ "Added current-traction actuals (Assumptions) kept separate from the forecast; blank until documented.",
+ "Assumption Register rebuilt: source document, evidence date, responsible person, actual vs estimate, confidence, last validation, impact if wrong, evidence status, materiality; priority-assumption impact table.",
+ "Asset Register completed: back end, source code, website/domains added; ownership evidence linked to due diligence; EGP 1.65M software reconciliation; IAS 38 eligibility test (historical spend stays expensed).",
+ "Opening BS: documented vs stated amounts for each use of the EGP 2.7M; evidence gap shown.",
+ "Unit Economics: marketplace CAC (incl. diner marketing) added beside restaurant CAC; LTV/CAC labelled projected.",
+ "Funding Scenarios: total round vs individual ticket; what each amount pays for (restaurants, engineer-years, marketing months, headcount); delayed-collection downside stress; purpose of capital above A; next financing requirement.",
+ "Valuation: automatic 'defensible' verdict removed. Assessment now requires evidence on 5 value drivers. Comparables count only if marked verified. Exit/return sensitivity and dilution/timing tests added; all returns labelled illustrative.",
+ "Checks split into formula integrity (must pass), business warnings, and evidence completeness; investor-readiness score added.",
+ "Dashboard: actual vs forecast separated; milestones, valuation assumptions, open due-diligence items and evidence indicator added.",
+ "Base-case inputs, restaurant targets, revenue streams, commission range and funding scenarios unchanged.",
+]
+for i, t in enumerate(CHANGES):
+    c = me.cell(r_me + 1 + i, 1, f"{i+1}. {t}"); c.alignment = Alignment(wrap_text=True, vertical="top"); me.row_dimensions[r_me + 1 + i].height = 30
+r_me += len(CHANGES) + 2
+sec(me, r_me, "OPEN MODELLING & ACCOUNTING ISSUES (documented, not overridden)", 1)
+ISSUES = [
+ "Tax: 22.5% Egyptian rate applied to consolidated profit. Gulf/Jordan/Morocco rates, withholding tax and transfer pricing are not modelled (Countries shows them for information).",
+ "VAT is excluded from revenue as a pass-through; VAT cash timing is not modelled.",
+ "Sponsorship revenue uses the contract value of the month the campaign is active; campaigns spanning a year-end use the new year's value (small timing effect).",
+ "Subscriptions and marketing packages are billed from the first live month, including the ramp months.",
+ "Gulf prices use an EGP-equivalent price index at a flat FX rate; a weaker EGP would raise Gulf revenue in EGP.",
+ "Card/bank fees on diners' bills are assumed passed through to restaurants (Feature Guide). If Kashier charges Reservya, they become a direct cost (~2–3% of GMV).",
+ "Receivables of churned restaurants are not separately written off beyond the 3% bad-debt allowance.",
+ "Signed restaurants are modelled as going live one month later (fixed lag).",
+ "Operating plan does not change with the funding scenario; funding only changes cash and dilution.",
+]
+for i, t in enumerate(ISSUES):
+    c = me.cell(r_me + 1 + i, 1, f"• {t}"); c.alignment = Alignment(wrap_text=True, vertical="top"); me.row_dimensions[r_me + 1 + i].height = 28
+
+# ───────────── DUE DILIGENCE / UNRESOLVED EVIDENCE ─────────────
+dd = new_sheet("Due Diligence", "Due Diligence & Unresolved Evidence List", "Status stays Open until the document has been reviewed. Set Closed only after review (date it).", (5, 56, 13, 40, 10, 10, 30, 32, 18, 13))
+hdr(dd, 4, ["#", "Evidence item", "Area", "Why it matters", "Status", "Priority", "Linked input / sheet", "Impact if missing", "Owner", "Date closed"])
+for i, (k, it, ar_, why, pri, link, imp) in enumerate(DDI):
+    rr = 5 + i; put(dd, rr, 1, i + 1, GEN); dd.cell(rr, 2, it).alignment = Alignment(wrap_text=True); dd.cell(rr, 3, ar_); dd.cell(rr, 4, why).alignment = Alignment(wrap_text=True)
+    put(dd, rr, 5, "Open", GEN, BLUE); dd.cell(rr, 6, pri); dd.cell(rr, 7, link); dd.cell(rr, 8, imp).alignment = Alignment(wrap_text=True)
+    put(dd, rr, 9, "Founder / CEO (assign)", GEN, BLUE); put(dd, rr, 10, None, GEN, BLUE)
+    if pri == "Critical": dd.cell(rr, 6).fill = RFILL
+    dd.row_dimensions[rr].height = 28
+DD1 = 5 + len(DDI) - 1
+dvd = DataValidation(type="list", formula1='"Open,In progress,Closed"'); dd.add_data_validation(dvd); dvd.add(f"E5:E{DD1}")
+rr = DD1 + 2; dd.cell(rr, 2, "Open items").font = fnt(bold=True); put(dd, rr, 5, f'=COUNTIF(E5:E{DD1},"<>Closed")', NUM, bold=True); DD_OPEN = f"'Due Diligence'!$E${rr}"
+rr += 1; dd.cell(rr, 2, "Open critical items").font = fnt(bold=True); put(dd, rr, 5, f'=COUNTIFS(E5:E{DD1},"<>Closed",F5:F{DD1},"Critical")', NUM, bold=True); DD_CRIT = f"'Due Diligence'!$E${rr}"
+dd.freeze_panes = "C5"
 
 # ───────────── CHECKS ─────────────
-ck = new_sheet("Checks", "Model Integrity Checks", "Every check must read PASS. Tolerance: EGP 1.", (70, 20, 12))
-hdr(ck, 4, ["Check", "Value", "Status"])
-CK = []
-def chk(label, f, tol=True):
-    rr = 5 + len(CK); ck.cell(rr, 1, label); put(ck, rr, 2, f, EGP if tol else GEN)
-    put(ck, rr, 3, f'=IF(ABS(B{rr})<=1,"PASS","FAIL")' if tol else f'=IF(B{rr}=TRUE,"PASS","FAIL")', GEN, bold=True); CK.append(rr)
-chk("Opening balance sheet balances", f"='Opening BS'!B{OB['b_chk']}")
-chk("Founder contribution fully reconciled to uses", f"='Opening BS'!B{OB['var']}")
+ck = new_sheet("Checks", "Model Integrity, Warnings, Evidence & Readiness", "Section 1 must read ALL PASS. Sections 2–3 are business and evidence signals — a formula passing does not validate an assumption.", (74, 22, 14))
+CK = []; WARN = []
+r = 4; sec(ck, r, "1. FORMULA INTEGRITY (tolerance EGP 1)", 3)
+r += 1; hdr(ck, r, ["Check", "Difference", "Status"])
+def chk(label, f, kind="tol"):
+    global r
+    r += 1; ck.cell(r, 1, label); put(ck, r, 2, f, EGP if kind == "tol" else GEN)
+    put(ck, r, 3, f'=IF(ABS(B{r})<=1,"PASS","FAIL")' if kind == "tol" else f'=IF(B{r},"PASS","FAIL")', GEN, bold=True); CK.append(r)
+def eng_sum(s, expr):  # SUMPRODUCT(ABS(expr)) over months for engine s, expr uses {X} for range of key X
+    sn, R = ENG[s]
+    import re
+    e = re.sub(r"\{(\w+)\}", lambda m_: f"{sn}!${FIRST}${R[m_.group(1)]}:${LAST}${R[m_.group(1)]}", expr)
+    return f"=SUMPRODUCT(ABS({e}))"
+ck_sub = lambda t: (ck.cell(r + 1, 1, t).__setattr__("font", fnt("1A2420", True)), None)
+# H1 opening restaurants vs actual
+chk("H1 · Opening live restaurants = verified actual (blank actual = evidence pending, see section 3)", f'=IF(ISNUMBER({TRX["live"]}),SUM(Countries!C{CP["open"]}:G{CP["open"]})-{TRX["live"]},0)')
 for s in ["Downside", "Base", "Upside"]:
     sn, R = ENG[s]
-    chk(f"Engine {s}: balance sheet balances every month (sum of |differences|)", f"=SUMPRODUCT(ABS({sn}!$C${R['bs_chk']}:${LAST}${R['bs_chk']}))")
-    chk(f"Engine {s}: cash flow closing = balance-sheet cash", f"=SUMPRODUCT(ABS({sn}!${FIRST}${R['cash']}:${LAST}${R['cash']}-{sn}!${FIRST}${R['bs_cash']}:${LAST}${R['bs_cash']}))")
-chk("Annual balance sheet balances (all years)", f"=SUMPRODUCT(ABS({BSn}!C{BSR['chk']}:H{BSR['chk']}))")
-chk("Cash flow ties to balance sheet (all years)", f"=SUMPRODUCT(ABS({CFn}!C{CFR['chk']}:G{CFR['chk']}))")
-chk("Revenue by stream = total revenue (all years)", f"=SUMPRODUCT(ABS({RVn}!C{RVR['t_rev']}:G{RVR['t_rev']}-{ISn}!C{ISR['rev']}:G{ISR['rev']}))")
-chk("Gross profit by stream = income statement gross profit", f"=SUMPRODUCT(ABS({RVn}!C{RVR['gm_tot']}:G{RVR['gm_tot']}*0+{RVn}!C{RVR['gm_tot']-6 if False else RVR['gm_tot']}:G{RVR['gm_tot']}*0))+SUMPRODUCT(ABS({ISn}!C{ISR['gp']}:G{ISR['gp']}-({RVn}!C{RVR['gm_comm']}:G{RVR['gm_comm']}+{RVn}!C{RVR['gm_sub']}:G{RVR['gm_sub']}+{RVn}!C{RVR['gm_mkt']}:G{RVR['gm_mkt']}+{RVn}!C{RVR['gm_spon']}:G{RVR['gm_spon']})))")
-chk("Subscription plan mix totals 100% (all years)", f"=SUMPRODUCT(ABS(Assumptions!C{AR['p_sum']}:G{AR['p_sum']}-1))*1000000")
-chk("Commission tier shares total 100%", f"=({A['tier_share_sum']}-1)*1000000")
-chk("Country targets total = management targets (Base)", f"=SUMPRODUCT(ABS(Countries!C{CT['tot']}:G{CT['tot']}-Countries!C{CT['mgmt']}:G{CT['mgmt']}))")
+    chk(f"H2 · {s}: opening + new − churned = closing live restaurants (60 months)", f"={sn}!$C${R['live']}+SUM({sn}!${FIRST}${R['new']}:${LAST}${R['new']})-SUM({sn}!${FIRST}${R['churned']}:${LAST}${R['churned']})-{sn}!${LAST}${R['live']}")
+chk("H2 · Annual funnel: prior year-end + new − churned = year-end (selected)", "=SUMPRODUCT(ABS(" + f"{RVn}!D{RVR['live']}:G{RVR['live']}-{RVn}!C{RVR['live']}:F{RVR['live']}-{RVn}!D{RVR['newlive']}:G{RVR['newlive']}+{RVn}!D{RVR['churned']}:G{RVR['churned']}))+ABS({RVn}!C{RVR['live']}-SUM(Countries!C{CP['open']}:G{CP['open']})-{RVn}!C{RVR['newlive']}+{RVn}!C{RVR['churned']})")
+for s in ["Downside", "Base", "Upside"]:
+    chk(f"H3 · {s}: commissionable GMV = completed GMV − refunds (refunds deducted once)", eng_sum(s, "{egmv}-{gmv}-{refunds}"))
+    chk(f"H3 · {s}: net commission = gross commission − waivers = Σ country commission", eng_sum(s, "{comm}-{comm_gross}-{waived}"))
+chk("H3 · GMV → net commission reconciliation ties to income statement (5 years)", f"=SUMPRODUCT(ABS({RVn}!C{RVR['rc_chk']}:G{RVR['rc_chk']}))")
+chk("H4 · Commission tier shares total 100%", f"=({A['tier_share_sum']}-1)*1000000")
+chk("H5 · Subscription plan mix totals 100% each year", f"=SUMPRODUCT(ABS(Assumptions!C{AR['p_sum']}:G{AR['p_sum']}-1))*1000000")
+chk("H5 · Plan shares between 0% and 100%", f"=SUMPRODUCT((Assumptions!C{AR['p_free']}:G{AR['p_multi']}<0)+(Assumptions!C{AR['p_free']}:G{AR['p_multi']}>1))")
+chk("H5 · Marketing adoption ≤ 100% of live restaurants in every scenario", f"=MAX(0,SUMPRODUCT(MAX((Assumptions!C{AR['m_b']}:G{AR['m_b']}+Assumptions!C{AR['m_s']}:G{AR['m_s']}+Assumptions!C{AR['m_g']}:G{AR['m_g']})*MAX(Assumptions!C{AR['mktx']}:E{AR['mktx']})))-1)*1000000")
+for s in ["Downside", "Base", "Upside"]:
+    chk(f"H6 · {s}: marketing delivery cost = cost rate × marketing revenue (net basis)", eng_sum(s, f"{{c_mkt}}-({{mrec}}+{{mone}})*{A['m_cost']}"))
+chk("H7 · Founder EGP 2.7M fully reconciled to uses", f"='Opening BS'!B{OB['var']}")
+chk("H7 · Documented amounts do not exceed stated amounts", f"=SUMPRODUCT(('Opening BS'!G{OB['u0']}:G{OB['cash']}>'Opening BS'!B{OB['u0']}:B{OB['cash']})*1)")
+chk("H7 · Opening balance sheet balances", f"='Opening BS'!B{OB['b_chk']}")
+chk("H8 · Historical development capitalised only if IAS 38 test passed", f'=IF({IAS_RES}="Not eligible — expense",{IAS_CAP},0)')
+chk("H8 · Asset register NBV = opening balance sheet", f"={AREG_CHK}")
+for s in ["Downside", "Base", "Upside"]:
+    sn, R = ENG[s]
+    chk(f"H8 · {s}: capitalised software NBV never negative; amortisation ≤ cost", f"=SUMPRODUCT(({sn}!$C${R['bs_sw']}:${LAST}${R['bs_sw']}<-1)*1)+MAX(0,SUM({sn}!${FIRST}${R['amort']}:${LAST}${R['amort']})-SUM({sn}!${FIRST}${R['capsw']}:${LAST}${R['capsw']})-{OBS('b_swc')})")
+    chk(f"H9 · {s}: tax never negative; tax paid ≤ tax expensed", f"=SUMPRODUCT(({sn}!${FIRST}${R['tax']}:${LAST}${R['tax']}<0)*1)+MAX(0,SUM({sn}!${FIRST}${R['taxpaid']}:${LAST}${R['taxpaid']})-SUM({sn}!${FIRST}${R['tax']}:${LAST}${R['tax']}))")
+chk("H9 · Tax rate within 0–50% and all FX rates positive", f"=AND({A['tax']}>=0,{A['tax']}<=0.5,MIN(FX!C5:G5)>0,MIN(FX!C{min(FXR.values())}:C{max(FXR.values())})>0)", "bool")
+for s in ["Downside", "Base", "Upside"]:
+    sn, R = ENG[s]
+    chk(f"H10 · {s}: equity inflow = selected round × 2027 FX; paid-in capital rolls forward", f"=SUM({sn}!${FIRST}${R['cf_eq']}:${LAST}${R['cf_eq']})-{A['raise_sel']}*FX!$C$5+{sn}!${LAST}${R['bs_pic']}-{OBS('b_pic')}-SUM({sn}!${FIRST}${R['cf_eq']}:${LAST}${R['cf_eq']})-SUM({sn}!${FIRST}${R['cf_add']}:${LAST}${R['cf_add']})")
+chk("H10 · Cap table totals 100% at every stage", f"=SUMPRODUCT(ABS('Cap Table'!B{CTR['tot']}:E{CTR['tot']}-1))*1000000")
+chk("H10 · Investor ownership = round ÷ post-money (A, B, C)", f"=SUMPRODUCT(ABS({FSN}!C{FR['own']}:E{FR['own']}-{FSN}!C{FR['raise']}:E{FR['raise']}/{FSN}!C{FR['post']}:E{FR['post']}))*1000000")
+chk("H10 · Use of funds totals 100% (A, B, C)", f"=SUMPRODUCT(ABS('Use of Funds'!B{UF_TOT}:D{UF_TOT}-1))*1000000")
+for s in ["Downside", "Base", "Upside"]:
+    sn, R = ENG[s]
+    chk(f"H12 · {s}: balance sheet balances every month", f"=SUMPRODUCT(ABS({sn}!$C${R['bs_chk']}:${LAST}${R['bs_chk']}))")
+    chk(f"H12 · {s}: cash-flow closing cash = balance-sheet cash every month", eng_sum(s, "{cash}-{bs_cash}"))
+chk("H12 · Annual balance sheet balances (opening + 5 years)", f"=SUMPRODUCT(ABS({BSn}!C{BSR['chk']}:H{BSR['chk']}))")
+chk("H12 · Annual cash flow ties to balance-sheet cash (5 years)", f"=SUMPRODUCT(ABS({CFn}!C{CFR['chk']}:G{CFR['chk']}))")
+chk("H12 · Retained earnings roll forward = opening + net profit (5 years)", f"={BSn}!H{BSR['bs_re']}-{BSn}!C{BSR['bs_re']}-SUM({ISn}!C{ISR['ni']}:G{ISR['ni']})")
+chk("H12 · Revenue by stream = income-statement revenue (5 years)", f"=SUMPRODUCT(ABS({RVn}!C{RVR['t_rev']}:G{RVR['t_rev']}-{ISn}!C{ISR['rev']}:G{ISR['rev']}))")
+chk("H12 · Gross profit by stream = income-statement gross profit (5 years)", f"=SUMPRODUCT(ABS({ISn}!C{ISR['gp']}:G{ISR['gp']}-({RVn}!C{RVR['gm_comm']}:G{RVR['gm_comm']}+{RVn}!C{RVR['gm_sub']}:G{RVR['gm_sub']}+{RVn}!C{RVR['gm_mkt']}:G{RVR['gm_mkt']}+{RVn}!C{RVR['gm_spon']}:G{RVR['gm_spon']})))")
+chk("H12 · Net profit: income statement = monthly engine (5 years, selected)", "=" + "+".join(f"ABS({ISn}!{yc}{ISR['ni']}-{SY('ni', yc).replace(yc+'$3', str(YEARS[i]))})" for i, yc in enumerate(YC)))
+chk("Country targets total = management targets", f"=SUMPRODUCT(ABS(Countries!C{CT['tot']}:G{CT['tot']}-Countries!C{CT['mgmt']}:G{CT['mgmt']}))")
 chk("Valuation probabilities total 100%", f"=(SUM(Assumptions!C{AR['prob']}:E{AR['prob']})-1)*1000000")
-chk("Cap table totals 100% at every stage", f"=SUMPRODUCT(ABS('Cap Table'!B{CTR['tot']}:E{CTR['tot']}-1))*1000000")
-chk("Use of funds totals 100% (A, B, C)", f"=SUMPRODUCT(ABS('Use of Funds'!B{UF_TOT}:D{UF_TOT}-1))*1000000")
-chk("Asset register NBV = opening balance sheet", f"={AREG_CHK}")
-chk("Selected scenario: no month below minimum cash buffer", f"={MRS['short']}")
-r_ok = 5 + len(CK) + 1
-ck.cell(r_ok, 1, "OVERALL STATUS").font = fnt(bold=True, size=12)
-put(ck, r_ok, 3, f'=IF(COUNTIF(C5:C{r_ok-2},"FAIL")=0,"ALL PASS","REVIEW")', GEN, bold=True, fill=TFILL)
-CK_ALL = f"Checks!$C${r_ok}"
-ck.cell(r_ok + 1, 1, "The cash-buffer check is a warning, not an error: it fails when the chosen operating + funding scenario runs short.").font = fnt("5A675F", italic=True, size=9)
-# fix the GP check (keep only the meaningful part)
-ck.cell(CK[[i for i, rr in enumerate(CK) if "Gross profit" in str(ck.cell(rr, 1).value)][0]], 2).value = \
-    f"=SUMPRODUCT(ABS({ISn}!C{ISR['gp']}:G{ISR['gp']}-({RVn}!C{RVR['gm_comm']}:G{RVR['gm_comm']}+{RVn}!C{RVR['gm_sub']}:G{RVR['gm_sub']}+{RVn}!C{RVR['gm_mkt']}:G{RVR['gm_mkt']}+{RVn}!C{RVR['gm_spon']}:G{RVR['gm_spon']})))"
+CK0, CK1 = CK[0], CK[-1]
+r += 2; ck.cell(r, 1, "FORMULA INTEGRITY STATUS").font = fnt(bold=True, size=12)
+put(ck, r, 3, f'=IF(COUNTIF(C{CK0}:C{CK1},"FAIL")=0,"ALL PASS","FAIL")', GEN, bold=True, fill=TFILL); CK_ALL = f"Checks!$C${r}"
+put(ck, r, 2, f'=COUNTIF(C{CK0}:C{CK1},"PASS")&" of "&ROWS(C{CK0}:C{CK1})&" pass"', GEN)
+
+r += 2; sec(ck, r, "2. BUSINESS WARNINGS (not formula errors — they describe risk in the chosen scenario)", 3)
+r += 1; hdr(ck, r, ["Warning", "Value", "Status"])
+def warn(label, f, ok, fmt_=EGP):
+    global r
+    r += 1; ck.cell(r, 1, label); put(ck, r, 2, f, fmt_); put(ck, r, 3, f'=IF({ok.replace("X", f"B{r}")},"OK","WARNING")', GEN, bold=True); WARN.append(r)
+warn("Selected scenario: months below the minimum cash buffer", f"={MRS['short']}", "X=0", NUM)
+warn("H11 · Downside + delayed collections: lowest cash with selected round (EGP)", f"={FSsel('d_stress')}", f"X>={A['minbuf']}")
+warn("Downside: lowest cash with selected round (EGP)", f"={FSsel('d_mincash')}", f"X>={A['minbuf']}")
+warn("EBITDA margin 2031 above 40% in selected scenario (investors will challenge)", f"={ISn}!G{ISR['em']}", "X<=0.4", PCT)
+warn("Restaurant LTV/CAC above 10x (projected — needs cohort evidence)", f"='Unit Economics'!C{UER['ltvcac']}", "X<=10", X)
+WARN_ALL = f'COUNTIF(C{WARN[0]}:C{WARN[-1]},"WARNING")'
+
+r += 2; sec(ck, r, "3. EVIDENCE COMPLETENESS (separate from formula integrity)", 3)
+r += 1; hdr(ck, r, ["Evidence area", "Status", "Resolved?"])
+EVR = []
+def ev(label, f, ok):
+    global r
+    r += 1; ck.cell(r, 1, label); put(ck, r, 2, f, GEN); put(ck, r, 3, f'=IF({ok},"Resolved","UNRESOLVED")', GEN, bold=True); EVR.append(r)
+ev("Material assumptions verified by documents", f'={EV_VER}&" of "&{EV_MAT}', f"{EV_VER}={EV_MAT}")
+ev("Priority assumptions (bills, activation, churn, commission, bill, conversion, adoption) unverified", f"={EV_PRI}", f'LEFT({EV_PRI},1)="0"')
+ev("Current live restaurants documented (H1)", f'=IF(ISNUMBER({TRX["live"]}),"Entered","Not entered")', f"ISNUMBER({TRX['live']})")
+ev("Founder EGP 2.7M documented", f"=TEXT('Opening BS'!G{OB['uses']}/'Opening BS'!B{OB['contrib']},\"0%\")", f"'Opening BS'!H{OB['uses']}=0")
+ev("Historical software spend EGP 1.65M documented", f'=TEXT({SW_DOC},"0%")', f"{SW_DOC}=1")
+ev("IAS 38 eligibility determined", f"={IAS_RES}", f'COUNTIF(\'Asset Register\'!G{i0}:G{i1},"Unknown")=0')
+ev("Software & IP ownership evidence closed", f"={AREG_OWN}", f'LEFT({AREG_OWN},FIND(" ",{AREG_OWN})-1)=MID({AREG_OWN},FIND("of ",{AREG_OWN})+3,9)')
+ev("Commission tier mix matched to signed contracts", f'={DDS("rate")}', f'{DDS("rate")}="Closed"')
+ev("Verified comparable financings", f"=Valuation!C{VA['cmpn']}", f"Valuation!C{VA['cmpn']}>0")
+ev("Due-diligence items open (critical)", f'={DD_OPEN}&" ("&{DD_CRIT}&" critical)"', f"{DD_OPEN}=0")
+r += 2; ck.cell(r, 1, "EVIDENCE STATUS").font = fnt(bold=True, size=12)
+put(ck, r, 3, f'=IF(COUNTIF(C{EVR[0]}:C{EVR[-1]},"UNRESOLVED")=0,"COMPLETE","INCOMPLETE")', GEN, bold=True, fill=RFILL); EV_ALL = f"Checks!$C${r}"
+put(ck, r, 2, f'=COUNTIF(C{EVR[0]}:C{EVR[-1]},"UNRESOLVED")&" of "&ROWS(C{EVR[0]}:C{EVR[-1]})&" unresolved"', GEN)
+
+r += 2; sec(ck, r, "4. INVESTOR-READINESS ASSESSMENT (scores update as evidence is closed)", 3)
+r += 1; hdr(ck, r, ["Dimension (weight)", "Score / 10", "Weight"])
+SC_ = []
+def sc(label, f, w):
+    global r
+    r += 1; ck.cell(r, 1, label); put(ck, r, 2, f, '0.0'); put(ck, r, 3, w, PCT, BLUE); SC_.append(r)
+sc("Formula integrity, linkage and reconciliations", f'=IF({CK_ALL}="ALL PASS",10,3)', 0.20)
+sc("Scenario, sensitivity and stress coverage (judgement)", 9, 0.10)
+sc("Assumption evidence (verified = 1, documented = 0.5)", f"=IFERROR(10*({EV_VER}+0.5*{EV_DOC})/{EV_MAT},0)", 0.25)
+sc("Historical capital, IP and asset documentation", f"=10*(0.4*'Opening BS'!G{OB['uses']}/'Opening BS'!B{OB['contrib']}+0.3*{SW_DOC}+0.3*COUNTIFS('Asset Register'!C5:C{at-1},\"A*\",'Asset Register'!O5:O{at-1},\"Closed\")/COUNTIF('Asset Register'!C5:C{at-1},\"A*\"))", 0.15)
+sc("Valuation support (methods + evidenced value drivers + comparables)", f"=MIN(10,4+Valuation!C{VA['evn']}+IF(Valuation!C{VA['cmpn']}>0,1,0))", 0.10)
+sc("Funding clarity and use of funds (judgement)", 9, 0.10)
+sc("Disclosure and transparency (judgement)", 9, 0.10)
+r += 1; ck.cell(r, 1, "Overall investor readiness").font = fnt(bold=True, size=12)
+put(ck, r, 2, f"=SUMPRODUCT(B{SC_[0]}:B{SC_[-1]},C{SC_[0]}:C{SC_[-1]})", '0.0" / 10"', bold=True, fill=TFILL); RDY = f"Checks!$B${r}"
+put(ck, r, 3, f"=SUM(C{SC_[0]}:C{SC_[-1]})", PCT)
+r += 1; ck.cell(r, 1, "Model mechanics only (integrity, coverage, funding, disclosure)"); put(ck, r, 2, f"=(B{SC_[0]}*0.2+B{SC_[1]}*0.1+B{SC_[5]}*0.1+B{SC_[6]}*0.1)/0.5", '0.0" / 10"', bold=True); RDY_M = f"Checks!$B${r}"
+r += 1; ck.cell(r, 1, "Score if every evidence item is closed and assumptions verified"); put(ck, r, 2, f"=(10*0.2+9*0.1+10*0.25+10*0.15+10*0.1+9*0.1+9*0.1)", '0.0" / 10"')
+note(ck, r + 1, 1, "The 9/10 target is reachable only by closing evidence items — not by changing formulas or assumptions.")
 
 # ───────────── DASHBOARD ─────────────
-db = new_sheet("Dashboard", "Reservya — Investor Dashboard", "Live: follows the scenario selectors on Assumptions.", (40, 16, 16, 16, 16, 16, 4, 30, 18))
-put(db, 3, 1, f'="Operating: "&{A["scen_name"]}&"   ·   Commission: "&{A["comm_name"]}&"   ·   Funding: "&CHOOSE({A["fundsel"]},"A","B","C")&"   ·   Checks: "&{CK_ALL}', GEN, bold=True)
-hdr(db, 5, ["", "2027", "2028", "2029", "2030", "2031"])
+db = new_sheet("Dashboard", "Reservya — Investor Dashboard", "ACTUAL figures (company-reported, with evidence status) are kept apart from FORECAST figures (model). Follows the selectors on Assumptions.", (44, 16, 16, 16, 16, 16, 3, 34, 30))
+put(db, 3, 1, f'="Operating: "&{A["scen_name"]}&"  ·  Commission: "&{A["comm_name"]}&"  ·  Funding: "&CHOOSE({A["fundsel"]},"A","B","C")&"  ·  Formula checks: "&{CK_ALL}&"  ·  Evidence: "&{EV_ALL}&"  ·  Readiness: "&TEXT({RDY},"0.0")&"/10"', GEN, bold=True)
+r = 5; sec(db, r, "ACTUAL — current traction (company-reported)", 6)
+r += 1; hdr(db, r, ["Metric", "Value", "Evidence status"])
+for k, lab, fmt_, stat in [("tested", "Venues tested in real service", NUM, f'=IF({DDS("live")}="Closed","Documented","Reported — documents pending")'),
+                           ("launch", "Public launch", GEN, f'=IF({DDS("prod")}="Closed","Documented","Reported — documents pending")'),
+                           ("invested", "Founder investment to date (EGP)", EGP, f"=TEXT('Opening BS'!G{OB['uses']}/'Opening BS'!B{OB['contrib']},\"0%\")&\" documented\""),
+                           ("live", "Live restaurants (verified)", NUM, f'=IF(ISNUMBER({TRX["live"]}),"Entered — check source","Not yet documented")'),
+                           ("paying", "Paying restaurants", NUM, f'=IF(ISNUMBER({TRX["paying"]}),"Entered — check source","Not yet documented")'),
+                           ("bills", "Completed bills, latest month", NUM, f'=IF(ISNUMBER({TRX["bills"]}),"Entered — check source","Not yet documented")'),
+                           ("rate", "Average commission charged", PCT, f'=IF(ISNUMBER({TRX["rate"]}),"Entered — check source","Not yet documented")')]:
+    r += 1; db.cell(r, 1, lab); put(db, r, 2, f'=IF(ISBLANK({TRX[k]}),"—",{TRX[k]})', fmt_, GREEN); put(db, r, 3, stat, GEN, GREEN)
+r += 2; sec(db, r, "FORECAST — selected scenario (model output, not results)", 6)
+r += 1; hdr(db, r, ["", "2027", "2028", "2029", "2030", "2031"])
 DBR = {}
-for i, (lab, src, fmt_) in enumerate([("Live restaurants (year end)", (RVn, RVR["live"]), NUM), ("Completed GMV (EGP)", (RVn, RVR["gmv"]), EGP),
-                                       ("Total revenue (EGP)", (ISn, ISR["rev"]), EGP), ("Total revenue (USD)", (ISn, ISR["rev_usd"]), USD),
-                                       ("Gross margin", (ISn, ISR["gm"]), PCT), ("EBITDA (EGP)", (ISn, ISR["ebitda"]), EGP), ("EBITDA margin", (ISn, ISR["em"]), PCT),
-                                       ("Net profit (EGP)", (ISn, ISR["ni"]), EGP), ("Closing cash (EGP)", (BSn, BSR["bs_cash"]), EGP),
-                                       ("Headcount (year end)", (OHn, OHR.get("hc_tot", OHR.get("hc", 12))), NUM), ("CAC (EGP)", ("'Unit Economics'", UER["cac"]), EGP),
-                                       ("LTV / CAC", ("'Unit Economics'", UER["ltvcac"]), X), ("ARPA (EGP / month)", ("'Unit Economics'", UER["arpa"]), EGP)]):
-    rr = 6 + i; db.cell(rr, 1, lab); DBR[lab] = rr
+UEN = "'Unit Economics'"
+FLINES = [("Live restaurants (year end)", RVn, RVR["live"], NUM), ("New restaurants live", RVn, RVR["newlive"], NUM), ("Restaurants churned", RVn, RVR["churned"], NUM),
+          ("Average transacting restaurants", RVn, RVR["avgtrx"], NUM), ("Completed online bills", RVn, RVR["bills"], NUM), ("Completed GMV (EGP)", RVn, RVR["gmv"], EGP),
+          ("Revenue — commission", ISn, ISR["comm"], EGP), ("Revenue — subscriptions", ISn, ISR["sub"], EGP), ("Revenue — restaurant marketing", RVn, RVR["mtot"], EGP),
+          ("Revenue — brand sponsorships", ISn, ISR["spon"], EGP), ("Total revenue (EGP)", ISn, ISR["rev"], EGP), ("Total revenue (USD)", ISn, ISR["rev_usd"], USD),
+          ("Gross margin", ISn, ISR["gm"], PCT), ("Contribution margin per restaurant", UEN, UER["cm"], PCT), ("EBITDA (EGP)", ISn, ISR["ebitda"], EGP),
+          ("EBITDA margin", ISn, ISR["em"], PCT), ("Net profit (EGP)", ISn, ISR["ni"], EGP), ("Closing cash (EGP)", BSn, BSR["bs_cash"], EGP),
+          ("Headcount (year end)", OHn, OHR.get("hc", 12), NUM), ("Restaurant CAC (EGP, projected)", UEN, UER["cac"], EGP),
+          ("Marketplace CAC (EGP, projected)", UEN, UER["cac_mp"], EGP), ("LTV / restaurant CAC (projected)", UEN, UER["ltvcac"], X)]
+for lab, sh, row_, fmt_ in FLINES:
+    r += 1; db.cell(r, 1, lab).font = fnt(bold=lab.startswith("Total revenue (EGP)") or lab.startswith("EBITDA (")); DBR[lab] = r
     for j in range(5):
-        col = L(4 + j) if src[0] == BSn else L(3 + j)
-        put(db, rr, 2 + j, f"={src[0]}!{col}{src[1]}", fmt_, GREEN)
-kp = 6; db.cell(kp - 1, 8, "Key figures").font = fnt(bold=True)
-KPIS = [("Raise (USD)", f"={FSsel('raise')}", USD), ("Pre-money target (USD)", f"={A['premoney']}", USD), ("Post-money (USD)", f"={FSsel('post')}", USD),
-        ("Investor ownership", f"={FSsel('own')}", PCT), ("Lowest cash, 60 months (EGP)", f"={MRS['mincash']}", EGP),
-        ("First EBITDA-positive month", f"={MRS['be']}", GEN), ("Peak funding need, no raise (USD)", f"={MRS['peakusd']}", USD),
-        ("Valuation methods — median (USD)", f"=Valuation!C{VA['med']}", USD), ("Valuation verdict", f"=Valuation!C{VA['verdict']}", GEN)]
+        col = L(4 + j) if sh == BSn else L(3 + j)
+        put(db, r, 2 + j, f"={sh}!{col}{row_}", fmt_, GREEN)
+F_END = r
+kp = 6
+db.cell(5, 8, "FUNDING, VALUATION & DILIGENCE").font = fnt("FFFFFF", True); db.cell(5, 8).fill = HFILL; db.cell(5, 9).fill = HFILL
+KPIS = [("Round (USD) / investors", f'=TEXT({FSsel("raise")},"$#,##0")&" / "&{FSsel("inv")}', GEN), ("Individual ticket (USD)", f"={FSsel('perinv')}", USD),
+        ("Pre-money (management proposal)", f"={A['premoney']}", USD), ("Post-money (USD)", f"={FSsel('post')}", USD),
+        ("Investor ownership (round)", f"={FSsel('own')}", PCT), ("Lowest cash, 60 months (EGP)", f"={MRS['mincash']}", EGP),
+        ("Lowest cash — downside + late payments", f"={FSsel('d_stress')}", EGP), ("First EBITDA-positive month (forecast)", f"={MRS['be']}", GEN),
+        ("Milestones funded", f"={FSsel('mil')}", GEN), ("Next financing", f"={FSsel('nextfin')}", GEN),
+        ("Valuation methods — range (USD)", f'=TEXT(Valuation!C{VA["lo"]},"$#,##0")&" – "&TEXT(Valuation!C{VA["hi"]},"$#,##0")', GEN),
+        ("Valuation assumptions", f'="Exit "&TEXT(Valuation!C{VA["mult"]},"0.0")&"x 2031 revenue; target return "&TEXT(Valuation!C{VA["ret_m"]},"0")&"x; seed $"&TEXT(Assumptions!D{AR["seed"]}/1000000,"0")&"M pre (illustrative)"', GEN),
+        ("Valuation assessment", f"=Valuation!C{VA['verdict']}", GEN),
+        ("Open due-diligence items (critical)", f'={DD_OPEN}&" ("&{DD_CRIT}&" critical)"', GEN),
+        ("Material assumptions verified", f'={EV_VER}&" of "&{EV_MAT}', GEN),
+        ("Investor-readiness score", f"={RDY}", '0.0" / 10"')]
+LONG = [k for k in KPIS if k[0] in ("Milestones funded", "Next financing", "Valuation assessment", "Valuation assumptions")]
+KPIS = [k for k in KPIS if k not in LONG]
 for i, (lab, f, fmt_) in enumerate(KPIS):
-    db.cell(kp + i, 8, lab); put(db, kp + i, 9, f, fmt_, GREEN, bold=True)
-ch = BarChart(); ch.type = "col"; ch.grouping = "stacked"; ch.overlap = 100; ch.title = "Revenue by stream (EGP)"; ch.height = 7.5; ch.width = 16
+    rr = kp + i; db.cell(rr, 8, lab); c = put(db, rr, 9, f, fmt_, GREEN, bold=True); c.alignment = Alignment(horizontal="right")
+r = F_END + 2; sec(db, r, "WHAT THE ROUND FUNDS & HOW THE PRICE IS SUPPORTED", 9)
+for lab, f, fmt_ in LONG:
+    r += 1; db.cell(r, 1, lab).alignment = Alignment(vertical="top"); c = put(db, r, 2, f, fmt_, GREEN, bold=True)
+    db.merge_cells(start_row=r, start_column=2, end_row=r, end_column=9); c.alignment = Alignment(wrap_text=True, vertical="top"); db.row_dimensions[r].height = 30
+F_END = r
+ch = BarChart(); ch.type = "col"; ch.grouping = "stacked"; ch.overlap = 100; ch.title = "Forecast revenue by stream (EGP)"; ch.height = 7.5; ch.width = 16
 data = Reference(wb["Income Statement"], min_col=2, max_col=7, min_row=ISR["comm"], max_row=ISR["spon"])
 ch.add_data(data, from_rows=True, titles_from_data=False)
 from openpyxl.chart.series import SeriesLabel
@@ -1271,11 +1651,11 @@ for k_, s_ in enumerate(ch.series): s_.tx = SeriesLabel(strRef=StrRef(f"'Income 
 ch.set_categories(Reference(wb["Income Statement"], min_col=3, max_col=7, min_row=4))
 for s_ in ch.series:
     s_.val.numRef.f = s_.val.numRef.f.replace("$B$", "$C$")
-db.add_chart(ch, "A21")
-lc = LineChart(); lc.title = "Month-end cash, 60 months (EGP)"; lc.height = 7.5; lc.width = 16
+db.add_chart(ch, f"A{F_END + 3}")
+lc = LineChart(); lc.title = "Forecast month-end cash, 60 months (EGP)"; lc.height = 7.5; lc.width = 16
 lc.add_data(Reference(wb["Monthly Cash & Runway"], min_col=11, min_row=T0, max_row=T1), titles_from_data=True)
 lc.set_categories(Reference(wb["Monthly Cash & Runway"], min_col=2, min_row=T0 + 1, max_row=T1))
-db.add_chart(lc, "F21")
+db.add_chart(lc, f"E{F_END + 3}")
 
 # ───────────── INVESTMENT SUMMARY ─────────────
 smy = new_sheet("Investment Summary", "Reservya — One-Page Investment Summary", "All numbers live from the model. Selected scenario shown.", (46, 18, 18, 18, 18, 18))
@@ -1286,13 +1666,14 @@ def sline(label, f, fmt_=GEN, bold=False):
 sec(smy, r, "THE COMPANY", 6)
 for t in ["Reservya lets diners book a table, pre-order food and choose the minute it is served, and pay — before they arrive.",
           "Restaurants run the whole night from one dashboard: one subscription instead of 5–7 systems. Delivery is left to delivery apps.",
-          "Live since 15 May 2026 on iOS, Android and web; 22+ venues tested; 2 years of build; EGP 2.7M invested by the founders."]:
+          "Company-reported (documents pending): live since 15 May 2026 on iOS, Android and web; 22+ venues tested; 2 years of build; EGP 2.7M invested by the founders."]:
     r += 1; smy.cell(r, 1, t)
 r += 1; sec(smy, r + 1, "THE ASK", 6); r += 1
-sline("Raise (USD)", f"={FSsel('raise')}", USD, True); sline("Pre-money target (USD)", f"={A['premoney']}", USD); sline("Post-money (USD)", f"={FSsel('post')}", USD)
+sline("Round size (USD)", f"={FSsel('raise')}", USD, True); sline("Investors / individual ticket", f'={FSsel("inv")}&" × "&TEXT({FSsel("perinv")},"$#,##0")'); sline("Pre-money — management proposal (USD)", f"={A['premoney']}", USD); sline("Post-money (USD)", f"={FSsel('post')}", USD)
 sline("Investor ownership", f"={FSsel('own')}", PCT, True); sline("Valuation methods — range (USD)", f'=TEXT(Valuation!C{VA["lo"]},"$#,##0")&" – "&TEXT(Valuation!C{VA["hi"]},"$#,##0")&"  (median "&TEXT(Valuation!C{VA["med"]},"$#,##0")&")"')
-sline("Verdict on the target", f"=Valuation!C{VA['verdict']}")
-r += 1; sec(smy, r + 1, "THE PLAN (selected scenario)", 6); r += 1
+sline("Valuation assessment", f"=Valuation!C{VA['verdict']}")
+sline("What the round pays for", f"={FSsel('mil')}")
+r += 1; sec(smy, r + 1, "THE PLAN — FORECAST, selected scenario (not results)", 6); r += 1
 r += 1; hdr(smy, r, ["", "2027", "2028", "2029", "2030", "2031"])
 for lab in ["Live restaurants (year end)", "Total revenue (USD)", "EBITDA margin", "Net profit (EGP)", "Closing cash (EGP)"]:
     r += 1; smy.cell(r, 1, lab)
@@ -1303,15 +1684,15 @@ for t in ["No operating history: bills per restaurant, churn and package adoptio
           "Gulf expansion depends on operating partners not yet signed.",
           "IP ownership and the EGP 2.7M contribution need documents before closing (see Due Diligence)."]:
     r += 1; smy.cell(r, 1, "• " + t)
-r += 1; sline("Lowest cash in 60 months (EGP)", f"={MRS['mincash']}", EGP); sline("Downside: extra funding needed (USD)", f"={FSsel('d_need')}", USD); sline("Model checks", f"={CK_ALL}", GEN, True)
+r += 1; sline("Lowest cash in 60 months (EGP)", f"={MRS['mincash']}", EGP); sline("Downside: extra funding needed (USD)", f"={FSsel('d_need')}", USD); sline("Formula integrity", f"={CK_ALL}", GEN, True); sline("Evidence status", f'={EV_ALL}&" — "&{EV_VER}&" of "&{EV_MAT}&" material assumptions verified; "&{DD_OPEN}&" diligence items open"', GEN, True)
 
 # ───────────── COVER ─────────────
 cv = wb.create_sheet("Cover", 0); cv.sheet_view.showGridLines = False
 cv.column_dimensions["A"].width = 4; cv.column_dimensions["B"].width = 38; cv.column_dimensions["C"].width = 90
 cv["B2"] = "Reservya"; cv["B2"].font = fnt("1A2420", True, size=24)
 cv["B3"] = "Integrated pre-seed financial model · 2027–2031 · EGP (USD where stated)"; cv["B3"].font = fnt("5A675F", size=11)
-cv["B4"] = "Version 2 · prepared November 2026 · projections, not audited"; cv["B4"].font = fnt("5A675F", italic=True, size=9)
-cv["B6"] = "Model status"; cv["C6"] = f"={CK_ALL}"; cv["C6"].font = fnt(GREEN, True)
+cv["B4"] = "Version 2.1 · November 2026 · projections, not audited · assumptions not yet evidence-verified"; cv["B4"].font = fnt("5A675F", italic=True, size=9)
+cv["B6"] = "Model status"; cv["C6"] = f'="Formula checks: "&{CK_ALL}&" · Evidence: "&{EV_ALL}&" · Readiness "&TEXT({RDY},"0.0")&"/10"'; cv["C6"].font = fnt(GREEN, True)
 cv["B7"] = "Selected scenarios"; cv["C7"] = f'={A["scen_name"]}&" operating · "&{A["comm_name"]}&" · funding "&CHOOSE({A["fundsel"]},"A ($100K)","B ($150K)","C ($250K)")'; cv["C7"].font = fnt(GREEN)
 cv["B9"] = "Colour code"; cv["B9"].font = fnt(bold=True)
 for i, (t, c_) in enumerate([("Blue text — input you can change", BLUE), ("Black text — formula on the same sheet", BLACK), ("Green text — link to another sheet", GREEN)]):

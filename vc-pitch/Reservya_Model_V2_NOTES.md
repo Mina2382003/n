@@ -1,37 +1,118 @@
-# Reservya — Pre-seed financial model V2: review notes
+# Reservya pre-seed financial model: V2.1 notes
 
-File: `Reservya_Financial_Model_PreSeed_V2.xlsx` (29 sheets, ~33,000 live formulas, 0 errors, all integrity checks pass).
-Rebuild: `python3 model_build/build_reservya_model_v2.py`, then recalculate in Excel or LibreOffice.
+**File:** `Reservya_Financial_Model_PreSeed_V2.xlsx`. It has the same 29 sheets as before, about 33,600 live formulas and 0 formula errors.
+**Rebuild:** run `python3 model_build/build_reservya_model_v2.py`, then recalculate in Excel or LibreOffice.
 
-## How to use
-Change three cells on **Assumptions** (yellow): operating scenario (Downside / Base / Upside), commission case (4% / 5.5% / 7% / tier mix), funding scenario (A $100K / B $150K / C $250K). Everything else follows.
+The scenarios, restaurant targets (200 → 3,000), revenue streams, 4–7% commission range, tier mix, $1.25M pre-money and the A/B/C funding options are all unchanged.
 
-## Base case (management targets, tier-mix commission ≈5.5%, funding C)
-| | 2027 | 2028 | 2029 | 2030 | 2031 |
-|---|---|---|---|---|---|
-| Live restaurants (year end) | 200 | 600 | 1,200 | 2,000 | 3,000 |
-| Revenue (EGP M) | 22.9 | 106.9 | 280.1 | 560.4 | 951.8 |
-| EBITDA (EGP M) | 9.3 | 55.2 | 130.0 | 262.5 | 455.9 |
-| EBITDA margin | 41% | 52% | 46% | 47% | 48% |
-| Net profit (EGP M) | 7.1 | 42.3 | 99.2 | 200.3 | 348.3 |
+## 1. Investor-readiness assessment (Checks sheet, section 4)
 
-At 4% commission: 2027 revenue EGP 18.1M, EBITDA EGP 5.0M (27%).
-Downside (60% of targets, 90 bills/month, 2.5% monthly churn): 2027 EBITDA negative.
+| Dimension | Weight | Score now |
+|---|---|---|
+| Formula integrity, linkage, reconciliations | 20% | 10 |
+| Scenario, sensitivity and stress coverage | 10% | 9 |
+| Assumption evidence | 25% | 1.1 (0 of 64 material inputs verified; price lists documented) |
+| Historical capital, IP and asset documentation | 15% | 0 |
+| Valuation support | 10% | 4 |
+| Funding clarity and use of funds | 10% | 9 |
+| Disclosure and transparency | 10% | 9 |
+| **Overall** | | **5.3 / 10** |
 
-## What changed from V1
-- Revenue built from the restaurant funnel (signed → live → transacting) with ramp-up, activation, churn, refunds and waivers. GMV is shown separately and never as revenue.
-- Subscriptions now use the real plan mix (free, EGP 2,000, 5,000, 3,000 per branch) rather than a flat EGP 4,000.
-- Opex is built from headcount (16 → 241), CAC, onboarding, brand marketing and country launches, instead of a single total.
-- Fully linked monthly engines for three scenarios, plus annual P&L, balance sheet and cash flow, opening balance sheet and the EGP 2.7M reconciliation.
-- Funding A/B/C, cap table, use of funds, four valuation methods, commission sensitivity, asset register, assumption register, due-diligence list and checks.
+- **Model mechanics alone:** 9.4 / 10.
+- **With every evidence item closed:** 9.7 / 10. I tested this by marking all items closed in a copy of the file.
+- **Status:** the model is not "fully verified". It cannot reach 9/10 by changing formulas, only by closing the evidence items in section 3.
 
-## Analyst flags (read before sharing)
-1. Base EBITDA margins (41–52%) are above what investors usually see from marketplaces. They come from low Egyptian salaries plus 125 bills a month per restaurant. Expect pushback, and lead with the downside.
-2. LTV/CAC above 30x and payback near one month mean the ARPA assumption is untested, not that the business is proven. Prove bills per restaurant with live data first.
-3. Valuation: the four methods put pre-money at $1.21M–$3.70M (median $1.30M), so $1.25M is defensible. The comparables table is empty until verified deals are added.
-4. Funding: in the base case the plan needs only about $40K to stay above the EGP 1M buffer. The raise mostly buys speed and safety. Downside with 4% commission and $100K needs about $390K more, so C ($250K) is the safe choice.
-5. FX is held flat at EGP 50/USD. Update it before sharing.
-6. These V2 numbers differ from the current deck and flashcards, which use V1. Sync them before pitching.
+## 2. Change log
 
-## Inputs to confirm (Low confidence)
-Bills per restaurant per month · commission rate actually agreed · plan mix · marketing-package adoption · sponsorship values · churn · founder EGP 2.7M split and equity vs loan · opening cash · IP ownership · Gulf partner share.
+1. **Engines audited** (3 scenarios × 60 months). I found no formula errors that changed results.
+   - Refunds are deducted once.
+   - Net commission = commissionable GMV × rate − waivers.
+   - The restaurant funnel rolls forward exactly.
+   - Tax carry-forward and April payment work as intended.
+   - There are no circular references.
+2. **GMV → commission reconciliation added:** completed GMV → commissionable GMV → gross commission → net commission, with a zero-difference check.
+3. **Monetisation verification table added** for every stream: pricing, adoption, revenue recognition (marketing media is booked net, as agent), delivery cost, collection timing and evidence status.
+4. **Current-traction actuals added** to Assumptions, kept apart from the forecast. They stay blank until a document supports them.
+5. **Assumption Register rebuilt.** Each input now has:
+   - source document, evidence date and responsible person
+   - actual vs estimate, confidence and last validation
+   - impact if wrong, evidence status and materiality
+
+   There is also a priority-impact table: −20% bills cuts 2027 revenue by EGP 3.5M. A 4% commission cuts it by EGP 4.8M.
+6. **Asset Register completed.**
+   - New rows: back end, source code, website/domains and integrations.
+   - Ownership status is linked to Due Diligence.
+   - New reconciliation of the EGP 1.65M software spend.
+   - New IAS 38 test: historical spend stays expensed.
+7. **Opening BS:** documented vs stated amount for every use of the EGP 2.7M, with the evidence gap shown.
+8. **Unit Economics:** marketplace CAC (including diner marketing) added beside restaurant CAC. LTV/CAC is labelled projected.
+9. **Funding Scenarios:**
+   - total round shown separately from the individual ticket
+   - what each amount pays for (restaurants, engineer-years, marketing months, headcount)
+   - stress test: downside plus 30-day late payments
+   - purpose of capital above A, and the next financing need
+10. **Valuation:**
+    - The automatic "defensible" verdict is removed. The model now says "supportable" only when 5 value drivers are evidenced.
+    - Comparables count only if marked verified.
+    - Added sensitivity, dilution and exit-timing tests. All returns are labelled illustrative.
+11. **Checks sheet** now has four sections:
+    - formula integrity (51 checks, all pass, covering H1–H12)
+    - business warnings
+    - evidence completeness
+    - readiness score
+12. **Dashboard:** actuals are separated from forecasts. Added milestones funded, valuation assumptions, open diligence items and an evidence indicator.
+
+## 3. Results to know
+
+- **Base case, 2027:** revenue EGP 22.9M and EBITDA EGP 9.3M.
+- **Funding:**
+  - A ($100K) and B ($150K) cover the plan and the downside. In a downside with late payments they need a bridge of about $145K (A) or $95K (B).
+  - C ($250K) covers all of it, with about 10.5 months of 2027 costs at zero revenue.
+- **Valuation:** the methods give a range of $1.21M–$3.70M, with a median of $1.30M. The price is **not yet supportable**, because none of the 5 value drivers is evidenced.
+- **Warnings:**
+  - 2031 EBITDA margin above 40% (47.9%)
+  - projected LTV/CAC of 30x
+
+## 4. Unresolved evidence list (Due Diligence sheet: 28 items, 6 critical)
+
+**Critical**
+- IP assignments from founders and developers
+- Source code held in a company-owned account
+- Bank evidence for the EGP 2.7M
+- Verified live restaurant count at Dec 2026
+- Kashier reports proving bills per restaurant (125/month)
+- Commission rates in signed contracts (5.5% tier mix)
+
+**High**
+- Company registration and shareholder register
+- Domain and app-store accounts in the company's name
+- Founder money: equity or loan
+- Software spend invoices (EGP 1.65M)
+- Activation (90%), churn (1.5%/month) and average bill (EGP 3,000)
+- Paid-plan conversion (70%)
+- Kashier fee terms
+- Team contracts and vesting
+- Product demo and uptime
+
+**Medium / Low**
+- Trademark
+- IAS 38 documentation
+- Marketing-package sales
+- Sponsorship LOIs
+- Consultant agreements
+- Payroll 2025–26
+- Law 151/2020 data-protection compliance
+- Tax and VAT status
+- FX path
+- Comparable financings
+- Gulf partner term sheets
+
+## 5. Open modelling and accounting issues (documented, not overridden)
+
+- Consolidated tax uses the Egyptian 22.5% rate. Gulf taxes and VAT cash timing are not modelled.
+- Sponsorship value can be off slightly when a campaign spans a year-end.
+- Ramp-month billing applies to subscriptions.
+- Gulf prices use an index at a flat EGP 50/USD.
+- Card fees are assumed passed through to restaurants. If Kashier charges Reservya instead, that is about 2–3% of GMV.
+- Restaurants sign one month before going live (fixed lag).
+- The operating plan does not change with the funding size.
