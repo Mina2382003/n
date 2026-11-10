@@ -539,6 +539,22 @@ const day06 = seriesPost(6, 'Opening Your Restaurant · 1/5', {
   comment: 'Comment your concept in one sentence',
   save: 'Save this for your restaurant plan',
 });
+const day07 = problemPost(7, {
+  hook: 'They loved it. They said they\'d be back. <span class="gold">They never came.</span>',
+  sub: 'It\'s not that they didn\'t enjoy it. You just gave them no reason, and no reminder, to return.',
+  costTitle: 'One-time guests are <span class="rose">expensive guests</span>',
+  cost: [['💸', 'You paid to get them in', 'Ads, promos, app commissions, for one visit'], ['📉', 'You start from zero every month', 'Always chasing new faces to fill the same tables'], ['🔇', 'No word of mouth', 'One-timers rarely recommend you'], ['🏃', 'Competitors win the next visit', 'Whoever reminds them first gets them']],
+  whyTitle: 'Nothing is <span class="gold">pulling them back</span>',
+  why: [['🤷', 'No reason to return', 'Nothing waiting for them on visit 2'], ['📵', 'No way to reach them', 'You never got their number'], ['🧠', 'Out of sight, out of mind', 'Dozens of new places compete for their weekend'], ['🎟️', 'Loyalty cards nobody uses', 'Paper stamps get lost in a wallet']],
+  fixTitle: 'Turn visit 1 <span class="rose">into visit 2</span>',
+  fix: [['Ask for their contact, with permission', 'At booking, at the table or via Wi-Fi'], ['Say thank you the next day', 'A short, personal message'], ['Give a reason to come back', 'A new dish, an event, a reward on visit 2'], ['Invite them within 30 days', 'Before the memory fades'], ['Reward the 3rd visit', 'That\'s when a habit starts']],
+  rsvTitle: '',
+  rsv: [['🔁', 'Loyalty across the whole network', 'Guests earn with every partner venue, not just one'], ['📱', 'No paper cards', 'Everything lives in the app, so nothing gets lost'], ['👤', 'Know who hasn\'t come back', 'See your one-time guests and invite them again'], ['📅', 'Rebooking in seconds', 'Coming back is as easy as the first time']],
+  rsvPill: 'If guests love you once but don\'t come back, Reservya gives them a reason, and a reminder, to return.',
+  ctaTitle: 'Turn first visits <span class="rose">into regulars.</span>',
+  ctaText: 'A new guest fills a table once. A regular fills it every month.',
+  comment: 'Comment how you bring guests back',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1239,6 +1255,7 @@ const carousels = {
   'day-04-empty-tables': day04,
   'day-05-remember-names': day05,
   'day-06-concept-on-paper': day06,
+  'day-07-one-visit-then-gone': day07,
 };
 
 (async () => {
