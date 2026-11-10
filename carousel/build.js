@@ -1,5 +1,5 @@
-// Builds 3 carousels (HTML + PNG per slide) from the content below.
-// Run: node build.js
+// Builds every carousel (HTML + PNG per slide) from the content below.
+// Run: node build.js  (or: node build.js <folder-prefix> to render just one)
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -345,6 +345,46 @@ const worldAr3 = [
     ${li('🔄', 'طول الوقت', 'شوية كل سنة، ومختلف في كل مكان')}${li('🗺️', 'الخرايط بتكتبه', 'الانحراف، وبيتغير قد إيه كل سنة')}${li('🛰️', 'نموذج المغناطيسية العالمي', 'بيتحدث كل ٥ سنين، وآخر نسخة سنة 2025')}${li('📱', 'موبايلك بيحسبها لوحده', 'شغّل "الشمال الحقيقي" في تطبيق البوصلة')}${li('🔎', 'اعرف رقمك', 'دوّر على "NOAA magnetic declination calculator"')}`) }),
   ctaAr('عرفت <span class="gold">الفرق؟</span>', 'ساعة واحدة للعالم كله، وشمالين مش واحد. الجغرافيا أسهل لما تشوفها في صفحة.', ['💬 &nbsp;اكتب في الكومنتات أكتر معلومة فاجئتك', '🔖 &nbsp;احفظ الأجزاء الـ ٣']),
 ];
+// 30-day series: one helper per post type, each a 6-slide carousel.
+const dayTag = (d, type) => `Day ${d} · ${type}`;
+const problemPost = (d, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, 'Problem & Solution')}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  { theme: 'light', body: center(`
+    <span class="tag">What it costs you</span>
+    <h2 style="margin:40px 0 30px">${p.costTitle}</h2>
+    ${p.cost.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">Why it happens</span>
+    <h2 style="margin:40px 0 30px">${p.whyTitle}</h2>
+    ${p.why.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Fix it this week</span>
+    <h2 style="margin:40px 0 30px">${p.fixTitle}</h2>
+    ${p.fix.map(([t, s], i) => li(i + 1, t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">How Reservya helps</span>
+    <h2 style="margin:40px 0 30px">${p.rsvTitle}</h2>
+    ${p.rsv.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'dark', last: true, body: cta(p.ctaTitle, p.ctaText, p.comment, 'Save this for your next team meeting') },
+];
+const day01 = problemPost(1, {
+  hook: 'Your bookings live in 4 places. <span class="gold">None of them talk to each other.</span>',
+  sub: 'Phone calls, WhatsApp, Instagram DMs and a notebook at the host stand. Sound familiar?',
+  costTitle: 'Scattered bookings <span class="rose">cost you guests</span>',
+  cost: [['📵', 'Missed calls at peak time', 'Every unanswered call is a guest who booked somewhere else'], ['🔁', 'Double bookings', 'The same table promised to two groups'], ['📝', 'Lost details', 'Names, numbers, birthdays and allergies'], ['🙈', 'No history', 'You can\'t tell a first-timer from a regular']],
+  whyTitle: 'The restaurant grew. <span class="gold">The system didn\'t.</span>',
+  why: [['➕', 'Channels added one by one', 'First the phone, then WhatsApp, then Instagram'], ['🙋', 'Whoever\'s free takes the booking', 'And writes it wherever is closest'], ['📍', 'No single source of truth', 'Nobody sees the full picture of the night'], ['⏰', 'Peak hours leave no time', 'The busiest moments get the least care']],
+  fixTitle: '5 fixes that cost <span class="rose">nothing</span>',
+  fix: [['One place for every booking', 'One book or one sheet. No exceptions'], ['One owner per shift', 'One person is responsible for bookings'], ['Same details, every time', 'Name, number, time, party size'], ['Write down the occasion', 'Birthday, anniversary, allergy'], ['Send DMs to one link or number', 'Stop taking bookings in comments']],
+  rsvTitle: 'One booking system. <span class="gold">One guest list.</span>',
+  rsv: [['📅', 'Guests book online, 24/7', 'No missed calls, no lost DMs'], ['📋', 'Every booking in one place', 'The whole night on one screen'], ['👤', 'Guest history', 'See who\'s new and who\'s a regular'], ['🔁', 'Loyalty across the network', 'A reason for guests to come back']],
+  ctaTitle: 'Where do <span class="gold">your bookings</span> live?',
+  ctaText: 'Every booking you lose is a guest you paid to attract. Put them all in one place.',
+  comment: 'Comment your number of booking channels',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1039,12 +1079,14 @@ const carousels = {
   '26-world-ar-part1': worldAr1,
   '27-world-ar-part2': worldAr2,
   '28-world-ar-part3': worldAr3,
+  'day-01-booking-chaos': day01,
 };
 
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } });
   for (const [name, slides] of Object.entries(carousels)) {
+    if (process.argv[2] && !name.startsWith(process.argv[2])) continue;
     const dir = path.join(__dirname, name);
     fs.mkdirSync(dir, { recursive: true });
     const html = `<!doctype html><html><head><meta charset="utf-8">${fonts}<style>${style}</style></head><body>` +
