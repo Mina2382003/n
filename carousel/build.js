@@ -485,6 +485,22 @@ const day03 = seriesPost(3, 'How Guests Rate You', {
   comment: 'Comment your weakest pillar',
   save: 'Save this for your next team briefing',
 });
+const day04 = problemPost(4, {
+  hook: 'Great food. Great team. <span class="gold">Empty tables.</span>',
+  sub: 'Most quiet nights aren\'t a food problem. They\'re a discovery problem: the guests who\'d love you don\'t know you exist.',
+  costTitle: 'Empty tables <span class="rose">still cost money</span>',
+  cost: [['🏢', 'Rent doesn\'t care if you\'re full', 'Monday costs the same as Friday'], ['👨‍🍳', 'Staff are paid either way', 'And a quiet floor kills their energy'], ['🥬', 'Prepped food goes to waste', 'Ingredients bought for guests who never came'], ['👀', 'Empty looks unpopular', 'Passers-by walk past an empty room']],
+  whyTitle: 'They\'re not ignoring you. <span class="gold">They can\'t see you.</span>',
+  why: [['🔎', 'Not showing up where people search', 'Maps, Instagram, booking apps'], ['📣', 'Marketing only to people who already know you', 'Your followers are mostly your regulars'], ['🎯', 'No reason to come tonight', 'Nothing new, nothing timely'], ['🏙️', 'Lost in a crowded street', 'New Cairo, Zayed and Gleem are full of options']],
+  fixTitle: '5 ways to <span class="rose">get found</span>',
+  fix: [['Own your Google profile', 'Hours, photos, menu, and reply to every review'], ['Post your quiet nights', 'Promote Tuesday, not Thursday'], ['Give a reason to come now', 'A set menu, an event, a new dish'], ['Partner with neighbours', 'Gyms, offices, hotels nearby'], ['Make booking effortless', 'One link everywhere: bio, Maps, WhatsApp']],
+  rsvTitle: '',
+  rsv: [['🔎', 'Discovered across the network', 'Guests find you through every partner venue, not just your page'], ['📅', 'Booking in seconds', 'From discovery to a confirmed table in one place'], ['🔁', 'Loyalty that travels', 'Guests earn across venues and come back to yours'], ['📊', 'See when you\'re quiet', 'Know which nights need a push']],
+  rsvPill: 'If your food is good but your tables are empty, Reservya puts you in front of the guests who are looking.',
+  ctaTitle: 'Get found by <span class="rose">the right guests.</span>',
+  ctaText: 'Good restaurants don\'t stay empty because they\'re bad. They stay empty because they\'re invisible.',
+  comment: 'Comment your quietest night',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1182,6 +1198,7 @@ const carousels = {
   'day-01-booking-chaos': day01,
   'day-02-first-60-seconds': day02,
   'day-03-what-guests-judge': day03,
+  'day-04-empty-tables': day04,
 };
 
 (async () => {
