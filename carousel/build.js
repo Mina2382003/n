@@ -501,6 +501,23 @@ const day04 = problemPost(4, {
   ctaText: 'Good restaurants don\'t stay empty because they\'re bad. They stay empty because they\'re invisible.',
   comment: 'Comment your quietest night',
 });
+const day05 = tipPost(5, {
+  hook: '"Welcome back, Ahmed. <span class="gold">The usual?"</span>',
+  sub: 'Five words that turn a customer into a regular. Here\'s how to make every guest feel remembered.',
+  whyTitle: 'Being remembered <span class="rose">feels like belonging</span>',
+  why: lis([['❤️', 'It\'s personal', 'Guests return to places where they feel known'], ['🔁', 'Regulars come back more often', 'And they bring friends, family and colleagues'], ['🛡️', 'They forgive more', 'A regular gives you a second chance. A stranger writes a review']]),
+  stepsTitle: 'What to <span class="gold">remember</span>',
+  stepIcons: ['👤', '🍽️', '📍', '🎂'],
+  steps: [['Their name', 'And how they like to be called'], ['Their favourites', 'Dish, drink, how they take their coffee'], ['Their table', 'The corner, the window, away from the AC'], ['Their moments', 'Birthdays, anniversaries, allergies, kids\' names']],
+  mistakesTitle: 'How remembering <span class="rose">goes wrong</span>',
+  mistakes: [['Only one waiter knows', 'When they\'re off, the guest is a stranger again'], ['Guessing the name', 'Wrong name is worse than no name'], ['Getting too personal', 'Remember preferences, not private details'], ['Memory instead of notes', 'Busy nights wipe everything']],
+  systemTitle: 'Turn memory into <span class="gold">a system</span>',
+  system: [['📝', 'Write it down after every visit', 'One line per guest: name, favourite, occasion'], ['📋', 'Read it before service', 'Who\'s booked tonight and what they like'], ['🗣️', 'Share it in the briefing', 'The whole team knows, not just one waiter'], ['🎁', 'Surprise on special days', 'A dessert with a candle beats any discount']],
+  ctaTitle: 'People forget meals. <span class="rose">They remember feelings.</span>',
+  ctaText: 'Remembering a name costs nothing. Forgetting it can cost a regular.',
+  rsvLine: 'Reservya keeps each guest\'s history, favourites and occasions in one place, so the whole team remembers.',
+  comment: 'Comment a restaurant that remembers you',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1199,6 +1216,7 @@ const carousels = {
   'day-02-first-60-seconds': day02,
   'day-03-what-guests-judge': day03,
   'day-04-empty-tables': day04,
+  'day-05-remember-names': day05,
 };
 
 (async () => {
