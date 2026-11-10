@@ -1,5 +1,5 @@
-// Builds 3 carousels (HTML + PNG per slide) from the content below.
-// Run: node build.js
+// Builds every carousel (HTML + PNG per slide) from the content below.
+// Run: node build.js  (or: node build.js <folder-prefix> to render just one)
 const fs = require('fs');
 const path = require('path');
 const { chromium } = require('playwright');
@@ -345,6 +345,216 @@ const worldAr3 = [
     ${li('🔄', 'طول الوقت', 'شوية كل سنة، ومختلف في كل مكان')}${li('🗺️', 'الخرايط بتكتبه', 'الانحراف، وبيتغير قد إيه كل سنة')}${li('🛰️', 'نموذج المغناطيسية العالمي', 'بيتحدث كل ٥ سنين، وآخر نسخة سنة 2025')}${li('📱', 'موبايلك بيحسبها لوحده', 'شغّل "الشمال الحقيقي" في تطبيق البوصلة')}${li('🔎', 'اعرف رقمك', 'دوّر على "NOAA magnetic declination calculator"')}`) }),
   ctaAr('عرفت <span class="gold">الفرق؟</span>', 'ساعة واحدة للعالم كله، وشمالين مش واحد. الجغرافيا أسهل لما تشوفها في صفحة.', ['💬 &nbsp;اكتب في الكومنتات أكتر معلومة فاجئتك', '🔖 &nbsp;احفظ الأجزاء الـ ٣']),
 ];
+// 30-day series: one helper per post type, each a 6-slide carousel.
+const dayTag = (d, type) => `Day ${d} · ${type}`;
+const problemPost = (d, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, 'Problem & Solution')}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  { theme: 'light', body: center(`
+    <span class="tag">What it costs you</span>
+    <h2 style="margin:40px 0 30px">${p.costTitle}</h2>
+    ${p.cost.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">Why it happens</span>
+    <h2 style="margin:40px 0 30px">${p.whyTitle}</h2>
+    ${p.why.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Fix it this week</span>
+    <h2 style="margin:40px 0 30px">${p.fixTitle}</h2>
+    ${p.fix.map(([t, s], i) => li(i + 1, t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">The solution I recommend</span>
+    <h2 style="margin:40px 0 30px">That's exactly why <span class="gold">we built Reservya</span></h2>
+    ${p.rsv.map(([i, t, s]) => li(i, t, s)).join('')}
+    <div class="pill" style="margin-top:30px">${p.rsvPill}</div>`) },
+  { theme: 'light', last: true, body: center(`
+    <span class="tag" style="margin-bottom:36px;display:inline-block">Try Reservya</span>
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="card d" style="margin-bottom:40px"><div class="l">✅ Recommended: Reservya</div><div class="m">Online bookings, guest history and loyalty across a network of restaurants. Now coming to Cairo and Alexandria.</div></div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>📩 &nbsp;DM me <span class="rose">"RESERVYA"</span> to get started</div>
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
+];
+const day01 = problemPost(1, {
+  hook: 'Your bookings live in 4 places. <span class="gold">None of them talk to each other.</span>',
+  sub: 'Phone calls, WhatsApp, Instagram DMs and a notebook at the host stand. Sound familiar?',
+  costTitle: 'Scattered bookings <span class="rose">cost you guests</span>',
+  cost: [['📵', 'Missed calls at peak time', 'Every unanswered call is a guest who booked somewhere else'], ['🔁', 'Double bookings', 'The same table promised to two groups'], ['📝', 'Lost details', 'Names, numbers, birthdays and allergies'], ['🙈', 'No history', 'You can\'t tell a first-timer from a regular']],
+  whyTitle: 'The restaurant grew. <span class="gold">The system didn\'t.</span>',
+  why: [['➕', 'Channels added one by one', 'First the phone, then WhatsApp, then Instagram'], ['🙋', 'Whoever\'s free takes the booking', 'And writes it wherever is closest'], ['📍', 'No single source of truth', 'Nobody sees the full picture of the night'], ['⏰', 'Peak hours leave no time', 'The busiest moments get the least care']],
+  fixTitle: '5 fixes that cost <span class="rose">nothing</span>',
+  fix: [['One place for every booking', 'One book or one sheet. No exceptions'], ['One owner per shift', 'One person is responsible for bookings'], ['Same details, every time', 'Name, number, time, party size'], ['Write down the occasion', 'Birthday, anniversary, allergy'], ['Send DMs to one link or number', 'Stop taking bookings in comments']],
+  rsvPill: 'If you take bookings in more than one place, Reservya is the simplest way to bring them together.',
+  rsv: [['📅', 'Guests book online, 24/7', 'No missed calls, no lost DMs'], ['📋', 'Every booking in one place', 'The whole night on one screen'], ['👤', 'Guest history', 'See who\'s new and who\'s a regular'], ['🔁', 'Loyalty across the network', 'A reason for guests to come back']],
+  ctaTitle: 'Put every booking <span class="rose">in one place.</span>',
+  ctaText: 'Every booking you lose is a guest you paid to attract. Stop losing them.',
+  comment: 'Comment your number of booking channels',
+});
+const tipPost = (d, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, 'Tips & Tricks')}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Why it matters</span>
+    <h2 style="margin:40px 0 30px">${p.whyTitle}</h2>
+    ${p.why}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">The playbook</span>
+    <h2 style="margin:40px 0 30px">${p.stepsTitle}</h2>
+    ${p.steps.map(([t, s], i) => li(p.stepIcons ? p.stepIcons[i] : i + 1, t, s)).join('')}`) },
+  { theme: 'light', body: center(`
+    <span class="tag">Avoid these</span>
+    <h2 style="margin:40px 0 30px">${p.mistakesTitle}</h2>
+    ${p.mistakes.map(([t, s]) => li('✕', t, s)).join('')}`) },
+  { theme: 'dark', body: center(`
+    <span class="tag">Make it stick</span>
+    <h2 style="margin:40px 0 30px">${p.systemTitle}</h2>
+    ${p.system.map(([i, t, s]) => li(i, t, s)).join('')}`) },
+  { theme: 'light', last: true, body: center(`
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="pill" style="margin-bottom:40px">💡 ${p.rsvLine}</div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>🔖 &nbsp;Save this for your next team briefing</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
+];
+const day02 = tipPost(2, {
+  hook: 'Guests decide how the night will go <span class="gold">before they sit down.</span>',
+  sub: 'The first 60 seconds at the door set the tone for everything that follows. Here\'s how to win them.',
+  whyTitle: 'The welcome <span class="rose">colours everything</span>',
+  why: [['🚪', 'It\'s the first thing they feel', 'Before the menu, before the food'], ['🔍', 'It changes how they judge the rest', 'A warm start forgives a slow kitchen. A cold one doesn\'t'], ['💬', 'It\'s what they tell friends', '"They made us feel welcome" is a review in itself']].map(([i, t, s]) => li(i, t, s)).join(''),
+  stepsTitle: 'The <span class="gold">60-second</span> welcome',
+  stepIcons: ['0s', '10s', '20s', '40s'],
+  steps: [['Eye contact and a smile', 'Even if you\'re busy, acknowledge them right away'], ['Greet by name if they booked', '"Welcome, Mr Ahmed, your table is ready"'], ['Walk them to the table', 'Never point. Pull out a chair, help with coats'], ['Water, menu, and a name', '"I\'m Sara, I\'ll be looking after you tonight"']],
+  mistakesTitle: 'What kills the <span class="rose">first impression</span>',
+  mistakes: [['Nobody at the door', 'Guests standing, unsure where to go'], ['Eyes on the phone or screen', 'They feel like an interruption'], ['"Do you have a booking?" first', 'Say hello before you ask for anything'], ['A messy entrance', 'Dirty glass, clutter, delivery bags']],
+  systemTitle: 'Make it <span class="gold">every shift</span>, not luck',
+  system: [['🧑‍💼', 'Never leave the door empty', 'One person owns the welcome at peak'], ['📋', 'Read tonight\'s bookings first', 'Names, occasions, regulars, allergies'], ['🎭', 'Role-play it in briefings', '2 minutes before every service'], ['✨', 'Check the entrance before opening', 'Lights, music, smell, cleanliness']],
+  ctaTitle: 'First impressions <span class="rose">don\'t get a second chance.</span>',
+  ctaText: 'The food brings them in once. The welcome makes them feel they belong.',
+  rsvLine: 'With Reservya, your host sees each guest\'s name, booking and occasion before they arrive.',
+  comment: 'Comment the best welcome you ever had',
+});
+// Generic series post: hook, any middle slides, light CTA with a light Reservya line.
+const seriesPost = (d, type, p) => [
+  { theme: 'dark', foot: `30-day series · Day ${d}`, body: center(`
+    <span class="tag" style="margin-bottom:44px;display:inline-block">${dayTag(d, type)}</span>
+    <h1>${p.hook}</h1>
+    <p class="sub" style="margin-top:44px">${p.sub}</p>`) },
+  ...p.slides.map((s, i) => ({ theme: i % 2 ? 'dark' : 'light', body: center(`
+    <span class="tag">${s.tag}</span>
+    <h2 style="margin:40px 0 30px">${s.title}</h2>
+    ${s.html}`) })),
+  { theme: 'light', last: true, body: center(`
+    <h1 style="font-size:88px">${p.ctaTitle}</h1>
+    <p class="sub" style="margin:36px 0 40px">${p.ctaText}</p>
+    <div class="pill" style="margin-bottom:40px">💡 ${p.rsvLine}</div>
+    <div style="display:flex;flex-direction:column;gap:20px;font:600 32px Inter">
+      <div>💬 &nbsp;${p.comment}</div>
+      <div>🔖 &nbsp;${p.save || 'Save this for later'}</div>
+      <div>➕ &nbsp;Follow <span class="rose">@mina_monir8</span></div>
+    </div>`) },
+];
+const lis = (rows) => rows.map(([i, t, s]) => li(i, t, s)).join('');
+const day03 = seriesPost(3, 'How Guests Rate You', {
+  hook: 'Guests don\'t rate your food. <span class="gold">They rate the whole night.</span>',
+  sub: 'Google and TripAdvisor both ask guests to score more than the food. Here\'s what\'s really on the scorecard.',
+  slides: [
+    { tag: 'The scorecard', title: 'The <span class="rose">4 things</span> guests score',
+      html: `<div class="grid4"><div><b>🍽️ Food</b><span>Taste, temperature, consistency, portion</span></div><div><b>🤝 Service</b><span>Speed, attitude, attention, fixing mistakes</span></div><div><b>✨ Atmosphere</b><span>Cleanliness, music, noise, comfort</span></div><div><b>💰 Value</b><span>Did the experience match the price?</span></div></div>
+      <div class="pill" style="margin-top:30px">Google asks diners to rate food, service and atmosphere. TripAdvisor adds value.</div>` },
+    { tag: 'The hidden factors', title: 'What they judge <span class="gold">but don\'t mention</span>',
+      html: lis([['🚻', 'The bathroom', 'They judge your kitchen by it'], ['⏳', 'The wait', 'For a table, the food and the bill'], ['🛠️', 'How you fixed a problem', 'Often remembered more than the problem itself'], ['🧾', 'The bill', 'Mistakes or surprise charges sour a great meal'], ['📱', 'Booking and finding you', 'If it was hard, the night started badly']]) },
+    { tag: 'Value is relative', title: 'Expensive is fine. <span class="rose">Disappointing isn\'t.</span>',
+      html: `<div class="cards"><div class="card w"><div class="l">EGP 300 meal · great experience</div><div class="m">"Worth every pound"</div><div class="big">⭐⭐⭐⭐⭐</div></div><div class="card d"><div class="l">EGP 300 meal · cold food, slow service</div><div class="m">"Overpriced"</div><div class="big">⭐⭐</div></div></div>
+      <div class="pill" style="margin-top:30px">Same price, different score. Guests rate value by the whole experience, not the number on the menu.</div>` },
+    { tag: 'What to do', title: 'Score yourself <span class="gold">before they do</span>',
+      html: lis([['1', 'Rate the 4 pillars every week', 'Food, service, atmosphere, value, out of 5'], ['2', 'Sort your reviews by pillar', 'Which one keeps coming up?'], ['3', 'Fix the lowest one first', 'One pillar at a time, not everything at once'], ['4', 'Ask one question at the end', '"What would make tonight a 5?"']]) },
+  ],
+  ctaTitle: 'Which pillar is <span class="rose">your weakest?</span>',
+  ctaText: 'Your rating is the average of every moment, from the booking to the goodbye.',
+  rsvLine: 'Reservya shows you which guests come back. That\'s the most honest rating there is.',
+  comment: 'Comment your weakest pillar',
+  save: 'Save this for your next team briefing',
+});
+const day04 = problemPost(4, {
+  hook: 'Great food. Great team. <span class="gold">Empty tables.</span>',
+  sub: 'Most quiet nights aren\'t a food problem. They\'re a discovery problem: the guests who\'d love you don\'t know you exist.',
+  costTitle: 'Empty tables <span class="rose">still cost money</span>',
+  cost: [['🏢', 'Rent doesn\'t care if you\'re full', 'Monday costs the same as Friday'], ['👨‍🍳', 'Staff are paid either way', 'And a quiet floor kills their energy'], ['🥬', 'Prepped food goes to waste', 'Ingredients bought for guests who never came'], ['👀', 'Empty looks unpopular', 'Passers-by walk past an empty room']],
+  whyTitle: 'They\'re not ignoring you. <span class="gold">They can\'t see you.</span>',
+  why: [['🔎', 'Not showing up where people search', 'Maps, Instagram, booking apps'], ['📣', 'Marketing only to people who already know you', 'Your followers are mostly your regulars'], ['🎯', 'No reason to come tonight', 'Nothing new, nothing timely'], ['🏙️', 'Lost in a crowded street', 'New Cairo, Zayed and Gleem are full of options']],
+  fixTitle: '5 ways to <span class="rose">get found</span>',
+  fix: [['Own your Google profile', 'Hours, photos, menu, and reply to every review'], ['Post your quiet nights', 'Promote Tuesday, not Thursday'], ['Give a reason to come now', 'A set menu, an event, a new dish'], ['Partner with neighbours', 'Gyms, offices, hotels nearby'], ['Make booking effortless', 'One link everywhere: bio, Maps, WhatsApp']],
+  rsvTitle: '',
+  rsv: [['🔎', 'Discovered across the network', 'Guests find you through every partner venue, not just your page'], ['📅', 'Booking in seconds', 'From discovery to a confirmed table in one place'], ['🔁', 'Loyalty that travels', 'Guests earn across venues and come back to yours'], ['📊', 'See when you\'re quiet', 'Know which nights need a push']],
+  rsvPill: 'If your food is good but your tables are empty, Reservya puts you in front of the guests who are looking.',
+  ctaTitle: 'Get found by <span class="rose">the right guests.</span>',
+  ctaText: 'Good restaurants don\'t stay empty because they\'re bad. They stay empty because they\'re invisible.',
+  comment: 'Comment your quietest night',
+});
+const day05 = tipPost(5, {
+  hook: '"Welcome back, Ahmed. <span class="gold">The usual?"</span>',
+  sub: 'Five words that turn a customer into a regular. Here\'s how to make every guest feel remembered.',
+  whyTitle: 'Being remembered <span class="rose">feels like belonging</span>',
+  why: lis([['❤️', 'It\'s personal', 'Guests return to places where they feel known'], ['🔁', 'Regulars come back more often', 'And they bring friends, family and colleagues'], ['🛡️', 'They forgive more', 'A regular gives you a second chance. A stranger writes a review']]),
+  stepsTitle: 'What to <span class="gold">remember</span>',
+  stepIcons: ['👤', '🍽️', '📍', '🎂'],
+  steps: [['Their name', 'And how they like to be called'], ['Their favourites', 'Dish, drink, how they take their coffee'], ['Their table', 'The corner, the window, away from the AC'], ['Their moments', 'Birthdays, anniversaries, allergies, kids\' names']],
+  mistakesTitle: 'How remembering <span class="rose">goes wrong</span>',
+  mistakes: [['Only one waiter knows', 'When they\'re off, the guest is a stranger again'], ['Guessing the name', 'Wrong name is worse than no name'], ['Getting too personal', 'Remember preferences, not private details'], ['Memory instead of notes', 'Busy nights wipe everything']],
+  systemTitle: 'Turn memory into <span class="gold">a system</span>',
+  system: [['📝', 'Write it down after every visit', 'One line per guest: name, favourite, occasion'], ['📋', 'Read it before service', 'Who\'s booked tonight and what they like'], ['🗣️', 'Share it in the briefing', 'The whole team knows, not just one waiter'], ['🎁', 'Surprise on special days', 'A dessert with a candle beats any discount']],
+  ctaTitle: 'People forget meals. <span class="rose">They remember feelings.</span>',
+  ctaText: 'Remembering a name costs nothing. Forgetting it can cost a regular.',
+  rsvLine: 'Reservya keeps each guest\'s history, favourites and occasions in one place, so the whole team remembers.',
+  comment: 'Comment a restaurant that remembers you',
+});
+const day06 = seriesPost(6, 'Opening Your Restaurant · 1/5', {
+  hook: 'Before the kitchen, the lease or the logo: <span class="gold">put it on one page.</span>',
+  sub: 'Part 1 of 5 on opening your first casual dining restaurant. It starts on paper, not with a contractor.',
+  slides: [
+    { tag: 'The one-page concept', title: '4 questions <span class="rose">before anything else</span>',
+      html: `<div class="grid4"><div><b>👥 Who</b><span>Who exactly is your guest? Age, budget, occasion</span></div><div><b>🍽️ What</b><span>Cuisine, signature dishes, price range</span></div><div><b>📍 Where</b><span>Which area, which street, who's already there</span></div><div><b>💡 Why</b><span>Why would they pick you over the place next door?</span></div></div>
+      <div class="pill" style="margin-top:30px">If you can't answer these on one page, you're not ready to spend money yet.</div>` },
+    { tag: 'Step 1 · Who', title: 'Know your guest <span class="gold">before you meet them</span>',
+      html: lis([['🧑‍🤝‍🧑', 'Who they are', 'Families, students, young professionals, tourists'], ['💰', 'What they spend', 'Their average spend per person'], ['🎉', 'Why they go out', 'Family lunch, friends\' night, date, business'], ['🕐', 'When they come', 'Lunch, dinner, weekends, late night']]) },
+    { tag: 'Step 2 · Your sentence', title: 'Your concept <span class="rose">in one sentence</span>',
+      html: `<div class="formula" style="font-size:30px;line-height:1.5">We serve <span class="rose">[cuisine]</span> for <span class="rose">[guest]</span> in <span class="rose">[area]</span> at <span class="rose">[price]</span>, and they choose us because <span class="rose">[difference]</span>.</div>
+      <div class="card d" style="margin-top:30px"><div class="l">Example</div><div class="m" style="font-size:26px">"We serve modern Egyptian grills for young families in New Cairo at mid-range prices, and they choose us because we have a kids' corner and a 20-minute lunch."</div></div>` },
+    { tag: 'Step 3 · Test it', title: 'Test it <span class="gold">before you spend</span>',
+      html: lis([['🔍', 'Visit 10 competitors', 'Order, watch, count the tables at peak'], ['🗣️', 'Ask 20 future guests', 'Would they come? How often? For how much?'], ['🚶', 'Count the street', 'Foot traffic at lunch and dinner, weekday and weekend'], ['🍳', 'Cook your menu for others', 'Friends, family, a pop-up. Watch what they finish']]) },
+  ],
+  ctaTitle: 'Paper is cheap. <span class="rose">Mistakes aren\'t.</span>',
+  ctaText: 'Every hour on the concept saves you money on the build. Next in this series: the numbers.',
+  rsvLine: 'When you open, Reservya helps the right guests find you from day one.',
+  comment: 'Comment your concept in one sentence',
+  save: 'Save this for your restaurant plan',
+});
+const day07 = problemPost(7, {
+  hook: 'They loved it. They said they\'d be back. <span class="gold">They never came.</span>',
+  sub: 'It\'s not that they didn\'t enjoy it. You just gave them no reason, and no reminder, to return.',
+  costTitle: 'One-time guests are <span class="rose">expensive guests</span>',
+  cost: [['💸', 'You paid to get them in', 'Ads, promos, app commissions, for one visit'], ['📉', 'You start from zero every month', 'Always chasing new faces to fill the same tables'], ['🔇', 'No word of mouth', 'One-timers rarely recommend you'], ['🏃', 'Competitors win the next visit', 'Whoever reminds them first gets them']],
+  whyTitle: 'Nothing is <span class="gold">pulling them back</span>',
+  why: [['🤷', 'No reason to return', 'Nothing waiting for them on visit 2'], ['📵', 'No way to reach them', 'You never got their number'], ['🧠', 'Out of sight, out of mind', 'Dozens of new places compete for their weekend'], ['🎟️', 'Loyalty cards nobody uses', 'Paper stamps get lost in a wallet']],
+  fixTitle: 'Turn visit 1 <span class="rose">into visit 2</span>',
+  fix: [['Ask for their contact, with permission', 'At booking, at the table or via Wi-Fi'], ['Say thank you the next day', 'A short, personal message'], ['Give a reason to come back', 'A new dish, an event, a reward on visit 2'], ['Invite them within 30 days', 'Before the memory fades'], ['Reward the 3rd visit', 'That\'s when a habit starts']],
+  rsvTitle: '',
+  rsv: [['🔁', 'Loyalty across the whole network', 'Guests earn with every partner venue, not just one'], ['📱', 'No paper cards', 'Everything lives in the app, so nothing gets lost'], ['👤', 'Know who hasn\'t come back', 'See your one-time guests and invite them again'], ['📅', 'Rebooking in seconds', 'Coming back is as easy as the first time']],
+  rsvPill: 'If guests love you once but don\'t come back, Reservya gives them a reason, and a reminder, to return.',
+  ctaTitle: 'Turn first visits <span class="rose">into regulars.</span>',
+  ctaText: 'A new guest fills a table once. A regular fills it every month.',
+  comment: 'Comment how you bring guests back',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1039,12 +1249,20 @@ const carousels = {
   '26-world-ar-part1': worldAr1,
   '27-world-ar-part2': worldAr2,
   '28-world-ar-part3': worldAr3,
+  'day-01-booking-chaos': day01,
+  'day-02-first-60-seconds': day02,
+  'day-03-what-guests-judge': day03,
+  'day-04-empty-tables': day04,
+  'day-05-remember-names': day05,
+  'day-06-concept-on-paper': day06,
+  'day-07-one-visit-then-gone': day07,
 };
 
 (async () => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1350 } });
   for (const [name, slides] of Object.entries(carousels)) {
+    if (process.argv[2] && !name.startsWith(process.argv[2])) continue;
     const dir = path.join(__dirname, name);
     fs.mkdirSync(dir, { recursive: true });
     const html = `<!doctype html><html><head><meta charset="utf-8">${fonts}<style>${style}</style></head><body>` +
