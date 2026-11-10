@@ -518,6 +518,27 @@ const day05 = tipPost(5, {
   rsvLine: 'Reservya keeps each guest\'s history, favourites and occasions in one place, so the whole team remembers.',
   comment: 'Comment a restaurant that remembers you',
 });
+const day06 = seriesPost(6, 'Opening Your Restaurant · 1/5', {
+  hook: 'Before the kitchen, the lease or the logo: <span class="gold">put it on one page.</span>',
+  sub: 'Part 1 of 5 on opening your first casual dining restaurant. It starts on paper, not with a contractor.',
+  slides: [
+    { tag: 'The one-page concept', title: '4 questions <span class="rose">before anything else</span>',
+      html: `<div class="grid4"><div><b>👥 Who</b><span>Who exactly is your guest? Age, budget, occasion</span></div><div><b>🍽️ What</b><span>Cuisine, signature dishes, price range</span></div><div><b>📍 Where</b><span>Which area, which street, who's already there</span></div><div><b>💡 Why</b><span>Why would they pick you over the place next door?</span></div></div>
+      <div class="pill" style="margin-top:30px">If you can't answer these on one page, you're not ready to spend money yet.</div>` },
+    { tag: 'Step 1 · Who', title: 'Know your guest <span class="gold">before you meet them</span>',
+      html: lis([['🧑‍🤝‍🧑', 'Who they are', 'Families, students, young professionals, tourists'], ['💰', 'What they spend', 'Their average spend per person'], ['🎉', 'Why they go out', 'Family lunch, friends\' night, date, business'], ['🕐', 'When they come', 'Lunch, dinner, weekends, late night']]) },
+    { tag: 'Step 2 · Your sentence', title: 'Your concept <span class="rose">in one sentence</span>',
+      html: `<div class="formula" style="font-size:30px;line-height:1.5">We serve <span class="rose">[cuisine]</span> for <span class="rose">[guest]</span> in <span class="rose">[area]</span> at <span class="rose">[price]</span>, and they choose us because <span class="rose">[difference]</span>.</div>
+      <div class="card d" style="margin-top:30px"><div class="l">Example</div><div class="m" style="font-size:26px">"We serve modern Egyptian grills for young families in New Cairo at mid-range prices, and they choose us because we have a kids' corner and a 20-minute lunch."</div></div>` },
+    { tag: 'Step 3 · Test it', title: 'Test it <span class="gold">before you spend</span>',
+      html: lis([['🔍', 'Visit 10 competitors', 'Order, watch, count the tables at peak'], ['🗣️', 'Ask 20 future guests', 'Would they come? How often? For how much?'], ['🚶', 'Count the street', 'Foot traffic at lunch and dinner, weekday and weekend'], ['🍳', 'Cook your menu for others', 'Friends, family, a pop-up. Watch what they finish']]) },
+  ],
+  ctaTitle: 'Paper is cheap. <span class="rose">Mistakes aren\'t.</span>',
+  ctaText: 'Every hour on the concept saves you money on the build. Next in this series: the numbers.',
+  rsvLine: 'When you open, Reservya helps the right guests find you from day one.',
+  comment: 'Comment your concept in one sentence',
+  save: 'Save this for your restaurant plan',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1217,6 +1238,7 @@ const carousels = {
   'day-03-what-guests-judge': day03,
   'day-04-empty-tables': day04,
   'day-05-remember-names': day05,
+  'day-06-concept-on-paper': day06,
 };
 
 (async () => {
