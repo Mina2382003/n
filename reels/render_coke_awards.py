@@ -53,6 +53,22 @@ CAP = {
     "vote":    (136.90, 140.04, "You guys were supposed to *vote* recently"),
     "brands":  (142.05, 145.67, "So which *brands* will win this year?"),
     "orgs":    (73.04, 78.80, "Hoping for a great event — and great *organizers*"),
+    # the full F&B Awards section, phrase by phrase
+    "fA": (55.50, 62.20, "We'll keep going — today we'll see who *wins* at the *F&B Awards*"),
+    "fB": (62.90, 67.90, "who wins *what* at the F&B Awards"),
+    "fC": (69.70, 71.90, "Hopefully it's…"),
+    "fD": (72.80, 82.90, "a *great event* with great *organizers* — because the last event, *GEF*, the organizing…"),
+    "fE": (83.20, 89.90, "but…"),
+    "fF": (92.20, 97.90, "Today we're heading to the *F&B Awards* in Cairo — at the *CITADEL*"),
+    "fG": (100.60, 107.90, "Let's see who *wins* at the F&B Awards"),
+    "fG2": (107.90, 110.90, "this Coke was *matching* me — so I got it"),
+    "fH": (112.30, 120.40, "OK guys, we're *matching* — me and it. That's why I bought it"),
+    "fI": (120.40, 123.50, "I'm driving from *Alexandria* to *Cairo*"),
+    "fJ": (123.50, 127.80, "going for the *first time in my life* to the *CITADEL*"),
+    "fK": (128.60, 135.90, "at *night* — for the *F&B Awards*. So let's see who wins *what*"),
+    "fL": (136.60, 139.90, "You guys were *voting* lately, right?"),
+    "fM": (140.60, 145.40, "So which *brands* do you think will *win* at the F&B Awards this year?"),
+    "fN": (147.80, 154.90, ""),
 }
 
 REELS = {
@@ -64,6 +80,12 @@ REELS = {
                cta=("Rate the fit /10", "Me or the can? ↓", "Follow for my F&B Awards vlog")),
     "r3": dict(name="who wins the F&B Awards", cold="brands", body=["today", "route", "night", "see", "orgs", "vote", "brands"],
                card=[("“Which ", WHITE), ("brands", YEL), (" will win this year?”", WHITE)],
+               cta=("Who wins the F&B Awards?", "Drop your pick ↓", "Follow for the awards night")),
+    "r4": dict(name="Citadel full ride", cold="fJ", body=["fA", "fB", "fC", "fD", "fE", "fF", "fG", "fG2", "fH", "fI", "fJ", "fK", "fL", "fM", "fN"],
+               card=[("“First time in my life going to the ", WHITE), ("CITADEL", YEL), ("…”", WHITE)],
+               cta=("Which brand wins tonight?", "Drop your pick ↓", "Follow for the awards night")),
+    "r5": dict(name="tonight at the Citadel", cold="fF", body=["fI", "fJ", "fK", "fA", "fB", "fL", "fM"],
+               card=[("“F&B Awards tonight — at the ", WHITE), ("CITADEL", YEL), ("”", WHITE)],
                cta=("Who wins the F&B Awards?", "Drop your pick ↓", "Follow for the awards night")),
 }
 
@@ -264,7 +286,75 @@ def hook_r3(fr, t):
     paste(fr, c, W / 2, 340, pop(min(1, (t - .15) / .3)))
 
 
-HOOKS = dict(r1=hook_r1, r2=hook_r2, r3=hook_r3)
+def citadel_icon(size=120, col=(255, 214, 0)):
+    """simple citadel silhouette: walls, towers and a domed mosque"""
+    im = Image.new("RGBA", (size * 2, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    u = size / 10
+    d.rectangle((0, 6 * u, 20 * u, 10 * u), fill=col)
+    for x in (0, 4, 8, 12, 16):
+        d.rectangle((x * u, 5 * u, (x + 2) * u, 6 * u), fill=col)
+    d.rectangle((2 * u, 3 * u, 5 * u, 10 * u), fill=col)
+    d.rectangle((15 * u, 3 * u, 18 * u, 10 * u), fill=col)
+    d.ellipse((7 * u, 1.5 * u, 13 * u, 7.5 * u), fill=col)
+    d.rectangle((7 * u, 4.5 * u, 13 * u, 10 * u), fill=col)
+    d.rectangle((5.6 * u, 0, 6.4 * u, 6 * u), fill=col)
+    d.rectangle((13.6 * u, 0, 14.4 * u, 6 * u), fill=col)
+    return im
+
+
+def hook_citadel(fr, t, question=False):
+    if question and t < 1.0:
+        q = lines_img([[("WHERE AM I GOING ", WHITE), ("TONIGHT", YEL), ("?", WHITE)]], ANTON(96), stroke=7)
+        paste(fr, q, W / 2, 260, pop(min(1, t / .25)))
+        return
+    t2 = t - (1.0 if question else 0)
+    tk = pill("F&B AWARDS · TONIGHT", ANTON(64), fg=WHITE, bg=(200, 30, 40), pad=(36, 10), r=18)
+    paste(fr, tk, W / 2, 90, pop(min(1, t2 / .25)))
+    c = Image.new("RGBA", (940, 300), (0, 0, 0, 0))
+    d = ImageDraw.Draw(c)
+    d.rounded_rectangle((0, 0, 939, 299), 30, fill=(18, 20, 28, 238))
+    x0, x1, y = 100, 760, 175
+    d.line((x0, y, x1, y), fill=(90, 95, 110), width=10)
+    u = ease((t2 - .2) / 1.5)
+    xc = x0 + (x1 - x0) * u
+    d.line((x0, y, xc, y), fill=YEL, width=10)
+    d.ellipse((x0 - 18, y - 18, x0 + 18, y + 18), fill=WHITE)
+    d.text((x0, y + 60), "ALEXANDRIA", font=MONT(34, 900), fill=WHITE, anchor="mm")
+    d.text((x1 + 10, y + 60), "CAIRO · CITADEL", font=MONT(34, 900), fill=YEL, anchor="mm")
+    ic = citadel_icon(70)
+    c.alpha_composite(ic, (int(x1 - 70), int(y - 95)))
+    d.ellipse((xc - 24, y - 24, xc + 24, y + 24), fill=RED, outline=WHITE, width=5)
+    d.text((470, 40), f"{int(round(220 * u))} km · tonight", font=MONT(34, 800), fill=YEL, anchor="mm")
+    paste(fr, c, W / 2, 330, pop(min(1, (t2 - .1) / .3)))
+
+
+def hook_r4(fr, t):
+    hook_citadel(fr, t)
+
+
+def hook_r5(fr, t):
+    hook_citadel(fr, t, question=True)
+
+
+def pin(txt):
+    """location pin chip"""
+    f = ANTON(76)
+    d = ImageDraw.Draw(Image.new("RGBA", (1, 1)))
+    l, tp, r, b = d.textbbox((0, 0), txt, font=f)
+    w, h = r - l + 150, b - tp + 40
+    im = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    dd = ImageDraw.Draw(im)
+    dd.rounded_rectangle((0, 0, w - 1, h - 1), h // 2, fill=(255, 255, 255, 245))
+    cx, cy, R = 62, h / 2 - 6, 22  # map pin
+    dd.ellipse((cx - R, cy - R, cx + R, cy + R), fill=RED)
+    dd.polygon([(cx - R * .8, cy + R * .5), (cx + R * .8, cy + R * .5), (cx, cy + R * 1.9)], fill=RED)
+    dd.ellipse((cx - 8, cy - 8, cx + 8, cy + 8), fill=WHITE)
+    dd.text((110 - l, 20 - tp), txt, font=f, fill=(20, 20, 20))
+    return im
+
+
+HOOKS = dict(r1=hook_r1, r2=hook_r2, r3=hook_r3, r4=hook_r4, r5=hook_r5)
 
 
 def poll(fr, t):
@@ -340,7 +430,7 @@ def render(rk):
     cfg = REELS[rk]
     parts = [cfg["cold"]] + cfg["body"]
     tl, t = [], 0.0
-    for i, key in enumerate(parts):
+    for i, key in enumerate(parts):  # the cold-open key can reappear in the body
         a, b, _ = CAP[key]
         tl.append((t, a, b, key, i == 0)); t += round((b - a) * FPS) / FPS
     body_end = t
@@ -353,7 +443,7 @@ def render(rk):
     for t0, a, b, key, cold in tl:
         x = voice(a, b); i = int(t0 * SR); vo[i:i + len(x)] += x
     vo = vo / (np.abs(vo).max() + 1e-9) * .9
-    mus = bed(T + 1, {"r1": 100, "r2": 108, "r3": 96}[rk])[:len(vo)]
+    mus = bed(T + 1, {"r1": 100, "r2": 108, "r3": 96, "r4": 96, "r5": 100}[rk])[:len(vo)]
     mus = np.pad(mus, (0, len(vo) - len(mus)))
     env = np.convolve(np.abs(vo), np.ones(2400) / 2400, "same")
     duck = 1 - .75 * np.clip(env / (np.percentile(env, 80) + 1e-9), 0, 1)
@@ -367,9 +457,12 @@ def render(rk):
     if rk == "r1": put(sfx_down(), .35, .8); put(sfx_stamp(), 1.5, .7)
     if rk == "r2": put(sfx_pop(), 0, .6); put(sfx_pop(), .25, .6); put(sfx_pop(), .5, .6); put(sfx_stamp(), 1.7, .5)
     if rk == "r3": put(sfx_whoosh(1.6), .3, .5)
+    if rk == "r4": put(sfx_whoosh(1.5), .3, .5)
+    if rk == "r5": put(sfx_pop(), 0, .6); put(sfx_whoosh(1.5), 1.3, .5)
     start = {key: t0 for t0, a, b, key, cold in tl if not cold}
     if rk == "r1": put(sfx_stamp(), start["highl"] + 1.0, .6)
     if rk == "r3": put(sfx_pop(), start["brands"], .6)
+    if rk in ("r4", "r5"): put(sfx_pop(), start["fL"], .6)
     put(sfx_whoosh(.5), body_end - .1, .6)
     mix = np.clip(vo + .15 * mus / (np.abs(mus).max() + 1e-9) * duck + fx * .5, -1, 1)
     os.makedirs(OUT, exist_ok=True)
@@ -385,6 +478,8 @@ def render(rk):
     caps = []
     for t0, a, b, key, cold in tl:
         if cold:
+            continue
+        if not CAP[key][2]:
             continue
         pages = caption_pages(CAP[key][2])
         nw = sum(len(p) for p in pages)
@@ -449,6 +544,22 @@ def render(rk):
                         paste(fr, pill("100% MATCH", ANTON(90), fg=BLACK, bg=YEL, pad=(40, 10)), W / 2, 330, pop(min(1, lt / .2)), rot=-3)
                     if rk == "r3" and key in ("vote", "brands"):
                         poll(fr, T_ - start["vote"])
+                    if rk in ("r4", "r5"):
+                        ov = {"fF": "pin", "fJ": "pin", "fI": "route", "fK": "night", "fG2": "match", "fH": "match",
+                              "fL": "poll", "fM": "poll", "fN": "poll", "fA": "who", "fB": "who", "fG": "who"}.get(key)
+                        if ov == "pin":
+                            paste(fr, pin("CAIRO CITADEL"), W / 2, 330, pop(min(1, lt / .22)))
+                            paste(fr, citadel_icon(90), W / 2, 180, 1, ease(lt / .3))
+                        elif ov == "route":
+                            paste(fr, pill("ALEXANDRIA → CAIRO", ANTON(80), fg=WHITE, bg=(200, 30, 40), pad=(40, 10), r=18), W / 2, 330, pop(min(1, lt / .2)))
+                        elif ov == "night":
+                            paste(fr, pill("TONIGHT · F&B AWARDS", ANTON(76), fg=BLACK, bg=YEL, pad=(40, 10), r=18), W / 2, 330, pop(min(1, lt / .2)))
+                        elif ov == "match":
+                            paste(fr, pill("100% MATCH", ANTON(90), fg=BLACK, bg=YEL, pad=(40, 10)), W / 2, 330, pop(min(1, lt / .2)), rot=-3)
+                        elif ov == "poll":
+                            poll(fr, T_ - start["fL"])
+                        elif ov == "who":
+                            paste(fr, lines_img([[("WHO ", WHITE), ("WINS", YEL), ("?", WHITE)]], ANTON(120), stroke=7), W / 2, 300, pop(min(1, lt / .2)))
                     if rk == "r3" and key in ("route", "night"):
                         paste(fr, pill("ALEXANDRIA → CAIRO", ANTON(80), fg=WHITE, bg=(200, 30, 40), pad=(40, 10), r=18), W / 2, 330, pop(min(1, (T_ - start["route"]) / .2)))
         g2 = min(1, T_ / .12, (T - T_) / .3)
