@@ -555,6 +555,23 @@ const day07 = problemPost(7, {
   ctaText: 'A new guest fills a table once. A regular fills it every month.',
   comment: 'Comment how you bring guests back',
 });
+const day08 = tipPost(8, {
+  hook: 'A complaint isn\'t an attack. <span class="gold">It\'s a second chance.</span>',
+  sub: 'The guest who complains is giving you a chance to fix it. The one who stays silent just never comes back.',
+  whyTitle: 'Complaints are <span class="rose">a gift</span>',
+  why: lis([['🗣️', 'They told you, not the internet', 'Fix it at the table and it may never become a review'], ['🔁', 'A fixed problem builds loyalty', 'Guests remember how you handled it'], ['🔍', 'It shows you what\'s broken', 'For every guest who complains, others felt the same']]),
+  stepsTitle: 'The <span class="gold">L.A.S.T.</span> method',
+  stepIcons: ['L', 'A', 'S', 'T'],
+  steps: [['Listen', 'Let them finish. Don\'t interrupt, don\'t explain yet'], ['Apologise', '"I\'m sorry this happened." No excuses, no blame'], ['Solve', 'Fix it fast, and ask: "What would make this right?"'], ['Thank', '"Thank you for telling us." Then check back later']],
+  mistakesTitle: 'What makes it <span class="rose">worse</span>',
+  mistakes: [['Arguing or explaining', '"The kitchen is very busy tonight…"'], ['Blaming someone else', 'The guest doesn\'t care whose fault it was'], ['Passing it around', 'Waiter to manager to chef. Solve it once'], ['Fixing it, then forgetting them', 'No check-back means the damage stays']],
+  systemTitle: 'Make every complaint <span class="gold">count</span>',
+  system: [['🙋', 'Empower the team', 'Let staff fix small things without asking'], ['📝', 'Log every complaint', 'What, when, which dish, which shift'], ['📊', 'Review them weekly', 'Patterns tell you what to fix for good'], ['🎓', 'Role-play L.A.S.T.', 'Practise it in briefings, not on real guests']],
+  ctaTitle: 'Handle it well, and <span class="rose">they\'ll come back.</span>',
+  ctaText: 'The best restaurants aren\'t the ones with no problems. They\'re the ones that fix them beautifully.',
+  rsvLine: 'Reservya keeps a note on every guest, so the next visit can make up for the last one.',
+  comment: 'Comment your best complaint save',
+});
 const carousels = {
   '1-cac': [
     { theme: 'dark', foot: 'Save this for later', body: center(`
@@ -1256,6 +1273,7 @@ const carousels = {
   'day-05-remember-names': day05,
   'day-06-concept-on-paper': day06,
   'day-07-one-visit-then-gone': day07,
+  'day-08-handling-complaints': day08,
 };
 
 (async () => {
